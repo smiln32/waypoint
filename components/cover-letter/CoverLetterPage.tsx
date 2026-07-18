@@ -27,7 +27,8 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
   useEffect(() => {
     const timer = setTimeout(() => {
       const saved = loadPersisted<SavedLetter>("waypoint.letter");
-      if (!saved) return;
+      // Purge sessions persisted from the pre-blank-state demo draft.
+      if (!saved || saved.draft.startsWith("Dear Hiring Manager,\n\nI am applying for the Technical Operations Manager")) return;
       setDraft(saved.draft);
       setRole(saved.role);
       setCompany(saved.company);
@@ -113,13 +114,20 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
           />
         ) : (
           <aside className="empty cover-empty">
-            <div>
-              <b>The cover letter editor is ready.</b>
-              <p>
-                It checks whether your letter connects verified experience to this employer and role. It
-                critiques weak claims; it does not write the letter for you.
-              </p>
-            </div>
+            {reviewing ? (
+              <div role="status">
+                <b>The editor is reading your letter.</b>
+                <p>Checking the employer connection and the evidence behind every claim — this takes a moment.</p>
+              </div>
+            ) : (
+              <div>
+                <b>The cover letter editor is ready.</b>
+                <p>
+                  It checks whether your letter connects verified experience to this employer and role. It
+                  critiques weak claims; it does not write the letter for you.
+                </p>
+              </div>
+            )}
           </aside>
         )}
       </div>

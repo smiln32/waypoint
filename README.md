@@ -85,6 +85,16 @@ MOS-to-career mappings are treated as hypotheses, never proof of experience. Pro
 
 Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The app keeps everything in the browser's own storage; uploaded files are parsed locally and never leave the machine.
 
+## Accessibility: WCAG 2.2 AA — audited, fixed, verified
+
+Accessibility is a stated product requirement, not a checkbox. The app was audited with **axe-core across every page** (WCAG 2A/AA/2.2 AA rulesets) plus a manual checklist pass, and every finding was fixed and re-verified in a live browser:
+
+- Zero axe violations on all pages; skip-to-content link as the first focusable element on every page
+- Visible 3px focus rings, full keyboard operability, `prefers-reduced-motion` support, and status announcements (`role="status"`) for evaluations, toasts, and fallback notices
+- 4.5:1+ contrast throughout, including form placeholders; rem-based type so browser text scaling works
+- 44px touch targets per the product spec (one documented exception: the intentionally compact Undo/Forward controls)
+- Per-page titles, correct heading hierarchy, labeled table headers, and screen-reader labels on calendar events
+
 ## Built for real use
 
 - **Your work survives.** The resume draft, editor findings, cover letter, interview answer, and the whole tracker persist in the browser (localStorage) — no account needed, and nothing leaves the machine.

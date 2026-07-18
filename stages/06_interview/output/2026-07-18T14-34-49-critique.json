@@ -1,0 +1,42 @@
+{
+  "requested_at": "2026-07-18T14:34:49.592Z",
+  "model": "claude-opus-4-8",
+  "input_excerpt": "We had an aircraft return with an intermittent fault. My team worked through it and got the jet back up before the next flight window.",
+  "findings": [
+    {
+      "level": "High",
+      "title": "Your individual contribution disappears",
+      "quote": "My team worked through it",
+      "why": "The employer asked what you did, but this collective phrasing hides your specific role. A hiring reader cannot tell whether you diagnosed the fault, directed others, or assisted. The question tests your technical problem-solving and ownership, and 'my team worked through it' gives credit to the group while leaving your decisions invisible.",
+      "task": "Name the specific steps you personally took to isolate and resolve the fault, without changing who else was involved. What did you decide or test that moved this forward?"
+    },
+    {
+      "level": "High",
+      "title": "The technical work is missing",
+      "quote": "worked through it",
+      "why": "This is the heart of the question and it is empty. 'Worked through it' tells the reader a problem was solved but shows no diagnostic reasoning, tools, or method. Employers use this question to see how you think under pressure; without the actual troubleshooting steps, there is nothing to evaluate.",
+      "task": "Add the concrete actions you took to trace an intermittent fault (how you reproduced it, what you checked, how you confirmed the fix). State only what actually happened."
+    },
+    {
+      "level": "Medium",
+      "title": "Jargon a civilian reader cannot decode",
+      "quote": "got the jet back up before the next flight window",
+      "why": "'Back up' and 'flight window' are operational shorthand. A corporate technical interviewer may not grasp the time pressure or what 'back up' required. The stakes and deadline are real but hidden inside terms they won't translate.",
+      "task": "Restate the deadline and consequence in plain terms: how much time you had, and what would have happened operationally if the aircraft stayed down."
+    },
+    {
+      "level": "Medium",
+      "title": "Result is asserted, not demonstrated",
+      "quote": "before the next flight window",
+      "why": "You state a deadline was met but give no defensible detail — how long the fault had persisted, how quickly you resolved it, or how you verified it was fixed rather than temporarily quiet. An intermittent fault that returns undermines the claim, so the reader needs to know how you confirmed the outcome.",
+      "task": "Add how you verified the fix held and, if you can, the timeframe you worked within. Do not invent numbers you cannot defend."
+    }
+  ],
+  "scores": {
+    "relevance": 2,
+    "ownership": 1,
+    "evidence": 1,
+    "translation": 2
+  },
+  "note": "The response names a relevant problem but hides your individual actions and the technical reasoning the question is designed to reveal."
+}
