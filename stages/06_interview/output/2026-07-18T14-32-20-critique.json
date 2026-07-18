@@ -1,0 +1,49 @@
+{
+  "requested_at": "2026-07-18T14:32:20.604Z",
+  "model": "claude-opus-4-8",
+  "input_excerpt": "We had an aircraft return with an intermittent fault. My team worked through it and got the jet back up before the next flight window.",
+  "findings": [
+    {
+      "level": "High",
+      "title": "Your individual role is invisible",
+      "quote": "My team worked through it",
+      "why": "What the employer is testing: ownership and how you personally lead technical problem-solving under pressure. For a Technical Operations Manager, the reader needs to see your decisions, not just the team's outcome. 'My team worked through it' collapses the entire diagnosis and repair into one collective phrase, so the reader cannot tell what you decided, directed, or contributed.",
+      "task": "Identify what you specifically did: how you organized the effort, what call you made, or what step you took. Name your action separately from the team's."
+    },
+    {
+      "level": "High",
+      "title": "The technical problem-solving is missing",
+      "quote": "worked through it",
+      "why": "What the employer is testing: competence and judgment in diagnosing a hard problem. 'Worked through it' names no method, no troubleshooting steps, and no reasoning. An intermittent fault is notoriously hard to isolate, but the reader sees none of how you narrowed it down, so the difficulty you're claiming stays unproven.",
+      "task": "State how the fault was diagnosed — what you checked, ruled out, or tested to find the cause. Give the reader the actual steps without inventing detail."
+    },
+    {
+      "level": "Medium",
+      "title": "The pressure and stakes are unstated",
+      "quote": "before the next flight window",
+      "why": "What the employer is testing: how you perform under pressure. The question asks specifically about pressure, but the response never establishes what was at risk or how tight the constraint was. 'Before the next flight window' hints at a deadline, but a civilian reader does not know how much time you had or what would have happened if you missed it.",
+      "task": "Add the concrete constraint: how much time you had and what the consequence of failure would have been. Do not exaggerate — state the real stakes."
+    },
+    {
+      "level": "Medium",
+      "title": "An intermittent fault needs plain-language framing",
+      "quote": "an intermittent fault",
+      "why": "Civilian-reader test: a hiring reader outside aviation may not grasp why an intermittent fault is harder than a constant one. The term is accurate but its significance — that the problem disappears when you look for it — is the very thing that made this difficult, and it goes unexplained.",
+      "task": "Briefly signal why an intermittent fault is hard to solve, so the reader understands the difficulty you overcame."
+    },
+    {
+      "level": "Low",
+      "title": "No learning or calibration shown",
+      "quote": "got the jet back up",
+      "why": "What the employer is testing: reflection and growth. The answer ends at the result with no takeaway. For a manager-level role, employers value what you learned about the process, the team, or prevention. Right now the response closes without any reflection.",
+      "task": "Add one sentence on what you took from this — a process change, a lesson about diagnosis, or how it shaped how you now handle pressure."
+    }
+  ],
+  "scores": {
+    "relevance": 2,
+    "ownership": 1,
+    "evidence": 1,
+    "translation": 2
+  },
+  "note": "A true and concise story that currently hides your individual actions, the diagnostic work, and the stakes the question is asking you to demonstrate."
+}

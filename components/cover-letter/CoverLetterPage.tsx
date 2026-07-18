@@ -16,14 +16,11 @@ interface SavedLetter {
   review: CritiqueResponse | null;
 }
 
-const initialDraft =
-  "Dear Hiring Manager,\n\nI am applying for the Technical Operations Manager position at AeroNorth Systems. During eight years in Marine Corps aviation maintenance, I coordinated daily maintenance priorities for 12 F/A-18 aircraft and led 18 technicians across three shifts.\n\nThis experience taught me to make clear operational decisions when safety, schedule, parts availability, and personnel capacity were all in tension. I would welcome the opportunity to bring that judgment to AeroNorth Systems.\n\nSincerely,\nAlex Morgan";
-
 export function CoverLetterPage({ example }: { example: CoverLetterExample | null }) {
   const { note } = useWaypoint();
-  const [draft, setDraft] = useState(initialDraft);
-  const [role, setRole] = useState("Technical Operations Manager");
-  const [company, setCompany] = useState("AeroNorth Systems");
+  const [draft, setDraft] = useState("");
+  const [role, setRole] = useState("");
+  const [company, setCompany] = useState("");
   const [review, setReview] = useState<CritiqueResponse | null>(null);
   const [reviewing, setReviewing] = useState(false);
 
@@ -57,7 +54,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
       <Heading
         kicker="COVER LETTER STUDIO"
         title="Make the connection specific."
-        text="Draft for Technical Operations Manager · AeroNorth Systems"
+        text="Write your letter for one employer and one role. The editor critiques the connection — it never writes for you."
       />
       <ExampleLetter example={example} />
       <div className="cover-letter-workspace">
@@ -67,6 +64,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               Target role
               <input
                 value={role}
+                placeholder="Operations Supervisor"
                 onChange={(e) => {
                   setRole(e.target.value);
                   persistLetter({ role: e.target.value });
@@ -77,6 +75,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               Company
               <input
                 value={company}
+                placeholder="Company name"
                 onChange={(e) => {
                   setCompany(e.target.value);
                   persistLetter({ company: e.target.value });
@@ -88,6 +87,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
             Cover letter
             <textarea
               value={draft}
+              placeholder="Write your letter here. Not sure how to start? Open the example above."
               onChange={(e) => {
                 setDraft(e.target.value);
                 setReview(null);
@@ -97,8 +97,8 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
             />
           </label>
           <div className="letter-actions">
-            <span>{draft.trim().split(/\s+/).length} words</span>
-            <button className="primary" disabled={reviewing} onClick={sendToEditor}>
+            <span>{draft.trim() ? draft.trim().split(/\s+/).length : 0} words</span>
+            <button className="primary" disabled={reviewing || !draft.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to cover letter editor"}
             </button>
           </div>
