@@ -5,6 +5,7 @@ import { VIEW_PATHS } from "@/lib/nav";
 import type { View } from "@/lib/types";
 
 const NAV_ITEMS: [View, string][] = [
+  ["start", "Start Here"],
   ["dashboard", "Dashboard"],
   ["resume", "Resume"],
   ["search", "Job Search"],

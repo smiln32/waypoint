@@ -1,4 +1,5 @@
 export type View =
+  | "start"
   | "dashboard"
   | "resume"
   | "coverletter"

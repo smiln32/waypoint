@@ -1,7 +1,6 @@
 "use client";
 import { NextSteps } from "./NextSteps";
 import { PipelineGlance } from "./PipelineGlance";
-import { WorkspaceCards } from "./WorkspaceCards";
 
 export function DashboardPage() {
   const today = new Date()
@@ -17,7 +16,6 @@ export function DashboardPage() {
       </div>
       <NextSteps />
       <PipelineGlance />
-      <WorkspaceCards />
     </div>
   );
 }
