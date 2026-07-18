@@ -27,3 +27,4 @@ Bands: 22–24 fully conformant · 17–21 mostly · 11–16 partial · 5–10 w
 
 ## History
 - 2026-07-17: first ICM audit — 2 findings, 22/24 (fully conformant). Workspace restructured to ICM today: editor packages moved from `editors/` into stage references, cover-letter package authored, contracts and root layers written.
+- 2026-07-18: re-audit after the UI redesign wave (page merge, Start Here, persona swap, template→example change). Tree verified intact: all six stages carry CONTEXT/references/output; prompt assembly still reads references/ at request time; example letter added as Layer 3 (`stages/04_cover_letter/references/example-letter.md`, contract updated). Fixed drift: Start Here added to Layer 1 routing in root CONTEXT.md. ICM-01 and ICM-02 remain open; score unchanged at 22/24.

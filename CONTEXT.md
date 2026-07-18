@@ -16,7 +16,9 @@ config) and writes only to its own `output/`.
 | 05 | `stages/05_applications/` | Track saved roles and applications: stage, materials, contacts, next actions, deadlines | `/applications` (page titled "Job Tracking") | no |
 | 06 | `stages/06_interview/` | Critique interview responses against the response rubric | `/interview` | yes — `POST /api/critique/interview` |
 
-Dashboard (`/`) is the router view over all six stages; it owns no stage work.
+Two pages sit outside the stages and own no stage work: Start Here (`/start`) orients a new user with
+the five-step path, and Dashboard (`/`) is the router view — next steps, pipeline counts, materials
+status, and a due-date calendar, all derived from stage data.
 
 ## Shared resources
 
