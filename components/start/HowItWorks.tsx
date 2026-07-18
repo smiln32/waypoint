@@ -5,8 +5,8 @@ import { useGo } from "@/lib/use-go";
 const PATH: { view: View; label: string; context: string }[] = [
   {
     view: "resume",
-    label: "Add and refine your resume",
-    context: "Load the resume you have, then work through the editor's findings one at a time.",
+    label: "Add and review your resume",
+    context: "Both happen on one page: load the resume you have, then work through the editor's findings right below it.",
   },
   {
     view: "search",

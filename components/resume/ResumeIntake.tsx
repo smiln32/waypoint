@@ -21,7 +21,7 @@ export function ResumeIntake({
   return (
     <section className="resume-intake" aria-label="Add your resume">
       <div className="intake-heading">
-        <h2>Add your resume</h2>
+        <h2>1. Add Your Resume</h2>
         <p>Start with the resume you have. It becomes the editable draft below, ready for review.</p>
       </div>
       <div className="intake-grid">

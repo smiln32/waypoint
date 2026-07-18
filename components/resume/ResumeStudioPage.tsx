@@ -137,7 +137,7 @@ export function ResumeStudioPage() {
         onUsePasted={() => loadResumeText(resumeImportText, "Pasted resume")}
       />
       <div className="intake-heading">
-        <h2>Review Your Resume</h2>
+        <h2>2. Review Your Resume</h2>
       </div>
       <div className="editor">
         <section className="resume-draft">
