@@ -40,6 +40,7 @@ export function StartHerePage() {
           spaces below; each one handles a single part of your transition.
         </p>
       </div>
+      <HowItWorks />
       <ResumeIntake
         fileRef={fileRef}
         importText={importText}
@@ -47,7 +48,6 @@ export function StartHerePage() {
         onUpload={uploadResume}
         onUsePasted={() => loadResume(importText, "Pasted resume")}
       />
-      <HowItWorks />
     </div>
   );
 }
