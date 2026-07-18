@@ -1,7 +1,9 @@
 "use client";
 import { useState } from "react";
 import { Heading } from "@/components/ui/Heading";
+import { requestCritique } from "@/lib/critique/client";
 import { useWaypoint } from "@/lib/store";
+import type { CritiqueResponse } from "@/lib/types";
 import { LetterReviewPanel } from "./LetterReviewPanel";
 
 const initialDraft =
@@ -10,7 +12,18 @@ const initialDraft =
 export function CoverLetterPage() {
   const { note } = useWaypoint();
   const [draft, setDraft] = useState(initialDraft);
-  const [reviewed, setReviewed] = useState(false);
+  const [role, setRole] = useState("Technical Operations Manager");
+  const [company, setCompany] = useState("AeroNorth Systems");
+  const [review, setReview] = useState<CritiqueResponse | null>(null);
+  const [reviewing, setReviewing] = useState(false);
+
+  const sendToEditor = async () => {
+    if (reviewing) return;
+    setReviewing(true);
+    const result = await requestCritique("cover-letter", draft, { role, company });
+    setReview(result);
+    setReviewing(false);
+  };
 
   return (
     <div className="page cover-letter-page">
@@ -24,11 +37,11 @@ export function CoverLetterPage() {
           <div className="letter-toolbar">
             <label>
               Target role
-              <input defaultValue="Technical Operations Manager" />
+              <input value={role} onChange={(e) => setRole(e.target.value)} />
             </label>
             <label>
               Company
-              <input defaultValue="AeroNorth Systems" />
+              <input value={company} onChange={(e) => setCompany(e.target.value)} />
             </label>
           </div>
           <label className="letter-draft">
@@ -37,22 +50,23 @@ export function CoverLetterPage() {
               value={draft}
               onChange={(e) => {
                 setDraft(e.target.value);
-                setReviewed(false);
+                setReview(null);
               }}
               rows={20}
             />
           </label>
           <div className="letter-actions">
             <span>{draft.trim().split(/\s+/).length} words</span>
-            <button className="primary" onClick={() => setReviewed(true)}>
-              Send to cover letter editor
+            <button className="primary" disabled={reviewing} onClick={sendToEditor}>
+              {reviewing ? "Reviewing…" : "Send to cover letter editor"}
             </button>
           </div>
         </section>
-        {reviewed ? (
+        {review ? (
           <LetterReviewPanel
+            findings={review.findings}
             onRevise={() => {
-              setReviewed(false);
+              setReview(null);
               note("Draft reopened for revision");
             }}
           />

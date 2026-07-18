@@ -31,6 +31,23 @@ export interface JobResult {
   fit: string;
 }
 
+export type CritiqueStage = "resume" | "cover-letter" | "interview";
+
+export interface InterviewScores {
+  relevance: number;
+  ownership: number;
+  evidence: number;
+  translation: number;
+}
+
+export interface CritiqueResponse {
+  source: "claude" | "demo";
+  findings: Finding[];
+  /** Interview stage only: 0–4 per dimension. */
+  scores?: InterviewScores;
+  note: string;
+}
+
 export type SavedJobStatus = "Saved" | "Researching" | "Ready to apply";
 
 export interface SavedJob {

@@ -1,6 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
+import { requestCritique } from "@/lib/critique/client";
 import { findings } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
@@ -17,6 +18,7 @@ export function ResumeStudioPage() {
     "Edit the résumé directly, then resubmit it for evaluation.",
   );
   const [resumeImportText, setResumeImportText] = useState("");
+  const [evaluating, setEvaluating] = useState(false);
   const resumeRef = useRef<HTMLElement>(null);
   const resumeFileRef = useRef<HTMLInputElement>(null);
   const resumeHistoryRef = useRef<string[]>([]);
@@ -116,25 +118,17 @@ export function ResumeStudioPage() {
     reader.readAsText(file);
   };
 
-  const evaluateResume = () => {
+  const evaluateResume = async () => {
+    if (evaluating) return;
     const text = resumeRef.current?.innerText ?? "";
-    const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
-    const patterns = [
-      new RegExp("(^|[^A-Za-z])MC([^A-Za-z]|$)", "i"),
-      new RegExp("Chief Information Security Officer", "i"),
-      new RegExp("complex avionics|under time pressure", "i"),
-    ];
-    const next = findings.flatMap((finding, index) => {
-      const quote = lines.find((line) => patterns[index].test(line));
-      return quote ? [{ ...finding, quote }] : [];
-    });
-    setResumeFindings(next);
+    setEvaluating(true);
+    setResumeEvaluationNote("Evaluating…");
+    const result = await requestCritique("resume", text);
+    setResumeFindings(result.findings);
     setSelected([]);
-    const message = next.length
-      ? "Evaluation updated: " + next.length + " finding" + (next.length === 1 ? "" : "s") + " to review."
-      : "Evaluation updated: no current findings from this review set.";
-    setResumeEvaluationNote(message);
-    note(message);
+    setResumeEvaluationNote(result.note);
+    setEvaluating(false);
+    note(result.note);
   };
 
   return (
@@ -165,7 +159,7 @@ export function ResumeStudioPage() {
           />
           <div className="resume-submit">
             <span role="status">{resumeEvaluationNote}</span>
-            <button className="primary" onClick={evaluateResume}>
+            <button className="primary" disabled={evaluating} onClick={evaluateResume}>
               Resubmit for evaluation
             </button>
           </div>
