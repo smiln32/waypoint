@@ -6,20 +6,6 @@ export function OverviewSection() {
   const onGo = useGo();
   return (
     <section className="dashboard-overview overview-page" id="dashboard-overview">
-      <section className="hero">
-        <div>
-          <small>NEXT DECISION</small>
-          <h2>Resolve three resume editor findings</h2>
-          <p>
-            Your operations resume has strong evidence, but three passages still rely on military shorthand or
-            unclear authority.
-          </p>
-          <button onClick={() => onGo("resume")}>Review findings</button>
-        </div>
-        <strong>
-          72%<small>ready</small>
-        </strong>
-      </section>
       <div className="cols">
         <Panel title="Application pipeline">
           <div className="pipeline">
