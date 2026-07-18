@@ -6,6 +6,7 @@ import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
+import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
 
 interface SavedResume {
   html: string;
@@ -200,7 +201,7 @@ export function ResumeStudioPage() {
               persistResume({ note: "Changes not evaluated yet." });
             }}
           />
-          <div className="resume-submit">
+          <AiPrivacyNotice />\n          <div className="resume-submit">
             <span role="status">{resumeEvaluationNote}</span>
             <button className="primary" disabled={evaluating} onClick={evaluateResume}>
               Resubmit for evaluation

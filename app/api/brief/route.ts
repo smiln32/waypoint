@@ -27,9 +27,10 @@ const SECTION_SCHEMA = {
 function buildSystemPrompt(): string {
   const read = (...segments: string[]) => fs.readFileSync(path.join(process.cwd(), ...segments), "utf8");
   return [
+    read("stages", "03_job_tracking", "CONTEXT.md"),
     read("stages", "03_job_tracking", "references", "brief-guide.md"),
     read("_config", "shared", "product-voice.md"),
-    "# Output contract\nReturn JSON matching the provided schema. Each section is 2–4 plain sentences (likelyQuestions may be a short list written as prose). No markdown syntax inside values.",
+    read("stages", "03_job_tracking", "references", "brief-format.md"),
   ].join("\n\n---\n\n");
 }
 
@@ -89,7 +90,8 @@ export async function POST(request: Request) {
     // ICM Layer 4: persist the run as a human-editable artifact (dev, best-effort).
     if (process.env.NODE_ENV !== "production") {
       try {
-        const file = path.join(process.cwd(), "stages", "03_job_tracking", "output", `${brief.slug}-brief.json`);
+        const file = path.join(process.cwd(), "stages", "03_job_tracking", "output", "runtime", `${brief.slug}-brief.json`);
+        fs.mkdirSync(path.dirname(file), { recursive: true });
         fs.writeFileSync(file, JSON.stringify(brief, null, 2) + "\n", "utf8");
       } catch {
         // Never fail the response over the write.

@@ -2374,3 +2374,7 @@ td small {
     animation: none;
   }
 }
+
+.ai-privacy-notice { margin: 1rem 0; padding: .875rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); }
+.ai-privacy-notice p { margin: .35rem 0 0; max-width: 72ch; }
+.ownership-action .secondary { min-width: 9rem; }

@@ -1,4 +1,4 @@
-# Task Routing — Stage Map
+# Waypoint operating model\n\nWaypoint's user-facing scope is exactly five steps: Resume, Job Search, Job Tracking, Cover Letter, and Interview Practice. React and browser local storage run the app; ICM files define stage responsibilities, editor behavior, and interpretable handoffs. Stage folders are not required to map one-to-one to pages. Imports are parsed locally; explicit AI review sends relevant text to the configured hosted provider.\n\n# Task Routing — Stage Map
 
 Layer 1. Start at `CLAUDE.md` for identity; open a stage's `CONTEXT.md` for its contract before working in it.
 

@@ -1,13 +1,19 @@
 "use client";
 import { useState } from "react";
 import { useWaypoint } from "@/lib/store";
-import type { View } from "@/lib/types";
+import type { OpportunityStatus, View } from "@/lib/types";
 
-const STAGE_OPTIONS: { label: string; className: string }[] = [
+const STAGE_OPTIONS: { label: OpportunityStatus; className: string }[] = [
   { label: "Saved", className: "saved-stage" },
+  { label: "Researching", className: "saved-stage" },
   { label: "Preparing", className: "saved-stage" },
+  { label: "Ready to Apply", className: "saved-stage" },
+  { label: "Application Started", className: "applied-stage" },
   { label: "Applied", className: "applied-stage" },
-  { label: "Interview 1", className: "interview-stage" },
+  { label: "Screening", className: "applied-stage" },
+  { label: "Interview", className: "interview-stage" },
+  { label: "Offer", className: "interview-stage" },
+  { label: "Closed", className: "saved-stage" },
 ];
 
 const ACTION_TARGETS: { label: string; view: View | "" }[] = [
@@ -22,7 +28,7 @@ export function AddPositionForm() {
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState("");
   const [company, setCompany] = useState("");
-  const [stage, setStage] = useState("Saved");
+  const [stage, setStage] = useState<OpportunityStatus>("Saved");
   const [contact, setContact] = useState("");
   const [nextAction, setNextAction] = useState("");
   const [target, setTarget] = useState<View | "">("");
@@ -43,6 +49,7 @@ export function AddPositionForm() {
     if (!role.trim() || !company.trim()) return;
     const added = new Date().toLocaleDateString("en-US", { month: "short", day: "numeric" });
     addPosition({
+      id: crypto.randomUUID(),
       role: role.trim(),
       roleDetail: `${company.trim()} · Added ${added}`,
       stage,
@@ -85,7 +92,7 @@ export function AddPositionForm() {
         </label>
         <label>
           Stage
-          <select value={stage} onChange={(e) => setStage(e.target.value)}>
+          <select value={stage} onChange={(e) => setStage(e.target.value as OpportunityStatus)}>
             {STAGE_OPTIONS.map((option) => (
               <option key={option.label}>{option.label}</option>
             ))}

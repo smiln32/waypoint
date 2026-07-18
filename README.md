@@ -37,7 +37,7 @@ stages/
 
 The app assembles each editor's prompt **from these files at request time** and writes every AI run to the stage's `output/` as diffable JSON. Edit `stages/01_resume/references/rules.md` and the resume editor behaves differently — no code change, no redeploy, full git history of who changed the editor's judgment and when. Even the cover-letter example shown in the app is a markdown file in its stage.
 
-### Conformance: 24/24, zero open findings
+### ICM foundation
 
 Audited against the six-area ICM rubric — root layers, stage folders, stage internals, contracts, chaining, layer discipline — with **4/4 in every area**. Full log with history and resolved findings: [`ICM-AUDIT-LOG.md`](ICM-AUDIT-LOG.md).
 
@@ -91,7 +91,7 @@ MOS-to-career mappings are treated as hypotheses, never proof of experience. Pro
 
 ## Privacy
 
-Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The app keeps everything in the browser's own storage; uploaded files are parsed locally and never leave the machine.
+Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The app stores drafts and tracker data in this browser, and uploaded files are parsed locally. When you press an AI-review control, the relevant text is sent to the configured hosted AI provider and the result returns to the browser. Remove Social Security and service numbers, home addresses, medical information, classified or controlled information, and unnecessary personal details before submitting.
 
 ## Accessibility: WCAG 2.2 AA — audited, fixed, verified
 
@@ -105,7 +105,7 @@ Accessibility is a stated product requirement, not a checkbox. The app was audit
 
 ## Built for real use
 
-- **Your work survives.** The resume draft, editor findings, cover letter, interview answer, and the whole tracker persist in the browser (localStorage) — no account needed, and nothing leaves the machine.
+- **Your work survives.** The resume draft, editor findings, cover letter, interview answer, and the whole tracker persist in the browser (localStorage) — no account needed. Only text submitted through an AI-review action is sent to the configured hosted provider.
 - **Real job listings.** Job Search connects to the **USAJOBS API** — federal hiring, where veterans' preference actually applies (free key at developer.usajobs.gov). Without credentials, clearly-labeled sample roles keep the page fully functional.
 - **Any resume file.** PDF, DOCX, TXT, MD, RTF, or pasted text — parsed entirely in the browser (pdf.js + mammoth), so the file never leaves the machine.
 - **Manual tracking.** Add positions directly in Job Tracking alongside roles saved from search; every next action links to the workspace where it happens.
