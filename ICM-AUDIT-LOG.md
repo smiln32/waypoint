@@ -40,7 +40,7 @@ None in the ICM foundation repair scope after verification. Later evidence, matc
 - ICM-07: Corrected Start Application detail preservation and stage transfer.
 - ICM-08: Derived tracker summaries from current data and removed the technical Ownership column.
 - ICM-09: Replaced UI-shaped tracker rows with canonical, versioned opportunity records and verified legacy migration, empty-state preservation, duplicate posting identity, and stage handoff integrity.
-- ICM-10: Removed stale committed company briefs containing résumé-derived content and aligned all output READMEs with the ignored runtime path.
+- ICM-10: Removed stale committed critique and company-brief artifacts containing user-derived content and aligned all output READMEs with the ignored runtime path.
 
 ## Audit History
 
