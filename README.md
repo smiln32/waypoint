@@ -35,7 +35,15 @@ stages/
 └── 06_interview/     CONTEXT.md · references/ (incl. the 0–4 response rubric) · output/
 ```
 
-The app assembles each editor's prompt **from these files at request time** and writes every critique run to the stage's `output/` as diffable JSON. Edit `stages/01_resume/references/rules.md` and the resume editor behaves differently — no code change, no redeploy, full git history of who changed the editor's judgment and when. Even the cover-letter example shown in the app is a markdown file in its stage. Conformance is tracked in [`ICM-AUDIT-LOG.md`](ICM-AUDIT-LOG.md) — **24/24, fully conformant**: even the tracker's state materializes into stage `output/` files on every change, so the declared handoffs exist as diffable artifacts.
+The app assembles each editor's prompt **from these files at request time** and writes every AI run to the stage's `output/` as diffable JSON. Edit `stages/01_resume/references/rules.md` and the resume editor behaves differently — no code change, no redeploy, full git history of who changed the editor's judgment and when. Even the cover-letter example shown in the app is a markdown file in its stage.
+
+### Conformance: 24/24, zero open findings
+
+Audited against the six-area ICM rubric — root layers, stage folders, stage internals, contracts, chaining, layer discipline — with **4/4 in every area**. Full log with history and resolved findings: [`ICM-AUDIT-LOG.md`](ICM-AUDIT-LOG.md).
+
+- **The handoffs are real files.** The tracker materializes its state into stage outputs on every change — `saved-roles.json` (02) → `tracked-roles.json` (03) → `applications.json` (05) — so the chain declared in the contracts exists as diffable, human-editable artifacts. Save a job in the app and `git diff` shows it.
+- **Every AI run is logged.** Resume, cover letter, and interview critiques land in their stage's `output/`; each generated company brief lands in stage 03's.
+- **The stages work without the app.** Each contract documents a canonical drop-file path for per-run input, so a headless agent can flow through the pipeline stage by stage.
 
 ## The journey
 
