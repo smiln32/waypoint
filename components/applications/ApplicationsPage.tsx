@@ -1,13 +1,15 @@
 "use client";
 import { Heading } from "@/components/ui/Heading";
 import { useWaypoint } from "@/lib/store";
+import { useGo } from "@/lib/use-go";
 
 export function ApplicationsPage() {
   const { note, applications } = useWaypoint();
+  const onGo = useGo();
   return (
     <div className="page">
       <Heading
-        kicker="APPLICATIONS"
+        kicker="JOB TRACKING"
         title="Nothing gets lost."
         text="Keep every posting, tailored document, contact, deadline, and follow-up in one place."
       />
@@ -67,7 +69,13 @@ export function ApplicationsPage() {
                   <small>{row.contactDetail}</small>
                 </td>
                 <td>
-                  <b>{row.nextAction}</b>
+                  {row.nextActionView ? (
+                    <button className="link next-action" onClick={() => onGo(row.nextActionView!)}>
+                      {row.nextAction} →
+                    </button>
+                  ) : (
+                    <b>{row.nextAction}</b>
+                  )}
                   <small>{row.nextActionDetail}</small>
                 </td>
                 <td>{row.due}</td>

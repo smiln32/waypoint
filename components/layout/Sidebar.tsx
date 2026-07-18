@@ -8,9 +8,8 @@ const NAV_ITEMS: [View, string][] = [
   ["dashboard", "Dashboard"],
   ["resume", "Resume"],
   ["search", "Job Search"],
-  ["jobs", "Job Tracking"],
+  ["applications", "Job Tracking"],
   ["coverletter", "Cover Letter"],
-  ["applications", "Application"],
   ["interview", "Interview Prep"],
 ];
 

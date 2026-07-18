@@ -1,4 +1,4 @@
-import type { ApplicationRow, Finding, JobMatch, JobResult, SavedJob } from "./types";
+import type { ApplicationRow, Finding, JobResult } from "./types";
 
 export const findings: Finding[] = [
   {
@@ -22,12 +22,6 @@ export const findings: Finding[] = [
     why: "“Complex” and “under time pressure” are conclusions. The reader cannot see the system involved, your diagnostic action, the constraint, or the observable result.",
     task: "Choose one defensible example and identify the system, diagnostic action, constraint, and result without disclosing sensitive information.",
   },
-];
-
-export const matches: JobMatch[] = [
-  ["88", "Technical Operations Manager", "AeroNorth Systems", "Jacksonville, FL · Hybrid", "Budget ownership"],
-  ["82", "Maintenance Planning Lead", "Harbor Aviation", "Savannah, GA · On-site", "FAA repair-station terminology"],
-  ["74", "Cybersecurity Operations Analyst", "Meridian Grid", "Remote · United States", "SIEM certification"],
 ];
 
 export const searchResults: JobResult[] = [
@@ -63,18 +57,6 @@ export const searchResults: JobResult[] = [
   },
 ];
 
-/** The three demo matches seed the saved-jobs pipeline so it is never empty. */
-export const savedJobSeeds: SavedJob[] = matches.map(([fit, title, company, place, gap], index) => ({
-  id: `seed-${index}`,
-  title,
-  company,
-  place,
-  fit,
-  tags: ["Maintenance leadership", "Safety systems"],
-  gap,
-  status: index === 0 ? "Ready to apply" : index === 1 ? "Researching" : "Saved",
-}));
-
 export const applicationRows: ApplicationRow[] = [
   {
     role: "Technical Operations Manager",
@@ -85,8 +67,9 @@ export const applicationRows: ApplicationRow[] = [
     materialsDetail: "Cover letter sent",
     contact: "Jordan Lee",
     contactDetail: "Operations Director",
-    nextAction: "Practice leadership answer",
+    nextAction: "Interview Prep",
     nextActionDetail: "Company brief ready",
+    nextActionView: "interview",
     due: "Jul 19",
   },
   {
@@ -100,6 +83,7 @@ export const applicationRows: ApplicationRow[] = [
     contactDetail: "No direct contact yet",
     nextAction: "Send concise follow-up",
     nextActionDetail: "Draft not started",
+    nextActionView: "coverletter",
     due: "Jul 21",
   },
   {
@@ -113,6 +97,7 @@ export const applicationRows: ApplicationRow[] = [
     contactDetail: "Security Manager",
     nextAction: "Address SIEM qualification gap",
     nextActionDetail: "Then tailor resume",
+    nextActionView: "resume",
     due: "Jul 22",
   },
 ];

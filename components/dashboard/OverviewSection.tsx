@@ -60,7 +60,7 @@ export function OverviewSection() {
           <em>88% fit</em>
           <h3>Technical Operations Manager</h3>
           <p>AeroNorth Systems · Jacksonville, FL</p>
-          <button className="link" onClick={() => onGo("jobs")}>
+          <button className="link" onClick={() => onGo("applications")}>
             See match reasoning →
           </button>
         </Panel>

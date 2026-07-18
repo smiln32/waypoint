@@ -1685,68 +1685,6 @@ blockquote {
   margin-right: auto;
 }
 
-/* ================================================================ */
-/* Jobs / matches                                                   */
-/* ================================================================ */
-
-.jobs {
-  border-top: 2px solid var(--ink);
-}
-
-.jobs > article {
-  display: grid;
-  grid-template-columns: 70px 1fr 250px;
-  gap: 22px;
-  align-items: center;
-  padding: 23px 0;
-  border-bottom: 1px solid var(--line);
-}
-
-.jobs > article > strong {
-  width: 60px;
-  height: 60px;
-  border: 5px solid var(--palette-mint);
-  border-radius: 50%;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  font-size: 18px;
-}
-
-.jobs strong small {
-  font-size: 9px;
-  color: var(--muted);
-}
-
-.jobs h2 {
-  font-size: 18px;
-  margin: 0 0 5px;
-}
-
-.jobs p {
-  color: var(--muted);
-}
-
-.jobs article > div span {
-  background: var(--info-soft);
-  color: oklch(0.36 0.065 214.9);
-  padding: 5px 7px;
-  font-size: 11px;
-  border-radius: 5px;
-}
-
-.jobs article > section {
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-}
-
-.jobs article > section small {
-  color: var(--muted);
-  font-size: 10px;
-}
-
 table {
   width: 100%;
   border-collapse: collapse;
@@ -2120,14 +2058,6 @@ td small {
     grid-template-columns: 1fr;
   }
 
-  .jobs > article {
-    grid-template-columns: 65px 1fr;
-  }
-
-  .jobs article > section {
-    grid-column: 2;
-  }
-
   .paper {
     min-height: 0;
     padding: 28px;
@@ -2237,14 +2167,6 @@ td small {
 
   .activity {
     grid-template-columns: 1fr;
-  }
-
-  .jobs > article {
-    grid-template-columns: 1fr;
-  }
-
-  .jobs article > section {
-    grid-column: 1;
   }
 
   table {
@@ -2435,14 +2357,10 @@ td small {
   }
 }
 
-/* ==== Saved-jobs pipeline (Job Tracking) ==== */
-.pipeline-summary{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 26px;border-top:2px solid var(--ink);padding-top:16px}
-.pipeline-summary span{display:flex;flex-direction:column;gap:3px;color:var(--muted);border-right:1px solid var(--line);padding-left:15px}
-.pipeline-summary span:first-child{padding-left:0}
-.pipeline-summary span:last-child{border:0}
-.pipeline-summary b{font-size:27px;color:var(--ink)}
-.saved-job-pay{margin-top:6px}
-.job-status{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-top:6px}
-.job-status select{border:1px solid var(--line);border-radius:8px;min-height:44px;padding:0 10px;background:var(--surface-raised);font:inherit;color:var(--ink);letter-spacing:normal;font-weight:600}
-.jobs article>section .primary{min-height:44px}
-@media(max-width:680px){.pipeline-summary{grid-template-columns:1fr;gap:12px}.pipeline-summary span{border-right:0;padding-left:0}}
+
+/* Clickable next actions in the Job Tracking table. */
+.application-table .next-action {
+  display: inline-block;
+  margin-bottom: 4px;
+  text-align: left;
+}

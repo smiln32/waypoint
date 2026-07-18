@@ -1,8 +1,10 @@
 # Stage 05 — Applications Tracker
 
-One job: track every submitted or in-preparation application — stage, materials, contacts, next actions,
-and due dates — so nothing gets lost. This stage does not critique materials or manage pre-application
-research (that is stage 03).
+One job: track every saved role and application — stage, materials, contacts, next actions, and due
+dates — so nothing gets lost. This stage does not critique materials.
+
+App surface: `/applications`, titled **Job Tracking** (it also displays stage 03's saved roles as
+Saved rows). Each next action links to the workspace where that step happens.
 
 ## Inputs
 

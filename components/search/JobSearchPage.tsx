@@ -3,13 +3,11 @@ import { useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import { searchResults } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
-import { useGo } from "@/lib/use-go";
 import { JobResultCard } from "./JobResultCard";
 import { SearchFilters } from "./SearchFilters";
 
 export function JobSearchPage() {
-  const onGo = useGo();
-  const { note, isJobSaved, toggleSavedJob, startApplication } = useWaypoint();
+  const { note, isJobTracked, toggleTrackedJob } = useWaypoint();
   const [query, setQuery] = useState("technical operations manager");
   const [location, setLocation] = useState("Jacksonville, FL");
   const [alert, setAlert] = useState(false);
@@ -59,17 +57,11 @@ export function JobSearchPage() {
           <JobResultCard
             key={job.title}
             job={job}
-            saved={isJobSaved(job.title)}
+            saved={isJobTracked(job.title)}
             onToggleSave={() => {
-              const wasSaved = isJobSaved(job.title);
-              toggleSavedJob(job);
+              const wasSaved = isJobTracked(job.title);
+              toggleTrackedJob(job);
               note(wasSaved ? job.title + " removed from Job Tracking" : job.title + " saved to Job Tracking");
-            }}
-            onSeeEvidence={() => onGo("jobs")}
-            onStartApplication={() => {
-              startApplication(job);
-              note(job.title + " added to applications");
-              onGo("applications");
             }}
           />
         ))}

@@ -11,9 +11,9 @@ config) and writes only to its own `output/`.
 |---|-------|----------------|----------|-----------|
 | 01 | `stages/01_resume/` | Critique the résumé draft into decision-ready findings | `/resume` | yes — `POST /api/critique/resume` |
 | 02 | `stages/02_job_search/` | Find and evaluate roles against verified résumé evidence | `/search` | no |
-| 03 | `stages/03_job_tracking/` | Move saved roles through Saved → Researching → Ready to apply | `/jobs` | no |
+| 03 | `stages/03_job_tracking/` | Hold saved roles until an application starts | `/applications` (merged into the tracker) | no |
 | 04 | `stages/04_cover_letter/` | Critique the cover letter's employer connection | `/cover-letter` | yes — `POST /api/critique/cover-letter` |
-| 05 | `stages/05_applications/` | Track submitted applications, materials, contacts, deadlines | `/applications` | no |
+| 05 | `stages/05_applications/` | Track saved roles and applications: stage, materials, contacts, next actions, deadlines | `/applications` (page titled "Job Tracking") | no |
 | 06 | `stages/06_interview/` | Critique interview responses against the response rubric | `/interview` | yes — `POST /api/critique/interview` |
 
 Dashboard (`/`) is the router view over all six stages; it owns no stage work.

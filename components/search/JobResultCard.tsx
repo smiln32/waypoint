@@ -5,14 +5,10 @@ export function JobResultCard({
   job,
   saved,
   onToggleSave,
-  onSeeEvidence,
-  onStartApplication,
 }: {
   job: JobResult;
   saved: boolean;
   onToggleSave: () => void;
-  onSeeEvidence: () => void;
-  onStartApplication: () => void;
 }) {
   return (
     <article>
@@ -39,12 +35,6 @@ export function JobResultCard({
       </p>
       <div className="job-result-actions">
         <b>{job.fit}</b>
-        <button className="secondary" onClick={onSeeEvidence}>
-          See match evidence
-        </button>
-        <button className="primary" onClick={onStartApplication}>
-          Start application
-        </button>
       </div>
     </article>
   );

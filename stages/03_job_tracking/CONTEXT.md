@@ -1,7 +1,10 @@
-# Stage 03 — Job Tracking (saved-jobs pipeline)
+# Stage 03 — Job Tracking (saved roles)
 
-One job: move saved roles through the pre-application pipeline — Saved → Researching → Ready to apply.
-This stage does not search for new roles and does not track submitted applications (that is stage 05).
+One job: hold roles saved from Job Search until an application starts. This stage does not search for
+new roles and does not track submitted applications (that is stage 05).
+
+App surface: merged into stage 05's tracker page (`/applications`, titled "Job Tracking") — saved
+roles appear there as rows with stage **Saved** alongside in-flight applications.
 
 ## Inputs
 

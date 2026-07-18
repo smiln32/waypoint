@@ -3,7 +3,6 @@ export type View =
   | "resume"
   | "coverletter"
   | "search"
-  | "jobs"
   | "applications"
   | "interview";
 
@@ -48,22 +47,6 @@ export interface CritiqueResponse {
   note: string;
 }
 
-export type SavedJobStatus = "Saved" | "Researching" | "Ready to apply";
-
-export interface SavedJob {
-  id: string;
-  title: string;
-  company: string;
-  place: string;
-  pay?: string;
-  /** Fit score as a bare number string, e.g. "88". */
-  fit: string;
-  tags: string[];
-  /** Qualification to address before applying, when known. */
-  gap?: string;
-  status: SavedJobStatus;
-}
-
 export interface ApplicationRow {
   role: string;
   roleDetail: string;
@@ -75,5 +58,7 @@ export interface ApplicationRow {
   contactDetail: string;
   nextAction: string;
   nextActionDetail: string;
+  /** Where clicking the next action takes the user. */
+  nextActionView?: View;
   due: string;
 }
