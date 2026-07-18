@@ -1340,15 +1340,18 @@ td small {
 }
 
 .application-summary {
+  border-bottom: 2px solid var(--ink);
   border-top: 2px solid var(--ink);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   margin-bottom: 0;
 }
 
-/* The summary sits directly on the table's top rule so the dividers meet it. */
+/* The summary carries its own bottom rule (dividers meet it); the table
+   starts 10px below without a duplicate rule. */
 .application-table table {
-  margin-top: 0;
+  border-top: 0;
+  margin-top: 10px;
 }
 
 .application-summary section {
