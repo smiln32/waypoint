@@ -1,12 +1,20 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import type { CoverLetterExample } from "@/lib/cover-letter-example.server";
 import { requestCritique } from "@/lib/critique/client";
+import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
 import type { CritiqueResponse } from "@/lib/types";
 import { ExampleLetter } from "./ExampleLetter";
 import { LetterReviewPanel } from "./LetterReviewPanel";
+
+interface SavedLetter {
+  draft: string;
+  role: string;
+  company: string;
+  review: CritiqueResponse | null;
+}
 
 const initialDraft =
   "Dear Hiring Manager,\n\nI am applying for the Technical Operations Manager position at AeroNorth Systems. During eight years in Marine Corps aviation maintenance, I coordinated daily maintenance priorities for 12 F/A-18 aircraft and led 18 technicians across three shifts.\n\nThis experience taught me to make clear operational decisions when safety, schedule, parts availability, and personnel capacity were all in tension. I would welcome the opportunity to bring that judgment to AeroNorth Systems.\n\nSincerely,\nAlex Morgan";
@@ -19,12 +27,29 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
   const [review, setReview] = useState<CritiqueResponse | null>(null);
   const [reviewing, setReviewing] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const saved = loadPersisted<SavedLetter>("waypoint.letter");
+      if (!saved) return;
+      setDraft(saved.draft);
+      setRole(saved.role);
+      setCompany(saved.company);
+      setReview(saved.review);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  const persistLetter = (partial: Partial<SavedLetter>) => {
+    persist("waypoint.letter", { draft, role, company, review, ...partial });
+  };
+
   const sendToEditor = async () => {
     if (reviewing) return;
     setReviewing(true);
     const result = await requestCritique("cover-letter", draft, { role, company });
     setReview(result);
     setReviewing(false);
+    persistLetter({ review: result });
   };
 
   return (
@@ -40,11 +65,23 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
           <div className="letter-toolbar">
             <label>
               Target role
-              <input value={role} onChange={(e) => setRole(e.target.value)} />
+              <input
+                value={role}
+                onChange={(e) => {
+                  setRole(e.target.value);
+                  persistLetter({ role: e.target.value });
+                }}
+              />
             </label>
             <label>
               Company
-              <input value={company} onChange={(e) => setCompany(e.target.value)} />
+              <input
+                value={company}
+                onChange={(e) => {
+                  setCompany(e.target.value);
+                  persistLetter({ company: e.target.value });
+                }}
+              />
             </label>
           </div>
           <label className="letter-draft">
@@ -54,6 +91,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               onChange={(e) => {
                 setDraft(e.target.value);
                 setReview(null);
+                persistLetter({ draft: e.target.value, review: null });
               }}
               rows={20}
             />

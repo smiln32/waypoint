@@ -1,6 +1,7 @@
 "use client";
-import { createContext, useCallback, useContext, useRef, useState } from "react";
+import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import { applicationRows } from "./demo-data";
+import { loadPersisted, persist } from "./persist";
 import type { ApplicationRow, JobResult } from "./types";
 
 interface WaypointStore {
@@ -17,6 +18,21 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState("");
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
   const [applications, setApplications] = useState<ApplicationRow[]>(applicationRows);
+  const hydratedRef = useRef(false);
+
+  // Restore persisted tracker state (deferred a tick so hydration matches SSR).
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const saved = loadPersisted<ApplicationRow[]>("waypoint.applications");
+      if (saved && Array.isArray(saved)) setApplications(saved);
+      hydratedRef.current = true;
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
+  useEffect(() => {
+    if (hydratedRef.current) persist("waypoint.applications", applications);
+  }, [applications]);
 
   const note = useCallback((message: string) => {
     setToast(message);

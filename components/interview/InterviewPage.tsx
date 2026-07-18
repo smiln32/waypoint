@@ -1,9 +1,15 @@
 "use client";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import { requestCritique } from "@/lib/critique/client";
+import { loadPersisted, persist } from "@/lib/persist";
 import type { CritiqueResponse } from "@/lib/types";
 import { InterviewReviewPanel } from "./InterviewReviewPanel";
+
+interface SavedInterview {
+  answer: string;
+  review: CritiqueResponse | null;
+}
 
 const question = "Tell me about a time you solved a difficult technical problem under pressure.";
 
@@ -15,6 +21,16 @@ export function InterviewPage() {
   const [review, setReview] = useState<CritiqueResponse | null>(null);
   const [reviewing, setReviewing] = useState(false);
 
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const saved = loadPersisted<SavedInterview>("waypoint.interview");
+      if (!saved) return;
+      setAnswer(saved.answer);
+      setReview(saved.review);
+    }, 0);
+    return () => clearTimeout(timer);
+  }, []);
+
   const sendToEditor = async () => {
     if (reviewing) return;
     setReviewing(true);
@@ -24,6 +40,7 @@ export function InterviewPage() {
     });
     setReview(result);
     setReviewing(false);
+    persist("waypoint.interview", { answer, review: result });
   };
 
   return (
@@ -45,6 +62,7 @@ export function InterviewPage() {
               onChange={(e) => {
                 setAnswer(e.target.value);
                 setReview(null);
+                persist("waypoint.interview", { answer: e.target.value, review: null });
               }}
             />
           </label>

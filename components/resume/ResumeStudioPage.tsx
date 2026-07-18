@@ -2,8 +2,16 @@
 import { useEffect, useRef, useState } from "react";
 import { requestCritique } from "@/lib/critique/client";
 import { findings } from "@/lib/demo-data";
+import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
+
+interface SavedResume {
+  html: string;
+  findings: Finding[];
+  note: string;
+  source: "claude" | "demo" | null;
+}
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
 import { ResumeIntake } from "./ResumeIntake";
 import { ResumePaper } from "./ResumePaper";
@@ -23,6 +31,35 @@ export function ResumeStudioPage() {
   const resumeHistoryRef = useRef<string[]>([]);
   const resumeHistoryIndexRef = useRef(-1);
   const [resumeHistoryState, setResumeHistoryState] = useState({ index: -1, length: 0 });
+
+  const persistResume = (partial?: Partial<SavedResume>) => {
+    const html = resumeRef.current?.innerHTML;
+    if (html === undefined) return;
+    persist("waypoint.resume", {
+      html,
+      findings: resumeFindings,
+      note: resumeEvaluationNote,
+      source: critiqueSource,
+      ...partial,
+    });
+  };
+
+  // Restore a persisted session (deferred a tick so the contentEditable ref is mounted).
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      const saved = loadPersisted<SavedResume>("waypoint.resume");
+      if (!saved || !resumeRef.current) return;
+      resumeRef.current.innerHTML = saved.html;
+      resumeHistoryRef.current = [saved.html];
+      resumeHistoryIndexRef.current = 0;
+      setResumeHistoryState({ index: 0, length: 1 });
+      setResumeFindings(saved.findings);
+      setResumeEvaluationNote(saved.note);
+      setCritiqueSource(saved.source);
+    }, 0);
+    return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   useEffect(() => {
     const root = resumeRef.current;
@@ -98,6 +135,7 @@ export function ResumeStudioPage() {
     setResumeFindings([]);
     setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
     setResumeImportText("");
+    persistResume({ findings: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
     note(source + " loaded");
   };
 
@@ -123,6 +161,7 @@ export function ResumeStudioPage() {
     setResumeEvaluationNote(result.note);
     setCritiqueSource(result.source);
     setEvaluating(false);
+    persistResume({ findings: result.findings, note: result.note, source: result.source });
     note(result.note);
   };
 
@@ -151,6 +190,7 @@ export function ResumeStudioPage() {
             onInput={() => {
               setResumeEvaluationNote("Changes not evaluated yet.");
               recordResumeHistory();
+              persistResume({ note: "Changes not evaluated yet." });
             }}
           />
           <div className="resume-submit">
