@@ -21,6 +21,9 @@ export interface Finding {
 export type JobMatch = [string, string, string, string, string];
 
 export interface JobResult {
+  /** Stable identity from the source system; never the result-list index. */
+  id: string;
+  source: "usajobs" | "sample";
   title: string;
   company: string;
   place: string;
@@ -63,6 +66,56 @@ export type OpportunityStatus =
 export const PRE_APPLICATION_STATUSES: OpportunityStatus[] = ["Saved", "Researching", "Preparing", "Ready to Apply"];
 export const APPLICATION_STATUSES: OpportunityStatus[] = ["Application Started", "Applied", "Screening", "Interview", "Offer", "Closed"];
 
+export type OpportunitySource = "job-search" | "manual" | "demo";
+
+export type NextActionKind =
+  | "review-resume"
+  | "write-cover-letter"
+  | "practice-interview"
+  | "follow-up"
+  | "research"
+  | "custom";
+
+export interface OpportunityMaterials {
+  resume: string;
+  coverLetter: string;
+}
+
+export interface OpportunityContact {
+  name: string;
+  relationship?: string;
+  email?: string;
+  phone?: string;
+  lastContactDate?: string;
+  nextFollowUpDate?: string;
+  notes?: string;
+}
+
+export interface OpportunityNextAction {
+  kind: NextActionKind;
+  label: string;
+  detail?: string;
+  dueDate?: string;
+}
+
+export interface OpportunityRecord {
+  /** Permanent Waypoint ID, preserved across stage ownership changes. */
+  id: string;
+  company: string;
+  role: string;
+  location?: string;
+  source: OpportunitySource;
+  sourceId?: string;
+  status: OpportunityStatus;
+  createdAt: string;
+  statusChangedAt: string;
+  appliedDate?: string;
+  materials: OpportunityMaterials;
+  contact?: OpportunityContact;
+  nextAction: OpportunityNextAction;
+}
+
+/** Legacy persisted shape; only migration code should consume this after conversion. */
 export interface ApplicationRow {
   /** Stable across the Stage 03 -> Stage 05 ownership transfer. */
   id: string;

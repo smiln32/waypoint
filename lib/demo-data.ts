@@ -26,6 +26,8 @@ export const findings: Finding[] = [
 
 export const searchResults: JobResult[] = [
   {
+    id: "sample-aeronorth-technical-operations-manager",
+    source: "sample",
     title: "Technical Operations Manager",
     company: "AeroNorth Systems",
     place: "Jacksonville, FL · Hybrid",
@@ -36,6 +38,8 @@ export const searchResults: JobResult[] = [
     fit: "88% fit",
   },
   {
+    id: "sample-harbor-maintenance-planning-manager",
+    source: "sample",
     title: "Maintenance Planning Manager",
     company: "Harbor Aviation",
     place: "Savannah, GA · On-site",
@@ -46,6 +50,8 @@ export const searchResults: JobResult[] = [
     fit: "82% fit",
   },
   {
+    id: "sample-atlas-field-service-operations-lead",
+    source: "sample",
     title: "Field Service Operations Lead",
     company: "Atlas Flight Systems",
     place: "Remote · Southeast",

@@ -1,6 +1,7 @@
 import { NextResponse } from "next/server";
 import { searchResults } from "@/lib/demo-data";
 import type { JobResult } from "@/lib/types";
+import { deterministicIdFromParts } from "@/lib/opportunities";
 
 /**
  * Job search backed by the USAJOBS API (free key: developer.usajobs.gov).
@@ -16,6 +17,7 @@ interface UsaJobsRemuneration {
 }
 
 interface UsaJobsDescriptor {
+  PositionID?: string;
   PositionTitle?: string;
   OrganizationName?: string;
   PositionLocationDisplay?: string;
@@ -63,6 +65,13 @@ export async function GET(request: Request) {
       .map((item) => item.MatchedObjectDescriptor)
       .filter((descriptor): descriptor is UsaJobsDescriptor => Boolean(descriptor?.PositionTitle))
       .map((descriptor) => ({
+        id: descriptor.PositionID ?? deterministicIdFromParts(
+          descriptor.PositionTitle ?? "",
+          descriptor.OrganizationName ?? "",
+          descriptor.PositionLocationDisplay ?? "",
+          descriptor.PublicationStartDate ?? "",
+        ),
+        source: "usajobs" as const,
         title: descriptor.PositionTitle ?? "",
         company: descriptor.OrganizationName ?? "U.S. Federal Government",
         place: descriptor.PositionLocationDisplay ?? "",
