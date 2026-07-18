@@ -2007,24 +2007,24 @@ td small {
 
 .how-steps button {
   gap: 20px;
-  padding: 22px 26px;
+  padding: 20px 26px;
 }
 
 .how-steps .step-index {
-  font-size: 15px;
-  height: 38px;
-  width: 38px;
+  font-size: 13px;
+  height: 34px;
+  width: 34px;
 }
 
 .how-steps .step-main {
-  gap: 5px;
+  gap: 4px;
 }
 
 .how-steps .step-main b {
-  font-size: 18px;
+  font-size: 16px;
 }
 
 .how-steps .step-main small {
-  font-size: 14px;
+  font-size: 12px;
   line-height: 1.5;
 }
