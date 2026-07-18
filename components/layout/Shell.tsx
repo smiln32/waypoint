@@ -7,8 +7,11 @@ export function Shell({ children }: { children: React.ReactNode }) {
   const { toast } = useWaypoint();
   return (
     <main className="shell">
+      <a className="skip-link" href="#main">
+        Skip to content
+      </a>
       <Sidebar />
-      <section className="work">
+      <section className="work" id="main" tabIndex={-1}>
         <Topbar />
         {children}
       </section>

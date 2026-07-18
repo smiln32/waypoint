@@ -2272,3 +2272,41 @@ td small {
   cursor: wait;
   text-decoration: none;
 }
+
+/* ==== Accessibility hardening ==== */
+
+/* Skip link: first focusable element, visible only on focus. */
+.skip-link {
+  background: var(--deep);
+  border-radius: 0 0 10px 0;
+  color: white;
+  font-weight: 600;
+  left: 0;
+  padding: 13px 20px;
+  position: fixed;
+  top: 0;
+  transform: translateY(-110%);
+  z-index: 100;
+}
+
+.skip-link:focus-visible {
+  transform: translateY(0);
+}
+
+#main:focus {
+  outline: none;
+}
+
+/* Placeholders must pass 4.5:1 — the base reset's 50% currentcolor doesn't. */
+::placeholder {
+  color: var(--muted);
+  opacity: 1;
+}
+
+/* Brief actions in the tracker: real target sizes (≥32px), not text-height. */
+.application-table td small a,
+.brief-generate {
+  align-items: center;
+  display: inline-flex;
+  min-height: 32px;
+}
