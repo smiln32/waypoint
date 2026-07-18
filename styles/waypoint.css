@@ -1794,7 +1794,6 @@ td small {
 }
 
 .application-summary {
-  border-bottom: 1px solid var(--line);
   border-top: 2px solid var(--ink);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -1809,7 +1808,7 @@ td small {
 }
 
 .application-summary section + section {
-  border-left: 1px solid var(--line);
+  border-left: 2px solid var(--ink);
 }
 
 .application-summary b {
@@ -2130,7 +2129,7 @@ td small {
 
   .application-summary section + section {
     border-left: 0;
-    border-top: 1px solid var(--line);
+    border-top: 2px solid var(--ink);
   }
 }
 

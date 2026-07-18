@@ -14,8 +14,8 @@ export function ApplicationsPage() {
         text="Keep every posting, tailored document, contact, deadline, and follow-up in one place."
       />
       <div className="application-actions">
-        <button className="primary" onClick={() => note("Application capture ready")}>
-          Add application
+        <button className="primary" onClick={() => note("Position capture ready")}>
+          Add New Position
         </button>
         <span>5 active applications · 2 actions due this week</span>
       </div>

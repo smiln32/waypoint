@@ -44,7 +44,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
           materialsDetail: "Cover letter not started",
           contact: "No contact yet",
           contactDetail: job.place,
-          nextAction: "Tailor the resume to this role",
+          nextAction: "Review resume",
           nextActionDetail: `Fit: ${job.fit}`,
           nextActionView: "resume" as const,
           due: "—",
