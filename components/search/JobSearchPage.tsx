@@ -12,7 +12,7 @@ export function JobSearchPage() {
   const [query, setQuery] = useState("operations");
   const [location, setLocation] = useState("Jacksonville, NC");
   const [alert, setAlert] = useState(false);
-  const [results, setResults] = useState<JobResult[]>(searchResults);
+  const [results, setResults] = useState<JobResult[]>([]);
   const [source, setSource] = useState<"usajobs" | "sample">("sample");
   const [searching, setSearching] = useState(false);
   const [resolved, setResolved] = useState(false);
@@ -71,9 +71,11 @@ export function JobSearchPage() {
       <SearchFilters />
       <div className="results-heading">
         <div>
-          <h2>{source === "usajobs" ? "USAJOBS results" : "Recommended results"}</h2>
+          <h2>{!resolved ? "Finding roles" : source === "usajobs" ? "USAJOBS results" : "Recommended results"}</h2>
           <span>
-            {results.length} role{results.length === 1 ? "" : "s"} match “{query}” near {location}
+            {!resolved
+              ? `Searching near ${location}…`
+              : `${results.length} role${results.length === 1 ? "" : "s"} match “${query}” near ${location}`}
           </span>
         </div>
         <label>
@@ -95,7 +97,9 @@ export function JobSearchPage() {
         </p>
       )}
       <div className="search-results">
-        {results.map((job) => (
+        {!resolved &&
+          [0, 1, 2].map((i) => <div className="result-skeleton" key={i} aria-hidden="true" />)}
+        {resolved && results.map((job) => (
           <JobResultCard
             key={job.title + job.place}
             job={job}
