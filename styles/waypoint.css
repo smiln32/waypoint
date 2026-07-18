@@ -253,11 +253,16 @@
   box-sizing: border-box;
 }
 
+b,
+strong {
+  font-weight: 650;
+}
+
 body {
   margin: 0;
   color: var(--ink);
   background: var(--bg);
-  font: 15px Arial, sans-serif;
+  font: 15px var(--font-sans), "Segoe UI", Arial, sans-serif;
 }
 
 button,
@@ -322,7 +327,7 @@ textarea:focus-visible {
   background: none;
   color: white;
   font-size: 18px;
-  font-weight: 800;
+  font-weight: 650;
   display: flex;
   align-items: center;
   gap: 10px;
@@ -450,7 +455,7 @@ nav .active {
 .interview > section > small {
   font-size: 11px;
   letter-spacing: 0.07em;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .heading small,
@@ -479,7 +484,7 @@ nav .active {
   min-height: 44px;
   padding: 0 17px;
   border-radius: 8px;
-  font-weight: 750;
+  font-weight: 600;
 }
 
 
@@ -506,14 +511,14 @@ nav .active {
   color: var(--ink);
   min-height: 44px;
   border-radius: 8px;
-  font-weight: 750;
+  font-weight: 600;
 }
 
 .link {
   border: 0;
   background: none;
   color: var(--deep);
-  font-weight: 750;
+  font-weight: 600;
   padding: 8px 0;
 }
 
@@ -525,7 +530,7 @@ button.link {
   border-radius: 7px;
   color: var(--deep);
   display: inline-flex;
-  font-weight: 750;
+  font-weight: 600;
   justify-content: center;
   min-height: 38px;
   padding: 0 14px;
@@ -589,7 +594,7 @@ button.link:not(:disabled):hover {
 .reviewhead em {
   font-size: 10px;
   font-style: normal;
-  font-weight: 800;
+  font-weight: 650;
   background: var(--deep);
   color: var(--palette-chartreuse);
   padding: 6px 8px;
@@ -618,7 +623,7 @@ button.link:not(:disabled):hover {
   font-size: 10px;
   padding: 4px 6px;
   border-radius: 5px;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .finding .high {
@@ -1095,7 +1100,7 @@ blockquote {
   display: flex;
   flex-direction: column;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 650;
   gap: 6px;
 }
 
@@ -1162,7 +1167,7 @@ blockquote {
   align-items: center;
   display: flex;
   font-size: 12px;
-  font-weight: 800;
+  font-weight: 650;
   gap: 8px;
 }
 
@@ -1275,7 +1280,7 @@ td small {
 .letter-draft {
   display: block;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .letter-draft textarea {
@@ -1358,7 +1363,7 @@ td small {
 }
 
 .application-summary span {
-  font-weight: 750;
+  font-weight: 600;
 }
 
 .application-summary small,
@@ -1391,7 +1396,7 @@ td small {
   border-radius: 99px;
   display: inline-block;
   font-size: 11px;
-  font-weight: 750;
+  font-weight: 600;
   padding: 5px 8px;
   white-space: nowrap;
 }
@@ -1437,7 +1442,7 @@ td small {
 
 .interview label {
   display: block;
-  font-weight: 750;
+  font-weight: 600;
   margin-top: 24px;
 }
 
@@ -1905,7 +1910,7 @@ td small {
   display: flex;
   flex: none;
   font-size: 13px;
-  font-weight: 800;
+  font-weight: 650;
   height: 30px;
   justify-content: center;
   width: 30px;
@@ -1934,14 +1939,14 @@ td small {
   color: var(--deep);
   flex: none;
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 600;
   padding: 5px 11px;
 }
 
 .step-arrow {
   color: var(--deep);
   flex: none;
-  font-weight: 800;
+  font-weight: 650;
 }
 
 .pipeline-glance {
@@ -1967,7 +1972,7 @@ td small {
 .pipeline-glance span {
   color: var(--muted);
   font-size: 12px;
-  font-weight: 750;
+  font-weight: 600;
 }
 
 @media (max-width: 900px) {

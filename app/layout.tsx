@@ -1,8 +1,15 @@
 import type { Metadata } from "next";
+import { Public_Sans } from "next/font/google";
 import "../styles/tokens.css";
 import "../styles/waypoint.css";
 import { Shell } from "@/components/layout/Shell";
 import { WaypointProvider } from "@/lib/store";
+
+const publicSans = Public_Sans({
+  subsets: ["latin"],
+  display: "swap",
+  variable: "--font-sans",
+});
 
 export const metadata: Metadata = {
   title: "Waypoint — Veteran Career Transition",
@@ -13,7 +20,7 @@ export const metadata: Metadata = {
 
 export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
   return (
-    <html lang="en">
+    <html lang="en" className={publicSans.variable}>
       <body>
         <WaypointProvider>
           <Shell>{children}</Shell>
