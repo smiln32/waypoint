@@ -36,8 +36,8 @@ export function StartHerePage() {
         <small>START HERE</small>
         <h1>Welcome to Waypoint.</h1>
         <p>
-          Add your resume first — it becomes the working draft the editors review. Then work through the
-          spaces below; each one handles a single part of your transition.
+          Waypoint walks you through five steps, from resume to interview. Take the first one right on this
+          page: add your resume below and it becomes the working draft the editors review.
         </p>
       </div>
       <HowItWorks />
