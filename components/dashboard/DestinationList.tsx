@@ -1,7 +1,8 @@
 "use client";
-import type { View } from "@/lib/types";
+import { useGo } from "@/lib/use-go";
 
-export function DestinationList({ onGo }: { onGo: (view: View) => void }) {
+export function DestinationList() {
+  const onGo = useGo();
   return (
     <section className="dashboard-destinations">
       <div>

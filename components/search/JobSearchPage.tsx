@@ -2,11 +2,14 @@
 import { useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import { searchResults } from "@/lib/demo-data";
-import type { View } from "@/lib/types";
+import { useWaypoint } from "@/lib/store";
+import { useGo } from "@/lib/use-go";
 import { JobResultCard } from "./JobResultCard";
 import { SearchFilters } from "./SearchFilters";
 
-export function JobSearchPage({ onGo, note }: { onGo: (view: View) => void; note: (message: string) => void }) {
+export function JobSearchPage() {
+  const onGo = useGo();
+  const { note } = useWaypoint();
   const [query, setQuery] = useState("technical operations manager");
   const [location, setLocation] = useState("Jacksonville, FL");
   const [saved, setSaved] = useState<string[]>([]);

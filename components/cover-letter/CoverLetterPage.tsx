@@ -1,12 +1,14 @@
 "use client";
 import { useState } from "react";
 import { Heading } from "@/components/ui/Heading";
+import { useWaypoint } from "@/lib/store";
 import { LetterReviewPanel } from "./LetterReviewPanel";
 
 const initialDraft =
   "Dear Hiring Manager,\n\nI am applying for the Technical Operations Manager position at AeroNorth Systems. During eight years in Marine Corps aviation maintenance, I coordinated daily maintenance priorities for 12 F/A-18 aircraft and led 18 technicians across three shifts.\n\nThis experience taught me to make clear operational decisions when safety, schedule, parts availability, and personnel capacity were all in tension. I would welcome the opportunity to bring that judgment to AeroNorth Systems.\n\nSincerely,\nAlex Morgan";
 
-export function CoverLetterPage({ note }: { note: (message: string) => void }) {
+export function CoverLetterPage() {
+  const { note } = useWaypoint();
   const [draft, setDraft] = useState(initialDraft);
   const [reviewed, setReviewed] = useState(false);
 

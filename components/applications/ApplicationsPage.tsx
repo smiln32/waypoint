@@ -1,8 +1,10 @@
 "use client";
 import { Heading } from "@/components/ui/Heading";
 import { applicationRows } from "@/lib/demo-data";
+import { useWaypoint } from "@/lib/store";
 
-export function ApplicationsPage({ note }: { note: (message: string) => void }) {
+export function ApplicationsPage() {
+  const { note } = useWaypoint();
   return (
     <div className="page">
       <Heading

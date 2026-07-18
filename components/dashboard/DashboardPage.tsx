@@ -1,11 +1,10 @@
 "use client";
 import { Heading } from "@/components/ui/Heading";
-import type { View } from "@/lib/types";
 import { DestinationList } from "./DestinationList";
 import { OverviewSection } from "./OverviewSection";
 import { StatusStrip } from "./StatusStrip";
 
-export function DashboardPage({ onGo }: { onGo: (view: View) => void }) {
+export function DashboardPage() {
   return (
     <div className="page dashboard-page">
       <section className="dashboard-intro overview-page">
@@ -24,9 +23,9 @@ export function DashboardPage({ onGo }: { onGo: (view: View) => void }) {
         </section>
         <h2 className="dashboard-next-title">What&apos;s Next</h2>
       </section>
-      <StatusStrip onGo={onGo} />
-      <DestinationList onGo={onGo} />
-      <OverviewSection onGo={onGo} />
+      <StatusStrip />
+      <DestinationList />
+      <OverviewSection />
     </div>
   );
 }

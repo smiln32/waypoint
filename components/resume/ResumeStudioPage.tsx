@@ -2,13 +2,15 @@
 import { useEffect, useRef, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import { findings } from "@/lib/demo-data";
+import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
 import { ResumeImport } from "./ResumeImport";
 import { ResumePaper } from "./ResumePaper";
 import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
-export function ResumeStudioPage({ note }: { note: (message: string) => void }) {
+export function ResumeStudioPage() {
+  const { note } = useWaypoint();
   const [selected, setSelected] = useState<number[]>([]);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(

@@ -1,8 +1,9 @@
 "use client";
 import { Panel } from "@/components/ui/Panel";
-import type { View } from "@/lib/types";
+import { useGo } from "@/lib/use-go";
 
-export function OverviewSection({ onGo }: { onGo: (view: View) => void }) {
+export function OverviewSection() {
+  const onGo = useGo();
   return (
     <section className="dashboard-overview overview-page" id="dashboard-overview">
       <section className="workspace-guide" aria-label="Career transition workspaces">

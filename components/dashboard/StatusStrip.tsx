@@ -1,7 +1,8 @@
 "use client";
-import type { View } from "@/lib/types";
+import { useGo } from "@/lib/use-go";
 
-export function StatusStrip({ onGo }: { onGo: (view: View) => void }) {
+export function StatusStrip() {
+  const onGo = useGo();
   return (
     <section className="dashboard-status" aria-label="Career transition status">
       <div>

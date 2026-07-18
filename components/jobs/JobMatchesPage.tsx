@@ -1,9 +1,10 @@
 "use client";
 import { Heading } from "@/components/ui/Heading";
 import { matches } from "@/lib/demo-data";
-import type { View } from "@/lib/types";
+import { useGo } from "@/lib/use-go";
 
-export function JobMatchesPage({ onGo }: { onGo: (view: View) => void }) {
+export function JobMatchesPage() {
+  const onGo = useGo();
   return (
     <div className="page">
       <Heading

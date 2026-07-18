@@ -49,11 +49,13 @@ body,
   color: var(--deep);
 }
 
-nav button {
+nav button,
+nav a {
   color: oklch(0.93 0.025 286.7);
 }
 
 nav button:hover,
+nav a:hover,
 nav .active {
   background: var(--palette-mint);
   color: var(--deep);

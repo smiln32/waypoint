@@ -1,4 +1,7 @@
 "use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { VIEW_PATHS } from "@/lib/nav";
 import type { View } from "@/lib/types";
 
 const NAV_ITEMS: [View, string][] = [
@@ -11,18 +14,22 @@ const NAV_ITEMS: [View, string][] = [
   ["interview", "Interview Prep"],
 ];
 
-export function Sidebar({ view, onGo }: { view: View; onGo: (view: View) => void }) {
+export function Sidebar() {
+  const pathname = usePathname();
   return (
     <aside className="side">
-      <button className="logo" onClick={() => onGo("dashboard")}>
+      <Link className="logo" href="/">
         <span>W</span>Waypoint
-      </button>
+      </Link>
       <nav>
-        {NAV_ITEMS.map(([v, l]) => (
-          <button className={view === v ? "active" : ""} key={v} onClick={() => onGo(v)}>
-            {l}
-          </button>
-        ))}
+        {NAV_ITEMS.map(([view, label]) => {
+          const href = VIEW_PATHS[view];
+          return (
+            <Link className={pathname === href ? "active" : ""} key={view} href={href}>
+              {label}
+            </Link>
+          );
+        })}
       </nav>
       <p>
         <b>Your record stays yours.</b>
