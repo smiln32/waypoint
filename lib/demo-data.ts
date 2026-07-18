@@ -70,6 +70,7 @@ export const opportunityRecords: OpportunityRecord[] = [
     role: "Technical Operations Manager",
     location: "Jacksonville, FL · Hybrid",
     source: "demo",
+    sourceId: "sample:sample-aeronorth-technical-operations-manager",
     status: "Interview",
     createdAt: "2026-07-10T14:00:00.000Z",
     statusChangedAt: "2026-07-18T14:00:00.000Z",

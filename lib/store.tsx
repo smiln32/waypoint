@@ -8,7 +8,7 @@ import {
   OPPORTUNITY_STORAGE_KEY,
   resolveOpportunityState,
 } from "./opportunity-migration";
-import { jobIdentity } from "./opportunities";
+import { jobIdentity, opportunityMatchesJob } from "./opportunities";
 import { loadPersisted, persist } from "./persist";
 import type { JobResult, OpportunityRecord } from "./types";
 
@@ -84,14 +84,14 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const isJobTracked = useCallback(
-    (job: JobResult) => opportunities.some((record) => record.sourceId === jobIdentity(job)),
+    (job: JobResult) => opportunities.some((record) => opportunityMatchesJob(record, job)),
     [opportunities],
   );
 
   const toggleTrackedJob = useCallback((job: JobResult) => {
     setOpportunities((records) => {
       const sourceId = jobIdentity(job);
-      const existing = records.find((record) => record.sourceId === sourceId);
+      const existing = records.find((record) => opportunityMatchesJob(record, job));
       if (existing) return records.filter((record) => record.id !== existing.id);
       const now = new Date().toISOString();
       return [

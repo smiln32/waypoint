@@ -4,8 +4,16 @@ import { useWaypoint } from "@/lib/store";
 import type { NextActionKind, OpportunityStatus } from "@/lib/types";
 
 const STAGE_OPTIONS: OpportunityStatus[] = [
-  "Saved", "Researching", "Preparing", "Ready to Apply", "Application Started",
-  "Applied", "Screening", "Interview", "Offer", "Closed",
+  "Saved",
+  "Researching",
+  "Preparing",
+  "Ready to Apply",
+  "Application Started",
+  "Applied",
+  "Screening",
+  "Interview",
+  "Offer",
+  "Closed",
 ];
 
 const ACTION_TARGETS: { label: string; kind: NextActionKind }[] = [
@@ -27,8 +35,13 @@ export function AddPositionForm() {
   const [dueDate, setDueDate] = useState("");
 
   const reset = () => {
-    setRole(""); setCompany(""); setStage("Saved"); setContact("");
-    setNextAction(""); setActionKind("custom"); setDueDate("");
+    setRole("");
+    setCompany("");
+    setStage("Saved");
+    setContact("");
+    setNextAction("");
+    setActionKind("custom");
+    setDueDate("");
   };
 
   const submit = (event: React.FormEvent) => {
@@ -43,7 +56,10 @@ export function AddPositionForm() {
       status: stage,
       createdAt: now,
       statusChangedAt: now,
-      materials: { resume: "Resume not tailored yet", coverLetter: "Cover letter not started" },
+      materials: {
+        resume: "Resume not tailored yet",
+        coverLetter: "Cover letter not started",
+      },
       ...(contact.trim() ? { contact: { name: contact.trim() } } : {}),
       nextAction: {
         kind: actionKind,
@@ -52,36 +68,111 @@ export function AddPositionForm() {
       },
     });
     note(role.trim() + " added to Job Tracking");
-    reset(); setOpen(false);
+    reset();
+    setOpen(false);
   };
 
   if (!open) {
     return (
       <div className="add-position-trigger">
-        <button className="primary" onClick={() => setOpen(true)}>Add Position</button>
+        <button className="primary" onClick={() => setOpen(true)}>
+          Add Position
+        </button>
         <small>from another source</small>
       </div>
     );
   }
 
   return (
-    <form className="add-position" onSubmit={submit} aria-label="Add a new position">
+    <form
+      className="add-position"
+      onSubmit={submit}
+      aria-label="Add a new position"
+    >
       <div className="add-position-grid">
-        <label>Role title *<input value={role} onChange={(e) => setRole(e.target.value)} placeholder="Operations Supervisor" /></label>
-        <label>Company *<input value={company} onChange={(e) => setCompany(e.target.value)} placeholder="Northgate Logistics" /></label>
-        <label>Stage<select value={stage} onChange={(e) => setStage(e.target.value as OpportunityStatus)}>
-          {STAGE_OPTIONS.map((option) => <option key={option}>{option}</option>)}
-        </select></label>
-        <label>Contact<input value={contact} onChange={(e) => setContact(e.target.value)} placeholder="Name, if you have one" /></label>
-        <label>Next action<input value={nextAction} onChange={(e) => setNextAction(e.target.value)} placeholder="Tailor resume" /></label>
-        <label>Action opens<select value={actionKind} onChange={(e) => setActionKind(e.target.value as NextActionKind)}>
-          {ACTION_TARGETS.map((option) => <option key={option.label} value={option.kind}>{option.label}</option>)}
-        </select></label>
-        <label>Due<input type="date" value={dueDate} onChange={(e) => setDueDate(e.target.value)} /></label>
+        <label>
+          Role title *
+          <input
+            value={role}
+            onChange={(e) => setRole(e.target.value)}
+            placeholder="Operations Supervisor"
+          />
+        </label>
+        <label>
+          Company *
+          <input
+            value={company}
+            onChange={(e) => setCompany(e.target.value)}
+            placeholder="Northgate Logistics"
+          />
+        </label>
+        <label>
+          Stage
+          <select
+            value={stage}
+            onChange={(e) => setStage(e.target.value as OpportunityStatus)}
+          >
+            {STAGE_OPTIONS.map((option) => (
+              <option key={option}>{option}</option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Contact
+          <input
+            value={contact}
+            onChange={(e) => setContact(e.target.value)}
+            placeholder="Name, if you have one"
+          />
+        </label>
+        <label>
+          Next action
+          <input
+            value={nextAction}
+            onChange={(e) => setNextAction(e.target.value)}
+            placeholder="Tailor resume"
+          />
+        </label>
+        <label>
+          Action opens
+          <select
+            value={actionKind}
+            onChange={(e) => setActionKind(e.target.value as NextActionKind)}
+          >
+            {ACTION_TARGETS.map((option) => (
+              <option key={option.label} value={option.kind}>
+                {option.label}
+              </option>
+            ))}
+          </select>
+        </label>
+        <label>
+          Due
+          <input
+            type="date"
+            value={dueDate}
+            onChange={(e) => setDueDate(e.target.value)}
+          />
+        </label>
       </div>
       <div className="add-position-actions">
-        <button type="submit" className="primary" disabled={!role.trim() || !company.trim()}>Add position</button>
-        <button type="button" className="secondary" onClick={() => { reset(); setOpen(false); }}>Cancel</button>
+        <button
+          type="submit"
+          className="primary"
+          disabled={!role.trim() || !company.trim()}
+        >
+          Add position
+        </button>
+        <button
+          type="button"
+          className="secondary"
+          onClick={() => {
+            reset();
+            setOpen(false);
+          }}
+        >
+          Cancel
+        </button>
       </div>
     </form>
   );

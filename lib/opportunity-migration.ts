@@ -124,6 +124,7 @@ export function migrateLegacyOpportunity(value: unknown, now = new Date()): Oppo
   const role = text(legacy.role);
   if (!role) return null;
   const roleDetail = text(legacy.roleDetail);
+  const nextActionDetail = optionalText(legacy.nextActionDetail);
   const company = legacyCompany(roleDetail);
   const status = isStatus(legacy.stage) ? legacy.stage : "Saved";
   const detailDate = parseLegacyDate(roleDetail, now);
@@ -135,13 +136,18 @@ export function migrateLegacyOpportunity(value: unknown, now = new Date()): Oppo
     ? detailDate
     : undefined;
   const id = text(legacy.id) || deterministicIdFromParts(company, role, timestamp);
+  const source = id.startsWith("demo-")
+    ? "demo"
+    : /saved from job search/i.test(`${roleDetail} ${nextActionDetail ?? ""}`)
+      ? "job-search"
+      : "manual";
 
   return {
     id,
     company,
     role,
     ...(location ? { location } : {}),
-    source: id.startsWith("demo-") ? "demo" : "manual",
+    source,
     status,
     createdAt: timestamp,
     statusChangedAt: timestamp,
@@ -154,7 +160,7 @@ export function migrateLegacyOpportunity(value: unknown, now = new Date()): Oppo
     nextAction: {
       kind: actionKindFromLegacy(legacy.nextActionView, label),
       label,
-      ...(optionalText(legacy.nextActionDetail) ? { detail: optionalText(legacy.nextActionDetail) } : {}),
+      ...(nextActionDetail ? { detail: nextActionDetail } : {}),
       ...(dueDate ? { dueDate } : {}),
     },
   };

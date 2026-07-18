@@ -6,6 +6,7 @@ An opportunity record represents one specific job posting or manually entered po
 
 - The Waypoint record ID is permanent. Starting an application changes ownership and status, never the ID.
 - A source ID identifies the external posting when one is available. It prevents duplicate saves of the same posting while allowing identical titles from different companies or postings.
+- Migrated Job Search records whose legacy data did not preserve an external posting ID use a narrowly scoped fallback: normalized company, role, and location must all match. This fallback applies only to `job-search` records without `sourceId`; records with a real `sourceId` match exclusively by that ID.
 - Company and role are separate authoritative values. Location is separate from contact information.
 - Fictional seed records are marked as demo data. Private user records belong only in ignored runtime output and browser storage.
 

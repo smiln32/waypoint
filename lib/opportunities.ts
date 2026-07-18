@@ -51,6 +51,27 @@ export function jobIdentity(job: JobResult): string {
   return `${job.source}:${job.id}`;
 }
 
+function normalizeIdentityPart(value?: string): string {
+  return (value ?? "")
+    .normalize("NFKC")
+    .trim()
+    .toLocaleLowerCase("en-US")
+    .replace(/\s+/g, " ");
+}
+
+/**
+ * Legacy Job Search records may lack the external posting ID. Only those records
+ * use the normalized field fallback; a preserved source ID is always exclusive.
+ */
+export function opportunityMatchesJob(record: OpportunityRecord, job: JobResult): boolean {
+  const sourceId = jobIdentity(job);
+  if (record.sourceId) return record.sourceId === sourceId;
+  if (record.source !== "job-search") return false;
+  return normalizeIdentityPart(record.company) === normalizeIdentityPart(job.company)
+    && normalizeIdentityPart(record.role) === normalizeIdentityPart(job.title)
+    && normalizeIdentityPart(record.location) === normalizeIdentityPart(job.place);
+}
+
 export function deterministicIdFromParts(...parts: string[]): string {
   const input = parts.map((part) => part.trim().toLowerCase()).join("|");
   let hash = 2166136261;
