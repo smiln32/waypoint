@@ -36,7 +36,6 @@ export function HowItWorks() {
     <section className="dash-section" aria-label="How Waypoint works">
       <div className="dash-section-head">
         <h2>How Waypoint works</h2>
-        <p>Follow the path in order — each step opens its workspace.</p>
       </div>
       <ol className="next-steps how-steps">
         {PATH.map((step, index) => (
