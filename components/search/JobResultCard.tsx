@@ -1,4 +1,5 @@
 "use client";
+import { jobTrackingButtonFor } from "@/lib/opportunities";
 import type { JobResult, JobTrackingState } from "@/lib/types";
 
 export function JobResultCard({
@@ -10,8 +11,7 @@ export function JobResultCard({
   trackingState: JobTrackingState;
   onToggleSave: () => void;
 }) {
-  const isTracked = trackingState !== "not-tracked";
-  const label = trackingState === "not-tracked" ? "Save" : trackingState === "saved" ? "Saved" : "Tracked";
+  const button = jobTrackingButtonFor(trackingState);
 
   return (
     <article>
@@ -25,11 +25,11 @@ export function JobResultCard({
         </div>
         <button
           className="save-job"
-          aria-pressed={isTracked}
-          disabled={trackingState === "tracked"}
+          aria-pressed={button.pressed}
+          disabled={button.disabled}
           onClick={onToggleSave}
         >
-          {label}
+          {button.label}
         </button>
       </div>
       <div className="job-facts">

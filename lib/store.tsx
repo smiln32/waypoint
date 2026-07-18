@@ -8,7 +8,7 @@ import {
   OPPORTUNITY_STORAGE_KEY,
   resolveOpportunityState,
 } from "./opportunity-migration";
-import { jobIdentity, jobTrackingStateFor, opportunityMatchesJob } from "./opportunities";
+import { jobTrackingStateFor, startApplicationRecord, toggleTrackedJobRecords } from "./opportunities";
 import { loadPersisted, persist } from "./persist";
 import type { JobResult, JobTrackingState, OpportunityRecord } from "./types";
 
@@ -89,35 +89,12 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   );
 
   const toggleTrackedJob = useCallback((job: JobResult) => {
-    setOpportunities((records) => {
-      const sourceId = jobIdentity(job);
-      const existing = records.find((record) => opportunityMatchesJob(record, job));
-      if (existing) {
-        if (existing.status !== "Saved") return records;
-        return records.filter((record) => record.id !== existing.id);
-      }
-      const now = new Date().toISOString();
-      return [
-        ...records,
-        {
-          id: crypto.randomUUID(),
-          company: job.company,
-          role: job.title,
-          ...(job.place ? { location: job.place } : {}),
-          source: "job-search",
-          sourceId,
-          status: "Saved",
-          createdAt: now,
-          statusChangedAt: now,
-          materials: { resume: "Resume not tailored yet", coverLetter: "Cover letter not started" },
-          nextAction: {
-            kind: "review-resume",
-            label: "Review resume",
-            ...(job.fit ? { detail: `Fit: ${job.fit}` } : { detail: "Saved from Job Search" }),
-          },
-        },
-      ];
-    });
+    setOpportunities((records) => toggleTrackedJobRecords(
+      records,
+      job,
+      new Date().toISOString(),
+      crypto.randomUUID(),
+    ));
   }, []);
 
   const addOpportunity = useCallback((record: OpportunityRecord) => {
@@ -125,11 +102,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   const startApplication = useCallback((id: string) => {
-    setOpportunities((records) => records.map((record) => record.id === id ? {
-      ...record,
-      status: "Application Started",
-      statusChangedAt: new Date().toISOString(),
-    } : record));
+    setOpportunities((records) => startApplicationRecord(records, id, new Date().toISOString()));
   }, []);
 
   return (

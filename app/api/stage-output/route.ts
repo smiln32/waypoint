@@ -2,7 +2,7 @@ import fs from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import type { OpportunityRecord } from "@/lib/types";
-import { APPLICATION_STATUSES, PRE_APPLICATION_STATUSES } from "@/lib/types";
+import { partitionOpportunityStageOutputs } from "@/lib/stage-outputs";
 import { isOpportunityRecord } from "@/lib/opportunity-migration";
 
 export async function POST(request: Request) {
@@ -27,20 +27,21 @@ export async function POST(request: Request) {
   };
 
   try {
+    const outputs = partitionOpportunityStageOutputs(opportunities);
     write(
       "02_job_search",
       "saved-roles.json",
-      opportunities.filter((record) => record.source === "job-search" && record.status === "Saved"),
+      outputs.savedRoles,
     );
     write(
       "03_job_tracking",
       "tracked-roles.json",
-      opportunities.filter((record) => PRE_APPLICATION_STATUSES.includes(record.status)),
+      outputs.trackedRoles,
     );
     write(
       "05_applications",
       "applications.json",
-      opportunities.filter((record) => APPLICATION_STATUSES.includes(record.status)),
+      outputs.applications,
     );
     return NextResponse.json({ written: true });
   } catch {
