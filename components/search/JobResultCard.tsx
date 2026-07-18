@@ -25,13 +25,15 @@ export function JobResultCard({
         </button>
       </div>
       <div className="job-facts">
-        <span>{job.pay}</span>
-        <span>{job.type}</span>
-        <span>{job.apply}</span>
+        {[job.pay, job.type, job.apply].filter(Boolean).map((fact) => (
+          <span key={fact}>{fact}</span>
+        ))}
       </div>
-      <div className="job-result-actions">
-        <b>{job.fit}</b>
-      </div>
+      {job.fit && (
+        <div className="job-result-actions">
+          <b>{job.fit}</b>
+        </div>
+      )}
     </article>
   );
 }

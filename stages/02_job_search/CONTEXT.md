@@ -19,7 +19,8 @@ materials or track application progress.
    gap needs attention before applying.
 3. Saving a role hands it to stage 03; "Start application" hands it directly to stage 05.
 
-Current app status: results are grounded sample data; no live job-board API is connected yet.
+Current app status: connects to the USAJOBS API (federal listings, veterans' preference) when
+credentials are configured; otherwise shows clearly-labeled sample roles.
 
 ## Outputs
 

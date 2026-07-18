@@ -62,7 +62,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
           contact: "No contact yet",
           contactDetail: job.place,
           nextAction: "Review resume",
-          nextActionDetail: `Fit: ${job.fit}`,
+          nextActionDetail: job.fit ? `Fit: ${job.fit}` : "Saved from Job Search",
           nextActionView: "resume" as const,
           due: "—",
         },

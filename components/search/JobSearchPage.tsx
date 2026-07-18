@@ -1,8 +1,9 @@
 "use client";
-import { useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
 import { searchResults } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
+import type { JobResult } from "@/lib/types";
 import { JobResultCard } from "./JobResultCard";
 import { SearchFilters } from "./SearchFilters";
 
@@ -11,6 +12,32 @@ export function JobSearchPage() {
   const [query, setQuery] = useState("technical operations manager");
   const [location, setLocation] = useState("Jacksonville, FL");
   const [alert, setAlert] = useState(false);
+  const [results, setResults] = useState<JobResult[]>(searchResults);
+  const [source, setSource] = useState<"usajobs" | "sample">("sample");
+  const [searching, setSearching] = useState(false);
+
+  const runSearch = useCallback(async (q: string, loc: string) => {
+    setSearching(true);
+    try {
+      const res = await fetch(`/api/jobs?q=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}`);
+      if (!res.ok) throw new Error(String(res.status));
+      const data = (await res.json()) as { source: "usajobs" | "sample"; results: JobResult[] };
+      setResults(data.results);
+      setSource(data.source);
+    } catch {
+      setResults(searchResults);
+      setSource("sample");
+    }
+    setSearching(false);
+  }, []);
+
+  // Load live results on arrival when the API is configured.
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      runSearch("technical operations manager", "Jacksonville, FL");
+    }, 0);
+    return () => clearTimeout(timer);
+  }, [runSearch]);
 
   return (
     <div className="page job-search-page">
@@ -28,16 +55,23 @@ export function JobSearchPage() {
           <span>City, state, or remote</span>
           <input value={location} onChange={(e) => setLocation(e.target.value)} />
         </label>
-        <button className="primary" onClick={() => note("Search results updated")}>
-          Search jobs
+        <button
+          className="primary"
+          disabled={searching}
+          onClick={async () => {
+            await runSearch(query, location);
+            note("Search results updated");
+          }}
+        >
+          {searching ? "Searching…" : "Search jobs"}
         </button>
       </section>
       <SearchFilters />
       <div className="results-heading">
         <div>
-          <h2>Recommended results</h2>
+          <h2>{source === "usajobs" ? "USAJOBS results" : "Recommended results"}</h2>
           <span>
-            18 roles match “{query}” near {location}
+            {results.length} role{results.length === 1 ? "" : "s"} match “{query}” near {location}
           </span>
         </div>
         <label>
@@ -52,10 +86,16 @@ export function JobSearchPage() {
           Alert me to new jobs
         </label>
       </div>
+      {source === "sample" && (
+        <p className="demo-notice" role="status">
+          <b>Sample roles.</b> Live federal listings need a free USAJOBS key — set{" "}
+          <code>USAJOBS_API_KEY</code> and <code>USAJOBS_EMAIL</code> in <code>.env.local</code>.
+        </p>
+      )}
       <div className="search-results">
-        {searchResults.map((job) => (
+        {results.map((job) => (
           <JobResultCard
-            key={job.title}
+            key={job.title + job.place}
             job={job}
             saved={isJobTracked(job.title)}
             onToggleSave={() => {

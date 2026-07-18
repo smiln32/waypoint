@@ -77,6 +77,11 @@ MOS-to-career mappings are treated as hypotheses, never proof of experience. Pro
 
 Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The demo keeps everything in browser session state; uploaded files never leave the machine.
 
-## Current limitations
+## Built for real use
 
-Demo state is in-memory and resets on refresh; job results are grounded sample data (no live job-board API); PDF/DOCX parsing not yet implemented (TXT/MD/RTF and paste work); the add-position intake form is future work.
+- **Your work survives.** The resume draft, editor findings, cover letter, interview answer, and the whole tracker persist in the browser (localStorage) — no account needed, and nothing leaves the machine.
+- **Real job listings.** Job Search connects to the **USAJOBS API** — federal hiring, where veterans' preference actually applies (free key at developer.usajobs.gov). Without credentials, clearly-labeled sample roles keep the page fully functional.
+- **Any resume file.** PDF, DOCX, TXT, MD, RTF, or pasted text — parsed entirely in the browser (pdf.js + mammoth), so the file never leaves the machine.
+- **Manual tracking.** Add positions directly in Job Tracking alongside roles saved from search; every next action links to the workspace where it happens.
+
+Roadmap: accounts and cloud sync, additional job boards, materialized ICM `output/` files for the non-AI stages.
