@@ -70,6 +70,7 @@ export const applicationRows: ApplicationRow[] = [
     nextAction: "Interview Prep",
     nextActionDetail: "Company brief ready",
     nextActionView: "interview",
+    nextActionDetailHref: "/brief/aeronorth",
     due: "Jul 19",
   },
   {

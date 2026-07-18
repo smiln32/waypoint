@@ -61,5 +61,7 @@ export interface ApplicationRow {
   nextActionDetail: string;
   /** Where clicking the next action takes the user. */
   nextActionView?: View;
+  /** Optional document the detail line links to (opens in a new tab). */
+  nextActionDetailHref?: string;
   due: string;
 }

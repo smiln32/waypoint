@@ -829,11 +829,6 @@ blockquote {
   min-width: 0;
 }
 
-.resume-edit-note {
-  color: var(--muted);
-  font-size: 13px;
-  margin: 0 0 10px;
-}
 
 .editable-paper {
   cursor: text;
@@ -928,14 +923,15 @@ blockquote {
 
 .resume-history {
   display: flex;
-  gap: 8px;
-  justify-content: flex-end;
+  gap: 6px;
+  justify-content: flex-start;
   margin-bottom: 10px;
 }
 
 .resume-history button {
-  min-height: 40px;
-  padding: 0 14px;
+  font-size: 13px;
+  min-height: 32px;
+  padding: 0 11px;
 }
 
 .resume-history button:disabled {
@@ -981,7 +977,12 @@ blockquote {
 
 .intake-heading h2 {
   font-size: 20px;
+  font-weight: 650;
   margin: 0 0 5px;
+}
+
+.intake-heading p + p {
+  margin-top: 3px;
 }
 
 .intake-heading p {
@@ -2238,4 +2239,18 @@ td small {
   .add-position-grid {
     grid-template-columns: 1fr;
   }
+}
+
+/* Detail-line document links (e.g. the company brief) */
+.application-table td small a {
+  color: var(--deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+/* Company brief document */
+.brief-page .paper {
+  max-width: 760px;
+  min-height: 0;
 }

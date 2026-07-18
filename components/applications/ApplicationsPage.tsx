@@ -75,7 +75,15 @@ export function ApplicationsPage() {
                   ) : (
                     <b>{row.nextAction}</b>
                   )}
-                  <small>{row.nextActionDetail}</small>
+                  {row.nextActionDetailHref ? (
+                    <small>
+                      <a href={row.nextActionDetailHref} target="_blank" rel="noopener noreferrer">
+                        {row.nextActionDetail} ↗
+                      </a>
+                    </small>
+                  ) : (
+                    <small>{row.nextActionDetail}</small>
+                  )}
                 </td>
                 <td>{row.due}</td>
               </tr>

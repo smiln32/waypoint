@@ -185,11 +185,12 @@ export function ResumeStudioPage() {
       />
       <div className="intake-heading">
         <h2>2. Review Your Resume</h2>
+        <p>Submit your resume for evaluation and make edits as needed.</p>
+        <p>Click anywhere in the resume to edit it.</p>
       </div>
       <div className="editor">
         <section className="resume-draft">
           <ResumeHistoryControls historyState={resumeHistoryState} onMove={moveResumeHistory} />
-          <p className="resume-edit-note">Click anywhere in the resume to edit it.</p>
           <ResumePaper
             paperRef={resumeRef}
             onFocus={seedResumeHistory}
