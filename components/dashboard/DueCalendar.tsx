@@ -64,7 +64,12 @@ export function DueCalendar() {
             <div key={day} className={`cal-cell${isToday ? " cal-today" : ""}`}>
               <span className="cal-day">{day}</span>
               {due.map((item) => (
-                <span className="cal-due" key={item.role} title={item.role}>
+                <span
+                  className="cal-due"
+                  key={item.role}
+                  title={item.role}
+                  aria-label={`${item.label} — ${item.role}`}
+                >
                   {item.label}
                 </span>
               ))}

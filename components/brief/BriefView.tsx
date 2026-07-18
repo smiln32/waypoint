@@ -44,15 +44,15 @@ export function BriefView({ slug }: { slug: string }) {
         </p>
       </div>
       <article className="paper brief-paper">
-        <h4>WHO THEY ARE</h4>
+        <h2>WHO THEY ARE</h2>
         <p>{brief.sections.whoTheyAre}</p>
-        <h4>WHAT THE ROLE OWNS</h4>
+        <h2>WHAT THE ROLE OWNS</h2>
         <p>{brief.sections.whatTheRoleOwns}</p>
-        <h4>WHY YOUR RECORD FITS</h4>
+        <h2>WHY YOUR RECORD FITS</h2>
         <p>{brief.sections.whyYourRecordFits}</p>
-        <h4>LIKELY QUESTIONS</h4>
+        <h2>LIKELY QUESTIONS</h2>
         <p>{brief.sections.likelyQuestions}</p>
-        <h4>ONE HONEST GAP</h4>
+        <h2>ONE HONEST GAP</h2>
         <p>{brief.sections.honestGap}</p>
       </article>
     </div>

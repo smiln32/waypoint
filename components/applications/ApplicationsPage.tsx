@@ -74,12 +74,12 @@ export function ApplicationsPage() {
         <table>
           <thead>
             <tr>
-              <th>Role</th>
-              <th>Stage</th>
-              <th>Materials</th>
-              <th>Contact</th>
-              <th>Next action</th>
-              <th>Due</th>
+              <th scope="col">Role</th>
+              <th scope="col">Stage</th>
+              <th scope="col">Materials</th>
+              <th scope="col">Contact</th>
+              <th scope="col">Next action</th>
+              <th scope="col">Due</th>
             </tr>
           </thead>
           <tbody>

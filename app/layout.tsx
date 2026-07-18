@@ -12,7 +12,10 @@ const publicSans = Public_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "Waypoint — Veteran Career Transition",
+  title: {
+    default: "Waypoint — Veteran Career Transition",
+    template: "%s · Waypoint",
+  },
   description:
     "Translate military experience into civilian opportunity without losing the person behind the record.",
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },

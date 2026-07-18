@@ -2310,3 +2310,21 @@ td small {
   display: inline-flex;
   min-height: 32px;
 }
+
+/* Brief document section heads: h2 semantics, small-caps document look. */
+.brief-paper h2 {
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  margin-top: 30px;
+}
+
+/* Topbar profile name (plain text until a real menu exists). */
+.profile-name {
+  color: var(--muted);
+}
+
+/* 44px targets per PRODUCT.md (Undo/Forward stay compact by explicit design choice). */
+.save-job,
+.application-table .next-action {
+  min-height: 44px;
+}
