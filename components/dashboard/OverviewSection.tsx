@@ -6,26 +6,6 @@ export function OverviewSection() {
   const onGo = useGo();
   return (
     <section className="dashboard-overview overview-page" id="dashboard-overview">
-      <section className="workspace-guide" aria-label="Career transition workspaces">
-        <dl>
-          <div>
-            <dt>Resume Studio</dt>
-            <dd>Translate your experience, review specific editor findings, and approve every change.</dd>
-          </div>
-          <div>
-            <dt>Job Matches</dt>
-            <dd>See where your verified skills align and which qualified gaps need attention.</dd>
-          </div>
-          <div>
-            <dt>Applications</dt>
-            <dd>Keep roles, tailored materials, contacts, deadlines, and follow-ups together.</dd>
-          </div>
-          <div>
-            <dt>Interview Practice</dt>
-            <dd>Practice realistic questions and learn how to make your experience clear to employers.</dd>
-          </div>
-        </dl>
-      </section>
       <section className="hero">
         <div>
           <small>NEXT DECISION</small>
