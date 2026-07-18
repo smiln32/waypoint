@@ -1,4 +1,4 @@
-﻿import type {
+import type {
   JobResult,
   NextActionKind,
   OpportunityRecord,
@@ -28,13 +28,14 @@ function dateOnly(timestamp: string): string {
 }
 
 export function formatOpportunityDetail(record: OpportunityRecord): string {
+  const isPreApplication = SAVED_STATUSES.includes(record.status);
   const lifecycle = record.status === "Application Started"
     ? "Application started"
-    : record.status === "Saved"
+    : isPreApplication
       ? record.source === "manual" ? "Added" : "Saved"
-      : record.status;
+      : record.appliedDate ? "Applied" : record.status;
   const date = record.appliedDate
-    ?? (record.status === "Saved" ? dateOnly(record.createdAt) : dateOnly(record.statusChangedAt));
+    ?? (isPreApplication ? dateOnly(record.createdAt) : dateOnly(record.statusChangedAt));
   const friendly = formatFriendlyDate(date);
   return `${record.company} · ${lifecycle}${friendly ? ` ${friendly}` : ""}`;
 }

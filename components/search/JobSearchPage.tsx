@@ -99,13 +99,13 @@ export function JobSearchPage() {
       <div className="search-results">
         {!resolved &&
           [0, 1, 2].map((i) => <div className="result-skeleton" key={i} aria-hidden="true" />)}
-        {resolved && results.map((job, i) => (
+        {resolved && results.map((job) => (
           <JobResultCard
-            key={`${job.title}|${job.place}|${i}`}
+            key={`${job.source}:${job.id}`}
             job={job}
-            saved={isJobTracked(job.title)}
+            saved={isJobTracked(job)}
             onToggleSave={() => {
-              const wasSaved = isJobTracked(job.title);
+              const wasSaved = isJobTracked(job);
               toggleTrackedJob(job);
               note(wasSaved ? job.title + " removed from Job Tracking" : job.title + " saved to Job Tracking");
             }}

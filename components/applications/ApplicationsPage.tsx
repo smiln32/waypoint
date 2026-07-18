@@ -1,29 +1,29 @@
-"use client";
+﻿"use client";
 import { useState } from "react";
 import { briefSlug, resumeTextFromStorage, type CompanyBrief } from "@/lib/briefs";
 import { Heading } from "@/components/ui/Heading";
+import { formatFriendlyDate, formatOpportunityDetail, nextActionViewFor, statusClassFor } from "@/lib/opportunities";
 import { useWaypoint } from "@/lib/store";
-import { PRE_APPLICATION_STATUSES, type ApplicationRow } from "@/lib/types";
+import { PRE_APPLICATION_STATUSES, type OpportunityRecord } from "@/lib/types";
 import { useGo } from "@/lib/use-go";
 import { AddPositionForm } from "./AddPositionForm";
 
 export function ApplicationsPage() {
-  const { applications, briefs, saveBrief, startApplication, note } = useWaypoint();
+  const { opportunities, briefs, saveBrief, startApplication, note } = useWaypoint();
   const onGo = useGo();
   const [generatingSlug, setGeneratingSlug] = useState<string | null>(null);
 
-  const generateBrief = async (row: ApplicationRow) => {
-    const company = row.roleDetail.split(" · ")[0];
-    const slug = briefSlug(company, row.role);
+  const generateBrief = async (record: OpportunityRecord) => {
+    const slug = briefSlug(record.company, record.role);
     setGeneratingSlug(slug);
     try {
       const res = await fetch("/api/brief", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
-          company,
-          role: row.role,
-          detail: row.roleDetail,
+          company: record.company,
+          role: record.role,
+          detail: formatOpportunityDetail(record),
           resumeText: resumeTextFromStorage(),
         }),
       });
@@ -32,141 +32,55 @@ export function ApplicationsPage() {
         note(payload.error ?? "Brief generation failed — try again.");
       } else {
         const brief = (await res.json()) as CompanyBrief;
-        saveBrief(brief);
-        note("Company brief ready");
+        saveBrief(brief); note("Company brief ready");
       }
     } catch {
       note("Brief generation failed — try again.");
     }
     setGeneratingSlug(null);
   };
-  const activeCount = applications.filter((row) => row.stage !== "Closed").length;
-  const interviewCount = applications.filter((row) => row.stage === "Interview").length;
-  const scheduledCount = applications.filter((row) => row.due !== "—").length;
-  const missingDueCount = applications.length - scheduledCount;
-  const activeStageCount = new Set(
-    applications.filter((row) => row.stage !== "Closed").map((row) => row.stage),
-  ).size;
+
+  const activeCount = opportunities.filter((record) => record.status !== "Closed").length;
+  const interviewCount = opportunities.filter((record) => record.status === "Interview").length;
+  const scheduledCount = opportunities.filter((record) => Boolean(record.nextAction.dueDate)).length;
+  const missingDueCount = opportunities.length - scheduledCount;
+  const activeStageCount = new Set(opportunities.filter((record) => record.status !== "Closed").map((record) => record.status)).size;
 
   return (
     <div className="page">
-      <Heading
-        kicker="JOB TRACKING"
-        title="Nothing gets lost."
-        text="Keep every posting, tailored document, contact, deadline, and follow-up in one place."
-      />
+      <Heading kicker="JOB TRACKING" title="Nothing gets lost." text="Keep every posting, tailored document, contact, deadline, and follow-up in one place." />
       <div className="application-summary">
-        <section>
-          <b>{activeCount}</b>
-          <span>Active</span>
-          <small>{activeStageCount === 0 ? "No active stages" : `${activeStageCount} active hiring stage${activeStageCount === 1 ? "" : "s"}`}</small>
-        </section>
-        <section>
-          <b>{interviewCount}</b>
-          <span>Interviews</span>
-          <small>{interviewCount === 0 ? "No interviews scheduled" : `${interviewCount} role${interviewCount === 1 ? "" : "s"} at interview stage`}</small>
-        </section>
-        <section>
-          <b>{scheduledCount}/{applications.length}</b>
-          <span>Follow-ups scheduled</span>
-          <small>{missingDueCount === 0 ? "Every position has a date" : `${missingDueCount} position${missingDueCount === 1 ? " needs" : "s need"} a date`}</small>
-        </section>
+        <section><b>{activeCount}</b><span>Active</span><small>{activeStageCount === 0 ? "No active stages" : `${activeStageCount} active hiring stage${activeStageCount === 1 ? "" : "s"}`}</small></section>
+        <section><b>{interviewCount}</b><span>Interviews</span><small>{interviewCount === 0 ? "No interviews scheduled" : `${interviewCount} role${interviewCount === 1 ? "" : "s"} at interview stage`}</small></section>
+        <section><b>{scheduledCount}/{opportunities.length}</b><span>Follow-ups scheduled</span><small>{missingDueCount === 0 ? "Every position has a date" : `${missingDueCount} position${missingDueCount === 1 ? " needs" : "s need"} a date`}</small></section>
       </div>
       <div className="application-toolbar">
-        <span>
-          {applications.length} position{applications.length === 1 ? "" : "s"} tracked
-        </span>
+        <span>{opportunities.length} position{opportunities.length === 1 ? "" : "s"} tracked</span>
         <AddPositionForm />
       </div>
-      <div className="application-table">
-        <table>
-          <thead>
-            <tr>
-              <th scope="col">Role</th>
-              <th scope="col">Stage</th>
-              <th scope="col">Materials</th>
-              <th scope="col">Contact</th>
-              <th scope="col">Next action</th>
-              <th scope="col">Due</th>
-
+      <div className="application-table"><table>
+        <thead><tr><th scope="col">Role</th><th scope="col">Stage</th><th scope="col">Materials</th><th scope="col">Contact</th><th scope="col">Next action</th><th scope="col">Due</th></tr></thead>
+        <tbody>{opportunities.map((record) => {
+          const actionView = nextActionViewFor(record.nextAction.kind);
+          const slug = briefSlug(record.company, record.role);
+          const brief = briefs[slug];
+          return (
+            <tr key={record.id}>
+              <td><b>{record.role}</b><small>{formatOpportunityDetail(record)}</small></td>
+              <td><span className={`stage ${statusClassFor(record.status)}`}>{record.status}</span></td>
+              <td>{record.materials.resume}<small>{record.materials.coverLetter}</small></td>
+              <td>{record.contact?.name ?? "No contact yet"}<small>{record.contact?.relationship ?? record.location ?? ""}</small></td>
+              <td>
+                {PRE_APPLICATION_STATUSES.includes(record.status) && <button className="secondary" onClick={() => { startApplication(record.id); note(record.role + " moved to Applications"); }}>Start Application</button>}
+                {actionView ? <button className="link next-action" onClick={() => onGo(actionView)}>{record.nextAction.label} →</button> : <b>{record.nextAction.label}</b>}
+                {record.nextAction.detail && <small>{record.nextAction.detail}</small>}
+                <small>{brief ? <a href={`/brief/${slug}`} target="_blank" rel="noopener noreferrer">Company brief ready ↗</a> : <button className="brief-generate" disabled={generatingSlug === slug} onClick={() => generateBrief(record)}>{generatingSlug === slug ? "Generating brief…" : "Generate company brief"}</button>}</small>
+              </td>
+              <td>{formatFriendlyDate(record.nextAction.dueDate) || "—"}</td>
             </tr>
-          </thead>
-          <tbody>
-            {applications.map((row) => (
-              <tr key={row.id}>
-                <td>
-                  <b>{row.role}</b>
-                  <small>{row.roleDetail}</small>
-                </td>
-                <td>
-                  <span className={`stage ${row.stageClass}`}>{row.stage}</span>
-                </td>
-                <td>
-                  {row.materials}
-                  <small>{row.materialsDetail}</small>
-                </td>
-                <td>
-                  {row.contact}
-                  <small>{row.contactDetail}</small>
-                </td>
-                <td>
-                  {PRE_APPLICATION_STATUSES.includes(row.stage) && (
-                    <button
-                      className="secondary"
-                      onClick={() => {
-                        startApplication(row.id);
-                        note(row.role + " moved to Applications");
-                      }}
-                    >
-                      Start Application
-                    </button>
-                  )}
-                  {row.nextActionView ? (
-                    <button className="link next-action" onClick={() => onGo(row.nextActionView!)}>
-                      {row.nextAction} →
-                    </button>
-                  ) : (
-                    <b>{row.nextAction}</b>
-                  )}
-                  {row.nextActionDetailHref ? (
-                    <small>
-                      <a href={row.nextActionDetailHref} target="_blank" rel="noopener noreferrer">
-                        {row.nextActionDetail} ↗
-                      </a>
-                    </small>
-                  ) : (
-                    (() => {
-                      const slug = briefSlug(row.roleDetail.split(" · ")[0], row.role);
-                      const brief = briefs[slug];
-                      return (
-                        <>
-                          {row.nextActionDetail && <small>{row.nextActionDetail}</small>}
-                          <small>
-                            {brief ? (
-                              <a href={`/brief/${slug}`} target="_blank" rel="noopener noreferrer">
-                                Company brief ready ↗
-                              </a>
-                            ) : (
-                              <button
-                                className="brief-generate"
-                                disabled={generatingSlug === slug}
-                                onClick={() => generateBrief(row)}
-                              >
-                                {generatingSlug === slug ? "Generating brief…" : "Generate company brief"}
-                              </button>
-                            )}
-                          </small>
-                        </>
-                      );
-                    })()
-                  )}
-                </td>
-                <td>{row.due}</td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      </div>
+          );
+        })}</tbody>
+      </table></div>
     </div>
   );
 }

@@ -119,23 +119,3 @@ export interface PersistedOpportunityState {
   version: 2;
   records: OpportunityRecord[];
 }
-/** Legacy persisted shape; only migration code should consume this after conversion. */
-export interface ApplicationRow {
-  /** Stable across the Stage 03 -> Stage 05 ownership transfer. */
-  id: string;
-  role: string;
-  roleDetail: string;
-  stage: OpportunityStatus;
-  stageClass: string;
-  materials: string;
-  materialsDetail: string;
-  contact: string;
-  contactDetail: string;
-  nextAction: string;
-  nextActionDetail: string;
-  /** Where clicking the next action takes the user. */
-  nextActionView?: View;
-  /** Optional document the detail line links to (opens in a new tab). */
-  nextActionDetailHref?: string;
-  due: string;
-}

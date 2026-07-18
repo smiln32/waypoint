@@ -1,19 +1,27 @@
-{
-  "updated_at": "2026-07-18T14:52:10.513Z",
-  "rows": [
+﻿{
+  "records": [
     {
+      "id": "demo-meridian-cybersecurity-operations-analyst",
+      "company": "Meridian Grid",
       "role": "Cybersecurity Operations Analyst",
-      "roleDetail": "Meridian Grid · Saved Jul 15",
-      "stage": "Preparing",
-      "stageClass": "saved-stage",
-      "materials": "Resume gap review",
-      "materialsDetail": "Cover letter pending",
-      "contact": "Priya Shah",
-      "contactDetail": "Security Manager",
-      "nextAction": "Tailor resume",
-      "nextActionDetail": "Address SIEM qualification gap first",
-      "nextActionView": "resume",
-      "due": "Jul 22"
+      "source": "demo",
+      "status": "Preparing",
+      "createdAt": "2026-07-15T14:00:00.000Z",
+      "statusChangedAt": "2026-07-18T14:00:00.000Z",
+      "materials": {
+        "resume": "Resume gap review",
+        "coverLetter": "Cover letter pending"
+      },
+      "contact": {
+        "name": "Priya Shah",
+        "relationship": "Security Manager"
+      },
+      "nextAction": {
+        "kind": "review-resume",
+        "label": "Tailor resume",
+        "detail": "Address SIEM qualification gap first",
+        "dueDate": "2026-07-22"
+      }
     }
   ]
 }

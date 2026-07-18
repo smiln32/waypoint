@@ -1,49 +1,47 @@
 import fs from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
-import type { ApplicationRow } from "@/lib/types";
+import type { OpportunityRecord } from "@/lib/types";
 import { APPLICATION_STATUSES, PRE_APPLICATION_STATUSES } from "@/lib/types";
-
-/**
- * Materialize the tracker's state as ICM Layer 4 artifacts, so the stage
- * handoffs declared in the CONTEXT contracts exist as diffable files:
- *   02_job_search/output/saved-roles.json     — roles saved from search
- *   03_job_tracking/output/tracked-roles.json — pre-application pipeline
- *   05_applications/output/applications.json  — every tracked record
- * Dev-only and best-effort, like every other output write.
- */
+import { isOpportunityRecord } from "@/lib/opportunity-migration";
 
 export async function POST(request: Request) {
-  if (process.env.NODE_ENV === "production") {
-    return NextResponse.json({ written: false });
-  }
+  if (process.env.NODE_ENV === "production") return NextResponse.json({ written: false });
 
-  let body: { applications?: ApplicationRow[] };
+  let body: { opportunities?: OpportunityRecord[] };
   try {
     body = await request.json();
   } catch {
     return NextResponse.json({ error: "Invalid JSON body" }, { status: 400 });
   }
-  const applications = body.applications;
-  if (!Array.isArray(applications)) {
-    return NextResponse.json({ error: "applications must be an array" }, { status: 400 });
+  const opportunities = body.opportunities;
+  if (!Array.isArray(opportunities) || !opportunities.every(isOpportunityRecord)) {
+    return NextResponse.json({ error: "opportunities must be an array" }, { status: 400 });
   }
 
-  const snapshot = (rows: ApplicationRow[]) => JSON.stringify({ updated_at: new Date().toISOString(), rows }, null, 2) + "\n";
-  const write = (stage: string, file: string, rows: ApplicationRow[]) => {
+  const snapshot = (records: OpportunityRecord[]) => JSON.stringify({ updated_at: new Date().toISOString(), records }, null, 2) + "\n";
+  const write = (stage: string, file: string, records: OpportunityRecord[]) => {
     const dir = path.join(process.cwd(), "stages", stage, "output", "runtime");
     fs.mkdirSync(dir, { recursive: true });
-    fs.writeFileSync(path.join(dir, file), snapshot(rows), "utf8");
+    fs.writeFileSync(path.join(dir, file), snapshot(records), "utf8");
   };
 
   try {
-    write("02_job_search", "saved-roles.json", applications.filter((row) => row.stage === "Saved"));
+    write(
+      "02_job_search",
+      "saved-roles.json",
+      opportunities.filter((record) => record.source === "job-search" && record.status === "Saved"),
+    );
     write(
       "03_job_tracking",
       "tracked-roles.json",
-      applications.filter((row) => PRE_APPLICATION_STATUSES.includes(row.stage)),
+      opportunities.filter((record) => PRE_APPLICATION_STATUSES.includes(record.status)),
     );
-    write("05_applications", "applications.json", applications.filter((row) => APPLICATION_STATUSES.includes(row.stage)));
+    write(
+      "05_applications",
+      "applications.json",
+      opportunities.filter((record) => APPLICATION_STATUSES.includes(record.status)),
+    );
     return NextResponse.json({ written: true });
   } catch {
     return NextResponse.json({ written: false });
