@@ -1,0 +1,141 @@
+/* Dashboard alignment and application-process detail */
+.hero > div {
+  flex: 1;
+  text-align: center;
+}
+
+.hero > div p {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.panel > em {
+  margin-top: -6px;
+}
+
+.interview .scores b {
+  color: oklch(0.28 0.07 145);
+  font-weight: 850;
+}
+
+.application-actions {
+  align-items: center;
+  display: flex;
+  gap: 18px;
+  margin-bottom: 28px;
+}
+
+.application-actions span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.application-summary {
+  border-bottom: 1px solid var(--line);
+  border-top: 2px solid var(--ink);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  margin-bottom: 28px;
+}
+
+.application-summary section {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  padding: 20px 24px;
+}
+
+.application-summary section + section {
+  border-left: 1px solid var(--line);
+}
+
+.application-summary b {
+  color: var(--deep);
+  font-size: 26px;
+}
+
+.application-summary span {
+  font-weight: 750;
+}
+
+.application-summary small,
+.application-table td small {
+  color: var(--muted);
+  font-size: 11px;
+  line-height: 1.45;
+}
+
+.application-table {
+  overflow-x: auto;
+}
+
+.application-table table {
+  min-width: 980px;
+}
+
+.application-table td {
+  line-height: 1.45;
+  vertical-align: top;
+}
+
+.application-table td:nth-child(5) {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stage {
+  border-radius: 99px;
+  display: inline-block;
+  font-size: 11px;
+  font-weight: 750;
+  padding: 5px 8px;
+  white-space: nowrap;
+}
+
+.interview-stage {
+  background: oklch(0.9 0.07 145);
+  color: var(--deep);
+}
+
+.applied-stage {
+  background: oklch(0.93 0.04 250);
+  color: oklch(0.38 0.11 250);
+}
+
+.saved-stage {
+  background: var(--surface);
+  color: var(--muted);
+}
+
+@media (max-width: 680px) {
+  .application-actions {
+    align-items: flex-start;
+    flex-direction: column;
+  }
+
+  .application-summary {
+    grid-template-columns: 1fr;
+  }
+
+  .application-summary section + section {
+    border-left: 0;
+    border-top: 1px solid var(--line);
+  }
+}
+
+.cols .panel:nth-child(2) h2 {
+  margin: 0 0 14px;
+}
+
+.cols .panel:nth-child(2) h3 {
+  margin: 0 0 7px;
+}
+
+.cols .panel:nth-child(2) p {
+  margin: 0 0 13px;
+}
+
+.cols .panel:nth-child(2) .link {
+  margin-top: 2px;
+}
