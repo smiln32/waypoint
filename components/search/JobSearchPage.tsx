@@ -9,8 +9,8 @@ import { SearchFilters } from "./SearchFilters";
 
 export function JobSearchPage() {
   const { note, isJobTracked, toggleTrackedJob } = useWaypoint();
-  const [query, setQuery] = useState("technical operations manager");
-  const [location, setLocation] = useState("Jacksonville, FL");
+  const [query, setQuery] = useState("operations");
+  const [location, setLocation] = useState("Jacksonville, NC");
   const [alert, setAlert] = useState(false);
   const [results, setResults] = useState<JobResult[]>(searchResults);
   const [source, setSource] = useState<"usajobs" | "sample">("sample");
@@ -34,7 +34,7 @@ export function JobSearchPage() {
   // Load live results on arrival when the API is configured.
   useEffect(() => {
     const timer = setTimeout(() => {
-      runSearch("technical operations manager", "Jacksonville, FL");
+      runSearch("operations", "Jacksonville, NC");
     }, 0);
     return () => clearTimeout(timer);
   }, [runSearch]);
