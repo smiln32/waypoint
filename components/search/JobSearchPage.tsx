@@ -8,7 +8,7 @@ import { JobResultCard } from "./JobResultCard";
 import { SearchFilters } from "./SearchFilters";
 
 export function JobSearchPage() {
-  const { note, isJobTracked, toggleTrackedJob } = useWaypoint();
+  const { note, jobTrackingState, toggleTrackedJob } = useWaypoint();
   const [query, setQuery] = useState("operations");
   const [location, setLocation] = useState("Jacksonville, NC");
   const [alert, setAlert] = useState(false);
@@ -99,15 +99,15 @@ export function JobSearchPage() {
       <div className="search-results">
         {!resolved &&
           [0, 1, 2].map((i) => <div className="result-skeleton" key={i} aria-hidden="true" />)}
-        {resolved && results.map((job, i) => (
+        {resolved && results.map((job) => (
           <JobResultCard
-            key={`${job.title}|${job.place}|${i}`}
+            key={`${job.source}:${job.id}`}
             job={job}
-            saved={isJobTracked(job.title)}
+            trackingState={jobTrackingState(job)}
             onToggleSave={() => {
-              const wasSaved = isJobTracked(job.title);
+              const trackingState = jobTrackingState(job);
               toggleTrackedJob(job);
-              note(wasSaved ? job.title + " removed from Job Tracking" : job.title + " saved to Job Tracking");
+              note(trackingState === "saved" ? job.title + " removed from Job Tracking" : job.title + " saved to Job Tracking");
             }}
           />
         ))}

@@ -1,17 +1,24 @@
 "use client";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { CompanyBrief } from "./briefs";
-import { applicationRows } from "./demo-data";
+import { opportunityRecords } from "./demo-data";
+import {
+  LEGACY_APPLICATION_STORAGE_KEY,
+  OPPORTUNITY_SCHEMA_VERSION,
+  OPPORTUNITY_STORAGE_KEY,
+  resolveOpportunityState,
+} from "./opportunity-migration";
+import { jobIdentity, jobTrackingStateFor, opportunityMatchesJob } from "./opportunities";
 import { loadPersisted, persist } from "./persist";
-import type { ApplicationRow, JobResult } from "./types";
+import type { JobResult, JobTrackingState, OpportunityRecord } from "./types";
 
 interface WaypointStore {
   toast: string;
   note: (message: string) => void;
-  applications: ApplicationRow[];
-  isJobTracked: (title: string) => boolean;
+  opportunities: OpportunityRecord[];
+  jobTrackingState: (job: JobResult) => JobTrackingState;
   toggleTrackedJob: (job: JobResult) => void;
-  addPosition: (row: ApplicationRow) => void;
+  addOpportunity: (record: OpportunityRecord) => void;
   startApplication: (id: string) => void;
   briefs: Record<string, CompanyBrief>;
   saveBrief: (brief: CompanyBrief) => void;
@@ -22,22 +29,18 @@ const WaypointContext = createContext<WaypointStore | null>(null);
 export function WaypointProvider({ children }: { children: React.ReactNode }) {
   const [toast, setToast] = useState("");
   const toastTimer = useRef<ReturnType<typeof setTimeout> | null>(null);
-  const [applications, setApplications] = useState<ApplicationRow[]>(applicationRows);
+  const [opportunities, setOpportunities] = useState<OpportunityRecord[]>(opportunityRecords);
   const hydratedRef = useRef(false);
-
   const [briefs, setBriefs] = useState<Record<string, CompanyBrief>>({});
   const [hydrated, setHydrated] = useState(false);
 
-  // Restore persisted tracker state (deferred a tick so hydration matches SSR).
   useEffect(() => {
     const timer = setTimeout(() => {
-      const saved = loadPersisted<ApplicationRow[]>("waypoint.applications");
-      if (saved && Array.isArray(saved)) {
-        // Merge in demo rows added after this session was first persisted.
-        const normalized = saved.map((row) => ({ ...row, id: row.id || crypto.randomUUID() }));
-        const merged = [...normalized, ...applicationRows.filter((demo) => !normalized.some((row) => row.id === demo.id))];
-        setApplications(merged);
-      }
+      const current = loadPersisted<unknown>(OPPORTUNITY_STORAGE_KEY);
+      const legacy = loadPersisted<unknown>(LEGACY_APPLICATION_STORAGE_KEY);
+      const resolved = resolveOpportunityState(current, legacy, opportunityRecords);
+      setOpportunities(resolved.state.records);
+      if (resolved.shouldPersist) persist(OPPORTUNITY_STORAGE_KEY, resolved.state);
       const savedBriefs = loadPersisted<Record<string, CompanyBrief>>("waypoint.briefs");
       if (savedBriefs) setBriefs(savedBriefs);
       hydratedRef.current = true;
@@ -47,23 +50,24 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   }, []);
 
   useEffect(() => {
-    if (hydratedRef.current) persist("waypoint.applications", applications);
-  }, [applications]);
+    if (hydratedRef.current) {
+      persist(OPPORTUNITY_STORAGE_KEY, { version: OPPORTUNITY_SCHEMA_VERSION, records: opportunities });
+    }
+  }, [opportunities]);
 
-  // Materialize stage output files (ICM Layer 4) whenever tracker state changes.
   useEffect(() => {
     if (!hydrated) return;
     const timer = setTimeout(() => {
       fetch("/api/stage-output", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ applications }),
+        body: JSON.stringify({ opportunities }),
       }).catch(() => {
         // Best-effort: the app never depends on the write.
       });
     }, 600);
     return () => clearTimeout(timer);
-  }, [applications, hydrated]);
+  }, [opportunities, hydrated]);
 
   useEffect(() => {
     if (hydratedRef.current) persist("waypoint.briefs", briefs);
@@ -79,52 +83,58 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
     toastTimer.current = setTimeout(() => setToast(""), 1800);
   }, []);
 
-  const isJobTracked = useCallback(
-    (title: string) => applications.some((row) => row.role === title),
-    [applications],
+  const jobTrackingState = useCallback(
+    (job: JobResult) => jobTrackingStateFor(opportunities, job),
+    [opportunities],
   );
 
   const toggleTrackedJob = useCallback((job: JobResult) => {
-    setApplications((rows) => {
-      const existing = rows.find((row) => row.role === job.title);
-      if (existing) return rows.filter((row) => row !== existing);
+    setOpportunities((records) => {
+      const sourceId = jobIdentity(job);
+      const existing = records.find((record) => opportunityMatchesJob(record, job));
+      if (existing) {
+        if (existing.status !== "Saved") return records;
+        return records.filter((record) => record.id !== existing.id);
+      }
+      const now = new Date().toISOString();
       return [
-        ...rows,
+        ...records,
         {
           id: crypto.randomUUID(),
+          company: job.company,
           role: job.title,
-          roleDetail: `${job.company} · Saved from Job Search`,
-          stage: "Saved",
-          stageClass: "saved-stage",
-          materials: "Resume not tailored yet",
-          materialsDetail: "Cover letter not started",
-          contact: "No contact yet",
-          contactDetail: job.place,
-          nextAction: "Review resume",
-          nextActionDetail: job.fit ? `Fit: ${job.fit}` : "Saved from Job Search",
-          nextActionView: "resume" as const,
-          due: "—",
+          ...(job.place ? { location: job.place } : {}),
+          source: "job-search",
+          sourceId,
+          status: "Saved",
+          createdAt: now,
+          statusChangedAt: now,
+          materials: { resume: "Resume not tailored yet", coverLetter: "Cover letter not started" },
+          nextAction: {
+            kind: "review-resume",
+            label: "Review resume",
+            ...(job.fit ? { detail: `Fit: ${job.fit}` } : { detail: "Saved from Job Search" }),
+          },
         },
       ];
     });
   }, []);
 
-  const addPosition = useCallback((row: ApplicationRow) => {
-    setApplications((rows) => [...rows, row]);
+  const addOpportunity = useCallback((record: OpportunityRecord) => {
+    setOpportunities((records) => [...records, record]);
   }, []);
 
   const startApplication = useCallback((id: string) => {
-    setApplications((rows) => rows.map((row) => row.id === id ? {
-      ...row,
-      stage: "Application Started",
-      stageClass: "applied-stage",
-      roleDetail: row.roleDetail.replace(/ · (Saved|Added).*$/, " · Application started"),
-    } : row));
+    setOpportunities((records) => records.map((record) => record.id === id ? {
+      ...record,
+      status: "Application Started",
+      statusChangedAt: new Date().toISOString(),
+    } : record));
   }, []);
 
   return (
     <WaypointContext.Provider
-      value={{ toast, note, applications, isJobTracked, toggleTrackedJob, addPosition, startApplication, briefs, saveBrief }}
+      value={{ toast, note, opportunities, jobTrackingState, toggleTrackedJob, addOpportunity, startApplication, briefs, saveBrief }}
     >
       {children}
     </WaypointContext.Provider>

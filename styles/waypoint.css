@@ -565,6 +565,13 @@ button.link:not(:disabled):hover {
   color: white;
 }
 
+.save-job:disabled {
+  background: var(--surface-raised);
+  border-color: var(--line-strong);
+  color: var(--muted);
+  cursor: not-allowed;
+}
+
 /* ================================================================ */
 /* Review system                                                    */
 /* ================================================================ */

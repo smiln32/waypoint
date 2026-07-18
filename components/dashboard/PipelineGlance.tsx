@@ -3,14 +3,14 @@ import { useWaypoint } from "@/lib/store";
 import { useGo } from "@/lib/use-go";
 
 export function PipelineGlance() {
-  const { applications } = useWaypoint();
+  const { opportunities } = useWaypoint();
   const onGo = useGo();
 
   const tiles: [string, number][] = [
-    ["Saved", applications.filter((row) => row.stage === "Saved").length],
-    ["Preparing", applications.filter((row) => row.stage === "Preparing").length],
-    ["Applied", applications.filter((row) => row.stage === "Applied").length],
-    ["Interviewing", applications.filter((row) => row.stage.startsWith("Interview")).length],
+    ["Saved", opportunities.filter((record) => record.status === "Saved").length],
+    ["Preparing", opportunities.filter((record) => record.status === "Preparing").length],
+    ["Applied", opportunities.filter((record) => record.status === "Applied").length],
+    ["Interviewing", opportunities.filter((record) => record.status === "Interview").length],
   ];
 
   return (

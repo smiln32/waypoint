@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { searchResults } from "@/lib/demo-data";
+import { deterministicIdFromParts } from "@/lib/opportunities";
 import type { JobResult } from "@/lib/types";
 
 /**
@@ -8,7 +9,6 @@ import type { JobResult } from "@/lib/types";
  * live board for Waypoint. Without credentials (or on any failure) the
  * route returns the labeled sample set — resilience, not a mode.
  */
-
 interface UsaJobsRemuneration {
   MinimumRange?: string;
   MaximumRange?: string;
@@ -16,6 +16,7 @@ interface UsaJobsRemuneration {
 }
 
 interface UsaJobsDescriptor {
+  PositionID?: string;
   PositionTitle?: string;
   OrganizationName?: string;
   PositionLocationDisplay?: string;
@@ -24,8 +25,13 @@ interface UsaJobsDescriptor {
   PositionSchedule?: { Name?: string }[];
 }
 
+interface UsaJobsItem {
+  MatchedObjectId?: string;
+  MatchedObjectDescriptor?: UsaJobsDescriptor;
+}
+
 interface UsaJobsPayload {
-  SearchResult?: { SearchResultItems?: { MatchedObjectDescriptor?: UsaJobsDescriptor }[] };
+  SearchResult?: { SearchResultItems?: UsaJobsItem[] };
 }
 
 function formatPay(pay?: UsaJobsRemuneration): string {
@@ -43,9 +49,7 @@ export async function GET(request: Request) {
   const key = process.env.USAJOBS_API_KEY;
   const email = process.env.USAJOBS_EMAIL;
 
-  if (!key || !email) {
-    return NextResponse.json({ source: "sample", results: searchResults });
-  }
+  if (!key || !email) return NextResponse.json({ source: "sample", results: searchResults });
 
   try {
     const url = new URL("https://data.usajobs.gov/api/search");
@@ -60,24 +64,29 @@ export async function GET(request: Request) {
     const payload = (await response.json()) as UsaJobsPayload;
     const items = payload.SearchResult?.SearchResultItems ?? [];
     const results: JobResult[] = items
-      .map((item) => item.MatchedObjectDescriptor)
-      .filter((descriptor): descriptor is UsaJobsDescriptor => Boolean(descriptor?.PositionTitle))
-      .map((descriptor) => ({
-        title: descriptor.PositionTitle ?? "",
-        company: descriptor.OrganizationName ?? "U.S. Federal Government",
-        place: descriptor.PositionLocationDisplay ?? "",
-        pay: formatPay(descriptor.PositionRemuneration?.[0]),
-        age: descriptor.PublicationStartDate
-          ? "Posted " +
-            new Date(descriptor.PublicationStartDate).toLocaleDateString("en-US", {
-              month: "short",
-              day: "numeric",
-            })
-          : "",
-        type: descriptor.PositionSchedule?.[0]?.Name ?? "Full-time",
-        apply: "USAJOBS.gov",
-        fit: "",
-      }));
+      .filter((item) => Boolean(item.MatchedObjectDescriptor?.PositionTitle))
+      .map((item) => {
+        const descriptor = item.MatchedObjectDescriptor as UsaJobsDescriptor;
+        return {
+          id: item.MatchedObjectId ?? descriptor.PositionID ?? deterministicIdFromParts(
+            descriptor.PositionTitle ?? "",
+            descriptor.OrganizationName ?? "",
+            descriptor.PositionLocationDisplay ?? "",
+            descriptor.PublicationStartDate ?? "",
+          ),
+          source: "usajobs" as const,
+          title: descriptor.PositionTitle ?? "",
+          company: descriptor.OrganizationName ?? "U.S. Federal Government",
+          place: descriptor.PositionLocationDisplay ?? "",
+          pay: formatPay(descriptor.PositionRemuneration?.[0]),
+          age: descriptor.PublicationStartDate
+            ? "Posted " + new Date(descriptor.PublicationStartDate).toLocaleDateString("en-US", { month: "short", day: "numeric" })
+            : "",
+          type: descriptor.PositionSchedule?.[0]?.Name ?? "Full-time",
+          apply: "USAJOBS.gov",
+          fit: "",
+        };
+      });
     if (!results.length) return NextResponse.json({ source: "usajobs", results: [] });
     return NextResponse.json({ source: "usajobs", results });
   } catch {

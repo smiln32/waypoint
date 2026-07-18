@@ -1,4 +1,24 @@
 {
-  "updated_at": "2026-07-18T14:52:10.512Z",
-  "rows": []
+  "records": [
+    {
+      "id": "demo-atlas-field-service-operations-lead",
+      "company": "Atlas Flight Systems",
+      "role": "Field Service Operations Lead",
+      "location": "Remote · Southeast",
+      "source": "job-search",
+      "sourceId": "sample:sample-atlas-field-service-operations-lead",
+      "status": "Saved",
+      "createdAt": "2026-07-18T14:00:00.000Z",
+      "statusChangedAt": "2026-07-18T14:00:00.000Z",
+      "materials": {
+        "resume": "Resume not tailored yet",
+        "coverLetter": "Cover letter not started"
+      },
+      "nextAction": {
+        "kind": "review-resume",
+        "label": "Review resume",
+        "detail": "Saved from Job Search"
+      }
+    }
+  ]
 }
