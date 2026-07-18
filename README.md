@@ -1,33 +1,63 @@
 # Waypoint
 
-Waypoint is a military-to-civilian career transition workspace for recently separated enlisted Marines pursuing technical and operational roles. The application demonstrates two portable ICM editors: one reviews military-to-civilian resumes, and one reviews civilian interview responses.
+Waypoint is a military-to-civilian career transition workspace for recently separated enlisted Marines
+pursuing technical and operational roles. Editors critique exact passages and return bounded decisions to
+the veteran; they never rewrite. Drafting is a separate step and applies only changes the user accepts.
 
-## Competition editors
+## Setup
 
-- `editors/resume-editor/` critiques exact resume passages that hide scope, rely on military shorthand, overstate civilian equivalence, or lack defensible evidence.
-- `editors/interview-editor/` critiques exact interview language that hides judgment, ownership, evidence, or civilian relevance.
+```
+npm install
+npm run dev      # http://localhost:3000
+```
 
-Neither editor rewrites. Each identifies a passage, explains the hiring consequence, and returns a bounded decision to the veteran. Drafting is a separate step and applies only changes the user accepts.
+Verification: `npm run lint` and `npm run build`.
 
-## Current stage
+### AI critique (optional)
 
-The responsive application shell includes an overview, interactive resume review, grounded job-match explanations, application tracking, and interview-response practice. The interface works on desktop and mobile browser layouts.
+Copy `.env.example` to `.env.local` and set `ANTHROPIC_API_KEY`. The résumé, cover-letter, and interview
+editors then run real Claude critiques assembled from the ICM persona packages in `stages/*/references/`.
+Without a key (or on any API failure) the editors fall back to grounded demo findings — the app always
+works offline.
 
-## Staged roadmap
+## Workspace structure (ICM)
 
-1. **Editor proof:** portable ICM folders and an interactive competition demonstration.
-2. **Evidence intake:** structured service history, education, credentials, civilian experience, and privacy screening.
-3. **Document workflow:** PDF/DOCX import, verified-fact ledger, resume generation, accepted-change drafting, version history, and export.
-4. **Job intelligence:** official occupational mappings, permitted job-board feeds, saved postings, qualification-gap analysis, and source-linked company research.
-5. **Application operations:** durable application records, reminders, contacts, materials, and communication history.
-6. **Interview lab:** question sets licensed or independently authored, optional audio/video practice, transcript review, accessible learning modes, and longitudinal rubric evidence.
+This workspace follows the Interpretable Context Methodology (Van Clief & McDermott, arXiv:2603.16021).
+Start at `CLAUDE.md` (identity) and `CONTEXT.md` (stage map). Six numbered stages under `stages/` carry the
+career-transition pipeline; each holds its contract (`CONTEXT.md`), stable references, and per-run outputs:
+
+| Stage | App page |
+|-------|----------|
+| `01_resume` — résumé editor | `/resume` |
+| `02_job_search` — find and evaluate roles | `/search` |
+| `03_job_tracking` — saved-jobs pipeline | `/jobs` |
+| `04_cover_letter` — cover-letter editor | `/cover-letter` |
+| `05_applications` — applications tracker | `/applications` |
+| `06_interview` — interview response editor | `/interview` |
+
+The Next.js app (`app/`, `components/`, `lib/`, `styles/`) is the execution layer: it reads
+`stages/*/references/` to build editor prompts at request time and writes critique runs to
+`stages/*/output/`. Editing the markdown in `references/` changes editor behavior with no code change.
 
 ## Grounding and boundaries
 
-MOS-to-career mappings are treated as hypotheses, never proof of experience. Production sources should prioritize O*NET, My Next Move for Veterans, Department of Labor resources, Marine Corps COOL, official employer postings, and company primary sources. Job sources must be accessed through permitted APIs or user-provided postings; the product should not scrape sites in violation of their terms.
+MOS-to-career mappings are treated as hypotheses, never proof of experience. Production sources should
+prioritize O*NET, My Next Move for Veterans, Department of Labor resources, Marine Corps COOL, official
+employer postings, and company primary sources. Job sources must be accessed through permitted APIs or
+user-provided postings; the product should not scrape sites in violation of their terms.
 
-The interview methodology uses general, independently established principles such as identifying the employer's underlying need, providing defensible evidence, and making individual judgment visible. It does not reproduce Martin John Yate's proprietary question banks or book text.
+The interview methodology uses general, independently established principles such as identifying the
+employer's underlying need, providing defensible evidence, and making individual judgment visible.
 
 ## Privacy
 
-Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, access logs, and explicit consent for any audio or video processing.
+Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying
+information. A production release requires authentication, encrypted storage, retention controls, deletion,
+access logs, and explicit consent for any audio or video processing.
+
+## Current limitations
+
+- State is in-memory demo state; it resets on hard refresh. Job results are grounded sample data — no live
+  job-board API.
+- PDF/DOCX résumé parsing is not implemented (TXT/MD/RTF and paste work).
+- "Add application" intake form is future work.
