@@ -2254,3 +2254,21 @@ td small {
   max-width: 760px;
   min-height: 0;
 }
+
+/* Generate-brief action in the tracker */
+.brief-generate {
+  background: none;
+  border: 0;
+  color: var(--deep);
+  font-size: 12px;
+  font-weight: 600;
+  padding: 0;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
+.brief-generate:disabled {
+  color: var(--muted);
+  cursor: wait;
+  text-decoration: none;
+}
