@@ -489,12 +489,13 @@ nav .active {
 
 
 .primary {
-  background: var(--primary);
+  background: var(--surface-raised);
+  border: 1px solid var(--deep);
   color: var(--deep);
 }
 
 .primary:not(:disabled):hover {
-  background: var(--primary-hover);
+  background: var(--surface);
   color: var(--deep);
   filter: none;
 }
@@ -957,14 +958,6 @@ blockquote {
 
 .resume-submit button {
   flex: 0 0 auto;
-}
-
-.resume-submit .primary,
-.resume-submit .primary:not(:disabled):hover {
-  background: transparent;
-  border: 1px solid var(--deep);
-  color: var(--deep);
-  filter: none;
 }
 
 /* ==== Resume intake — top of Resume Studio, one card per way in ==== */
@@ -1915,7 +1908,7 @@ td small {
 
 .step-index {
   align-items: center;
-  background: var(--soft);
+  background: var(--info-soft);
   border-radius: 50%;
   color: var(--deep);
   display: flex;
@@ -1945,7 +1938,7 @@ td small {
 }
 
 .step-due {
-  background: var(--soft);
+  background: var(--info-soft);
   border-radius: 99px;
   color: var(--deep);
   flex: none;
