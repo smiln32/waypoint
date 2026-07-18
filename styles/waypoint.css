@@ -2043,3 +2043,124 @@ td small {
   font-size: 12px;
   line-height: 1.5;
 }
+
+/* ==== Dashboard: materials row ==== */
+.materials-row {
+  display: grid;
+  gap: 18px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.materials-row > div {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px oklch(0.2817 0.1045 286.7 / 0.04), 0 6px 18px oklch(0.2817 0.1045 286.7 / 0.06);
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  padding: 18px 20px;
+}
+
+.materials-row b {
+  font-size: 15px;
+}
+
+.materials-row > div > span {
+  color: var(--deep);
+  font-size: 22px;
+  font-weight: 650;
+}
+
+.materials-row small {
+  color: var(--muted);
+  font-size: 12px;
+  line-height: 1.5;
+}
+
+.materials-row .link {
+  align-self: flex-start;
+  margin-top: 6px;
+}
+
+/* ==== Dashboard: due calendar ==== */
+.month-cal {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px oklch(0.2817 0.1045 286.7 / 0.04), 0 6px 18px oklch(0.2817 0.1045 286.7 / 0.06);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  overflow: hidden;
+}
+
+.cal-weekday {
+  border-bottom: 1px solid var(--line);
+  color: var(--muted);
+  font-size: 11px;
+  font-weight: 650;
+  letter-spacing: 0.05em;
+  padding: 10px 10px 8px;
+  text-transform: uppercase;
+}
+
+.cal-cell {
+  border-bottom: 1px solid var(--line);
+  border-right: 1px solid var(--line);
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-height: 74px;
+  padding: 8px 9px;
+}
+
+.cal-cell:nth-child(7n) {
+  border-right: 0;
+}
+
+.cal-blank {
+  background: var(--surface);
+}
+
+.cal-day {
+  color: var(--muted);
+  font-size: 12px;
+}
+
+.cal-today .cal-day {
+  background: var(--deep);
+  border-radius: 50%;
+  color: white;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: 22px;
+  width: 22px;
+}
+
+.cal-due {
+  background: var(--task-mustard);
+  border-radius: 5px;
+  color: var(--ink);
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1.3;
+  overflow: hidden;
+  padding: 3px 6px;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+@media (max-width: 680px) {
+  .materials-row {
+    grid-template-columns: 1fr;
+  }
+
+  .cal-due {
+    display: none;
+  }
+
+  .cal-cell {
+    min-height: 44px;
+  }
+}

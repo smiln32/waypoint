@@ -1,4 +1,6 @@
 "use client";
+import { DueCalendar } from "./DueCalendar";
+import { MaterialsRow } from "./MaterialsRow";
 import { NextSteps } from "./NextSteps";
 import { PipelineGlance } from "./PipelineGlance";
 
@@ -16,6 +18,8 @@ export function DashboardPage() {
       </div>
       <NextSteps />
       <PipelineGlance />
+      <MaterialsRow />
+      <DueCalendar />
     </div>
   );
 }
