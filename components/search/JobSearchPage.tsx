@@ -99,9 +99,9 @@ export function JobSearchPage() {
       <div className="search-results">
         {!resolved &&
           [0, 1, 2].map((i) => <div className="result-skeleton" key={i} aria-hidden="true" />)}
-        {resolved && results.map((job) => (
+        {resolved && results.map((job, i) => (
           <JobResultCard
-            key={job.title + job.place}
+            key={`${job.title}|${job.place}|${i}`}
             job={job}
             saved={isJobTracked(job.title)}
             onToggleSave={() => {
