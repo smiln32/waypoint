@@ -6,11 +6,11 @@ Every year, roughly 200,000 U.S. service members leave the military and run into
 
 ![Resume Studio — the editor highlights exact passages and explains, with evidence, why each one fails for a civilian reader](docs/screenshots/resume-studio.png)
 
-## 🏆 The editor — this week's submission
+## The editor — portable and deployed
 
 **[`stages/01_resume/references/`](stages/01_resume/references/) is the Military-to-Civilian Resume Editor** — five files, one job each: `identity.md` · `rules.md` · `examples.md` · `reference/` · `README.md`. Drop the folder into a Claude project and Claude becomes the editor: paste a resume, get back at most seven prioritized findings, each quoting the exact resume text, explaining how a civilian hiring reader will misread it, and assigning a bounded revision task. Never a rewrite — the folder's [README](stages/01_resume/references/README.md) has the two-minute setup.
 
-What makes this entry different: **the folder is also deployed.** Everything below is Waypoint, a working career-transition workspace where this exact markdown is assembled into the live AI editor's prompt on every request — findings highlight in the document, runs are logged to the stage's `output/`, and two sibling editors (cover letter, interview response) follow the same five-file shape in their own stages.
+And the folder isn't just portable — **it's deployed.** Everything below is Waypoint, a working career-transition workspace where this exact markdown is assembled into the live AI editor's prompt on every request — findings highlight in the document, runs are logged to the stage's `output/`, and two sibling editors (cover letter, interview response) follow the same five-file shape in their own stages.
 
 ## The principle: critique, never ghostwrite
 
