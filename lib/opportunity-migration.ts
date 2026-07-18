@@ -4,6 +4,7 @@ import type {
   OpportunityContact,
   OpportunityRecord,
   OpportunityStatus,
+  OpportunitySource,
   PersistedOpportunityState,
   View,
 } from "./types";
@@ -34,9 +35,80 @@ const STATUSES: OpportunityStatus[] = [
   "Applied", "Screening", "Interview", "Offer", "Closed",
 ];
 const MONTHS = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+const SOURCES: OpportunitySource[] = ["job-search", "manual", "demo"];
+const NEXT_ACTION_KINDS: NextActionKind[] = [
+  "review-resume",
+  "write-cover-letter",
+  "practice-interview",
+  "follow-up",
+  "research",
+  "custom",
+];
 
 const text = (value: unknown): string => typeof value === "string" ? value.trim() : "";
 const optionalText = (value: unknown): string | undefined => text(value) || undefined;
+
+function isObjectRecord(value: unknown): value is Record<string, unknown> {
+  return Boolean(value) && typeof value === "object" && !Array.isArray(value);
+}
+
+function isNonEmptyString(value: unknown): value is string {
+  return typeof value === "string" && value.trim().length > 0;
+}
+
+function isOptionalString(value: unknown): value is string | undefined {
+  return value === undefined || typeof value === "string";
+}
+
+function isDateOnly(value: unknown): value is string {
+  if (typeof value !== "string" || !/^\d{4}-\d{2}-\d{2}$/.test(value)) return false;
+  const parsed = new Date(`${value}T00:00:00.000Z`);
+  return !Number.isNaN(parsed.getTime()) && parsed.toISOString().slice(0, 10) === value;
+}
+
+function isOptionalDateOnly(value: unknown): value is string | undefined {
+  return value === undefined || isDateOnly(value);
+}
+
+function isIsoTimestamp(value: unknown): value is string {
+  if (typeof value !== "string") return false;
+  const match = value.match(
+    /^(\d{4}-\d{2}-\d{2})T(?:[01]\d|2[0-3]):[0-5]\d:[0-5]\d(?:\.\d{1,3})?(?:Z|[+-](?:[01]\d|2[0-3]):[0-5]\d)$/,
+  );
+  return Boolean(match && isDateOnly(match[1]) && !Number.isNaN(Date.parse(value)));
+}
+
+function isSource(value: unknown): value is OpportunitySource {
+  return typeof value === "string" && SOURCES.includes(value as OpportunitySource);
+}
+
+function isNextActionKind(value: unknown): value is NextActionKind {
+  return typeof value === "string" && NEXT_ACTION_KINDS.includes(value as NextActionKind);
+}
+
+function isMaterials(value: unknown): boolean {
+  return isObjectRecord(value)
+    && typeof value.resume === "string"
+    && typeof value.coverLetter === "string";
+}
+
+function isContact(value: unknown): boolean {
+  if (!isObjectRecord(value) || !isNonEmptyString(value.name)) return false;
+  return isOptionalString(value.relationship)
+    && isOptionalString(value.email)
+    && isOptionalString(value.phone)
+    && isOptionalString(value.notes)
+    && isOptionalDateOnly(value.lastContactDate)
+    && isOptionalDateOnly(value.nextFollowUpDate);
+}
+
+function isNextAction(value: unknown): boolean {
+  return isObjectRecord(value)
+    && isNextActionKind(value.kind)
+    && isNonEmptyString(value.label)
+    && isOptionalString(value.detail)
+    && isOptionalDateOnly(value.dueDate);
+}
 
 export function parseLegacyDate(value: unknown, now = new Date()): string | undefined {
   const raw = text(value);
@@ -99,22 +171,27 @@ function legacyContact(nameValue: unknown, detailValue: unknown): { contact?: Op
 }
 
 export function isOpportunityRecord(value: unknown): value is OpportunityRecord {
-  if (!value || typeof value !== "object") return false;
-  const record = value as Partial<OpportunityRecord>;
-  return Boolean(
-    text(record.id) && text(record.company) && text(record.role) && isStatus(record.status)
-    && /T/.test(text(record.createdAt)) && /T/.test(text(record.statusChangedAt))
-    && record.materials && typeof record.materials.resume === "string" && typeof record.materials.coverLetter === "string"
-    && record.nextAction && typeof record.nextAction.label === "string" && typeof record.nextAction.kind === "string",
-  );
+  if (!isObjectRecord(value)) return false;
+  return isNonEmptyString(value.id)
+    && isNonEmptyString(value.company)
+    && isNonEmptyString(value.role)
+    && isOptionalString(value.location)
+    && isSource(value.source)
+    && (value.sourceId === undefined || isNonEmptyString(value.sourceId))
+    && isStatus(value.status)
+    && isIsoTimestamp(value.createdAt)
+    && isIsoTimestamp(value.statusChangedAt)
+    && isOptionalDateOnly(value.appliedDate)
+    && isMaterials(value.materials)
+    && (value.contact === undefined || isContact(value.contact))
+    && isNextAction(value.nextAction);
 }
 
 export function isPersistedOpportunityState(value: unknown): value is PersistedOpportunityState {
-  if (!value || typeof value !== "object") return false;
-  const state = value as Partial<PersistedOpportunityState>;
-  return state.version === OPPORTUNITY_SCHEMA_VERSION
-    && Array.isArray(state.records)
-    && state.records.every(isOpportunityRecord);
+  return isObjectRecord(value)
+    && value.version === OPPORTUNITY_SCHEMA_VERSION
+    && Array.isArray(value.records)
+    && value.records.every(isOpportunityRecord);
 }
 
 export function migrateLegacyOpportunity(value: unknown, now = new Date()): OpportunityRecord | null {

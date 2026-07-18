@@ -8,15 +8,15 @@ import {
   OPPORTUNITY_STORAGE_KEY,
   resolveOpportunityState,
 } from "./opportunity-migration";
-import { jobIdentity, opportunityMatchesJob } from "./opportunities";
+import { jobIdentity, jobTrackingStateFor, opportunityMatchesJob } from "./opportunities";
 import { loadPersisted, persist } from "./persist";
-import type { JobResult, OpportunityRecord } from "./types";
+import type { JobResult, JobTrackingState, OpportunityRecord } from "./types";
 
 interface WaypointStore {
   toast: string;
   note: (message: string) => void;
   opportunities: OpportunityRecord[];
-  isJobTracked: (job: JobResult) => boolean;
+  jobTrackingState: (job: JobResult) => JobTrackingState;
   toggleTrackedJob: (job: JobResult) => void;
   addOpportunity: (record: OpportunityRecord) => void;
   startApplication: (id: string) => void;
@@ -83,8 +83,8 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
     toastTimer.current = setTimeout(() => setToast(""), 1800);
   }, []);
 
-  const isJobTracked = useCallback(
-    (job: JobResult) => opportunities.some((record) => opportunityMatchesJob(record, job)),
+  const jobTrackingState = useCallback(
+    (job: JobResult) => jobTrackingStateFor(opportunities, job),
     [opportunities],
   );
 
@@ -92,7 +92,10 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
     setOpportunities((records) => {
       const sourceId = jobIdentity(job);
       const existing = records.find((record) => opportunityMatchesJob(record, job));
-      if (existing) return records.filter((record) => record.id !== existing.id);
+      if (existing) {
+        if (existing.status !== "Saved") return records;
+        return records.filter((record) => record.id !== existing.id);
+      }
       const now = new Date().toISOString();
       return [
         ...records,
@@ -131,7 +134,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
 
   return (
     <WaypointContext.Provider
-      value={{ toast, note, opportunities, isJobTracked, toggleTrackedJob, addOpportunity, startApplication, briefs, saveBrief }}
+      value={{ toast, note, opportunities, jobTrackingState, toggleTrackedJob, addOpportunity, startApplication, briefs, saveBrief }}
     >
       {children}
     </WaypointContext.Provider>

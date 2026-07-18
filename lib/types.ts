@@ -68,6 +68,8 @@ export const APPLICATION_STATUSES: OpportunityStatus[] = ["Application Started",
 
 export type OpportunitySource = "job-search" | "manual" | "demo";
 
+export type JobTrackingState = "not-tracked" | "saved" | "tracked";
+
 export type NextActionKind =
   | "review-resume"
   | "write-cover-letter"

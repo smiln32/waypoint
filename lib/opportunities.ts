@@ -1,5 +1,6 @@
 import type {
   JobResult,
+  JobTrackingState,
   NextActionKind,
   OpportunityRecord,
   OpportunityStatus,
@@ -70,6 +71,15 @@ export function opportunityMatchesJob(record: OpportunityRecord, job: JobResult)
   return normalizeIdentityPart(record.company) === normalizeIdentityPart(job.company)
     && normalizeIdentityPart(record.role) === normalizeIdentityPart(job.title)
     && normalizeIdentityPart(record.location) === normalizeIdentityPart(job.place);
+}
+
+export function jobTrackingStateFor(
+  records: OpportunityRecord[],
+  job: JobResult,
+): JobTrackingState {
+  const match = records.find((record) => opportunityMatchesJob(record, job));
+  if (!match) return "not-tracked";
+  return match.status === "Saved" ? "saved" : "tracked";
 }
 
 export function deterministicIdFromParts(...parts: string[]): string {
