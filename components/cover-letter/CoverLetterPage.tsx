@@ -1,21 +1,31 @@
 "use client";
 import { useState } from "react";
 import { Heading } from "@/components/ui/Heading";
+import type { CoverLetterTemplate } from "@/lib/cover-letter-templates.server";
 import { requestCritique } from "@/lib/critique/client";
 import { useWaypoint } from "@/lib/store";
 import type { CritiqueResponse } from "@/lib/types";
 import { LetterReviewPanel } from "./LetterReviewPanel";
+import { TemplatePicker } from "./TemplatePicker";
 
 const initialDraft =
   "Dear Hiring Manager,\n\nI am applying for the Technical Operations Manager position at AeroNorth Systems. During eight years in Marine Corps aviation maintenance, I coordinated daily maintenance priorities for 12 F/A-18 aircraft and led 18 technicians across three shifts.\n\nThis experience taught me to make clear operational decisions when safety, schedule, parts availability, and personnel capacity were all in tension. I would welcome the opportunity to bring that judgment to AeroNorth Systems.\n\nSincerely,\nAlex Morgan";
 
-export function CoverLetterPage() {
+export function CoverLetterPage({ templates }: { templates: CoverLetterTemplate[] }) {
   const { note } = useWaypoint();
   const [draft, setDraft] = useState(initialDraft);
   const [role, setRole] = useState("Technical Operations Manager");
   const [company, setCompany] = useState("AeroNorth Systems");
   const [review, setReview] = useState<CritiqueResponse | null>(null);
   const [reviewing, setReviewing] = useState(false);
+
+  const loadTemplate = (template: CoverLetterTemplate) => {
+    const draftIsUntouched = draft === initialDraft || !draft.trim();
+    if (!draftIsUntouched && !window.confirm("Replace your current draft with this template?")) return;
+    setDraft(template.body);
+    setReview(null);
+    note(template.name + " loaded — replace the brackets with your facts");
+  };
 
   const sendToEditor = async () => {
     if (reviewing) return;
@@ -32,6 +42,7 @@ export function CoverLetterPage() {
         title="Make the connection specific."
         text="Draft for Technical Operations Manager · AeroNorth Systems"
       />
+      <TemplatePicker templates={templates} onPick={loadTemplate} />
       <div className="cover-letter-workspace">
         <section>
           <div className="letter-toolbar">

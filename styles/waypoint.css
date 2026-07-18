@@ -2352,6 +2352,67 @@ td small {
   }
 }
 
+/* ==== Cover letter template picker ==== */
+.template-picker {
+  margin-bottom: 34px;
+}
+
+.template-picker-intro {
+  margin-bottom: 14px;
+}
+
+.template-picker-intro h2 {
+  font-size: 20px;
+  margin: 0 0 5px;
+}
+
+.template-picker-intro p {
+  color: var(--muted);
+  margin: 0;
+  max-width: 640px;
+}
+
+.template-list {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 16px;
+}
+
+.template-list button {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  display: flex;
+  flex-direction: column;
+  gap: 7px;
+  padding: 18px;
+  text-align: left;
+}
+
+.template-list button b {
+  font-size: 15px;
+}
+
+.template-list button span {
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+  flex: 1;
+}
+
+.template-list button em {
+  color: var(--deep);
+  font-size: 13px;
+  font-style: normal;
+  font-weight: 750;
+}
+
+@media (max-width: 900px) {
+  .template-list {
+    grid-template-columns: 1fr;
+  }
+}
+
 /* ==== Saved-jobs pipeline (Job Tracking) ==== */
 .pipeline-summary{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 26px;border-top:2px solid var(--ink);padding-top:16px}
 .pipeline-summary span{display:flex;flex-direction:column;gap:3px;color:var(--muted);border-right:1px solid var(--line);padding-left:15px}
