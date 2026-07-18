@@ -9,14 +9,10 @@ import { SearchFilters } from "./SearchFilters";
 
 export function JobSearchPage() {
   const onGo = useGo();
-  const { note } = useWaypoint();
+  const { note, isJobSaved, toggleSavedJob, startApplication } = useWaypoint();
   const [query, setQuery] = useState("technical operations manager");
   const [location, setLocation] = useState("Jacksonville, FL");
-  const [saved, setSaved] = useState<string[]>([]);
   const [alert, setAlert] = useState(false);
-
-  const toggle = (title: string) =>
-    setSaved(saved.includes(title) ? saved.filter((x) => x !== title) : [...saved, title]);
 
   return (
     <div className="page job-search-page">
@@ -63,10 +59,15 @@ export function JobSearchPage() {
           <JobResultCard
             key={job.title}
             job={job}
-            saved={saved.includes(job.title)}
-            onToggleSave={() => toggle(job.title)}
+            saved={isJobSaved(job.title)}
+            onToggleSave={() => {
+              const wasSaved = isJobSaved(job.title);
+              toggleSavedJob(job);
+              note(wasSaved ? job.title + " removed from Job Tracking" : job.title + " saved to Job Tracking");
+            }}
             onSeeEvidence={() => onGo("jobs")}
             onStartApplication={() => {
+              startApplication(job);
               note(job.title + " added to applications");
               onGo("applications");
             }}

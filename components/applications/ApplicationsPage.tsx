@@ -1,10 +1,9 @@
 "use client";
 import { Heading } from "@/components/ui/Heading";
-import { applicationRows } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 
 export function ApplicationsPage() {
-  const { note } = useWaypoint();
+  const { note, applications } = useWaypoint();
   return (
     <div className="page">
       <Heading
@@ -48,7 +47,7 @@ export function ApplicationsPage() {
             </tr>
           </thead>
           <tbody>
-            {applicationRows.map((row) => (
+            {applications.map((row) => (
               <tr key={row.role}>
                 <td>
                   <b>{row.role}</b>

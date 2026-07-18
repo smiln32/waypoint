@@ -1,4 +1,4 @@
-import type { ApplicationRow, Finding, JobMatch, JobResult } from "./types";
+import type { ApplicationRow, Finding, JobMatch, JobResult, SavedJob } from "./types";
 
 export const findings: Finding[] = [
   {
@@ -62,6 +62,18 @@ export const searchResults: JobResult[] = [
     fit: "79% fit",
   },
 ];
+
+/** The three demo matches seed the saved-jobs pipeline so it is never empty. */
+export const savedJobSeeds: SavedJob[] = matches.map(([fit, title, company, place, gap], index) => ({
+  id: `seed-${index}`,
+  title,
+  company,
+  place,
+  fit,
+  tags: ["Maintenance leadership", "Safety systems"],
+  gap,
+  status: index === 0 ? "Ready to apply" : index === 1 ? "Researching" : "Saved",
+}));
 
 export const applicationRows: ApplicationRow[] = [
   {

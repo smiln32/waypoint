@@ -1,5 +1,5 @@
-import { JobMatchesPage } from "@/components/jobs/JobMatchesPage";
+import { SavedJobsPage } from "@/components/jobs/SavedJobsPage";
 
 export default function Page() {
-  return <JobMatchesPage />;
+  return <SavedJobsPage />;
 }

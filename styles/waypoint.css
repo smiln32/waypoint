@@ -2311,3 +2311,15 @@ td small {
     padding: 24px;
   }
 }
+
+/* ==== Saved-jobs pipeline (Job Tracking) ==== */
+.pipeline-summary{display:grid;grid-template-columns:repeat(3,1fr);margin:0 0 26px;border-top:2px solid var(--ink);padding-top:16px}
+.pipeline-summary span{display:flex;flex-direction:column;gap:3px;color:var(--muted);border-right:1px solid var(--line);padding-left:15px}
+.pipeline-summary span:first-child{padding-left:0}
+.pipeline-summary span:last-child{border:0}
+.pipeline-summary b{font-size:27px;color:var(--ink)}
+.saved-job-pay{margin-top:6px}
+.job-status{display:flex;flex-direction:column;gap:5px;font-size:11px;font-weight:800;letter-spacing:.05em;color:var(--muted);margin-top:6px}
+.job-status select{border:1px solid var(--line);border-radius:8px;min-height:44px;padding:0 10px;background:var(--surface-raised);font:inherit;color:var(--ink);letter-spacing:normal;font-weight:600}
+.jobs article>section .primary{min-height:44px}
+@media(max-width:680px){.pipeline-summary{grid-template-columns:1fr;gap:12px}.pipeline-summary span{border-right:0;padding-left:0}}
