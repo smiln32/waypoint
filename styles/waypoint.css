@@ -1970,41 +1970,6 @@ td small {
   font-weight: 750;
 }
 
-.workspace-cards {
-  display: grid;
-  gap: 18px;
-  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
-}
-
-.workspace-cards button {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  padding: 18px;
-  text-align: left;
-}
-
-.workspace-cards b {
-  font-size: 15px;
-}
-
-.workspace-cards small {
-  color: var(--muted);
-  flex: 1;
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.workspace-cards em {
-  color: var(--deep);
-  font-size: 13px;
-  font-style: normal;
-  font-weight: 750;
-}
-
 @media (max-width: 900px) {
   .pipeline-glance {
     grid-template-columns: repeat(2, 1fr);

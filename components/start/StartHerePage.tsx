@@ -1,7 +1,7 @@
 "use client";
 import { useRef, useState } from "react";
-import { WorkspaceCards } from "@/components/dashboard/WorkspaceCards";
 import { ResumeIntake } from "@/components/resume/ResumeIntake";
+import { HowItWorks } from "./HowItWorks";
 import { useWaypoint } from "@/lib/store";
 import { useGo } from "@/lib/use-go";
 
@@ -47,7 +47,7 @@ export function StartHerePage() {
         onUpload={uploadResume}
         onUsePasted={() => loadResume(importText, "Pasted resume")}
       />
-      <WorkspaceCards />
+      <HowItWorks />
     </div>
   );
 }
