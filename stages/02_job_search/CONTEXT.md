@@ -26,6 +26,6 @@ credentials are configured; otherwise shows clearly-labeled sample roles.
 
 | Output | Written to |
 |--------|-----------|
-| Saved roles with fit score, evidence tags, and qualification gap | `stages/02_job_search/output/` (currently held in app session state) |
+| Saved roles with fit score, evidence tags, and qualification gap | `stages/02_job_search/output/saved-roles.json` (materialized by the app on every change; dev best-effort) |
 
 Downstream: stage 03 (`stages/03_job_tracking/`) reads saved roles from this stage's output.

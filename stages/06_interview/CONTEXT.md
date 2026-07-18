@@ -7,7 +7,7 @@ answers, search jobs, or track applications.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Practice response text + the question asked | Submitted from the app's Interview Practice (`/interview`) | per-run |
+| Practice response text + the question asked | Submitted from the app's Interview Practice (`/interview`); headless runs drop it at `stages/06_interview/output/submitted-response.md` | per-run (Layer 4) |
 | Target role context | `stages/05_applications/output/` (roles at the interview stage) | 4 (prior stage) |
 | Editor persona: identity, rules, examples, response rubric | `stages/06_interview/references/` | 3 (stable) |
 | Shared ground rules + finding contract | `_config/shared/product-voice.md`, `_config/shared/finding-format.md` | shared |

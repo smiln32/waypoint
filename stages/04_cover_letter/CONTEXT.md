@@ -7,7 +7,7 @@ This stage does not write letters, critique the résumé, or track applications.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Cover letter draft + target role + company | Submitted from the app's Cover Letter Studio (`/cover-letter`) | per-run |
+| Cover letter draft + target role + company | Submitted from the app's Cover Letter Studio (`/cover-letter`); headless runs drop it at `stages/04_cover_letter/output/submitted-letter.md` | per-run (Layer 4) |
 | Verified résumé evidence (latest critique run) | `stages/01_resume/output/` | 4 (prior stage) |
 | Target role being readied | `stages/03_job_tracking/output/` | 4 (prior stage) |
 | Editor persona: identity, rules, examples, connection framework | `stages/04_cover_letter/references/` | 3 (stable) |

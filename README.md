@@ -35,7 +35,7 @@ stages/
 └── 06_interview/     CONTEXT.md · references/ (incl. the 0–4 response rubric) · output/
 ```
 
-The app assembles each editor's prompt **from these files at request time** and writes every critique run to the stage's `output/` as diffable JSON. Edit `stages/01_resume/references/rules.md` and the resume editor behaves differently — no code change, no redeploy, full git history of who changed the editor's judgment and when. Even the cover-letter example shown in the app is a markdown file in its stage. Conformance is tracked in [`ICM-AUDIT-LOG.md`](ICM-AUDIT-LOG.md) (currently 22/24, fully conformant band).
+The app assembles each editor's prompt **from these files at request time** and writes every critique run to the stage's `output/` as diffable JSON. Edit `stages/01_resume/references/rules.md` and the resume editor behaves differently — no code change, no redeploy, full git history of who changed the editor's judgment and when. Even the cover-letter example shown in the app is a markdown file in its stage. Conformance is tracked in [`ICM-AUDIT-LOG.md`](ICM-AUDIT-LOG.md) — **24/24, fully conformant**: even the tracker's state materializes into stage `output/` files on every change, so the declared handoffs exist as diffable artifacts.
 
 ## The journey
 
@@ -103,4 +103,4 @@ Accessibility is a stated product requirement, not a checkbox. The app was audit
 - **Manual tracking.** Add positions directly in Job Tracking alongside roles saved from search; every next action links to the workspace where it happens.
 - **Company briefs on demand.** One click per tracked position generates a five-section pre-interview brief — who they are, what the role owns, why *your* record fits, likely questions, and one honest gap — viewable in its own tab and logged to the ICM stage.
 
-Roadmap: accounts and cloud sync, additional job boards, materialized ICM `output/` files for the remaining non-AI stages.
+Roadmap: accounts and cloud sync, additional job boards.

@@ -25,6 +25,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   const hydratedRef = useRef(false);
 
   const [briefs, setBriefs] = useState<Record<string, CompanyBrief>>({});
+  const [hydrated, setHydrated] = useState(false);
 
   // Restore persisted tracker state (deferred a tick so hydration matches SSR).
   useEffect(() => {
@@ -38,6 +39,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
       const savedBriefs = loadPersisted<Record<string, CompanyBrief>>("waypoint.briefs");
       if (savedBriefs) setBriefs(savedBriefs);
       hydratedRef.current = true;
+      setHydrated(true);
     }, 0);
     return () => clearTimeout(timer);
   }, []);
@@ -45,6 +47,21 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     if (hydratedRef.current) persist("waypoint.applications", applications);
   }, [applications]);
+
+  // Materialize stage output files (ICM Layer 4) whenever tracker state changes.
+  useEffect(() => {
+    if (!hydrated) return;
+    const timer = setTimeout(() => {
+      fetch("/api/stage-output", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ applications }),
+      }).catch(() => {
+        // Best-effort: the app never depends on the write.
+      });
+    }, 600);
+    return () => clearTimeout(timer);
+  }, [applications, hydrated]);
 
   useEffect(() => {
     if (hydratedRef.current) persist("waypoint.briefs", briefs);

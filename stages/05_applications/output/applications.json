@@ -1,0 +1,60 @@
+{
+  "updated_at": "2026-07-18T14:52:10.513Z",
+  "rows": [
+    {
+      "role": "Technical Operations Manager",
+      "roleDetail": "AeroNorth Systems · Applied Jul 10",
+      "stage": "Interview 1",
+      "stageClass": "interview-stage",
+      "materials": "Resume v3",
+      "materialsDetail": "Cover letter sent",
+      "contact": "Jordan Lee",
+      "contactDetail": "Operations Director",
+      "nextAction": "Interview Prep",
+      "nextActionDetail": "Company brief ready",
+      "nextActionView": "interview",
+      "nextActionDetailHref": "/brief/aeronorth",
+      "due": "Jul 19"
+    },
+    {
+      "role": "Maintenance Planning Lead",
+      "roleDetail": "Harbor Aviation · Applied Jul 15",
+      "stage": "Applied",
+      "stageClass": "applied-stage",
+      "materials": "Resume v2",
+      "materialsDetail": "Cover letter sent",
+      "contact": "Recruiting team",
+      "contactDetail": "No direct contact yet",
+      "nextAction": "Follow up call",
+      "nextActionDetail": "No response since applying",
+      "due": "Jul 21"
+    },
+    {
+      "role": "Operations Supervisor",
+      "roleDetail": "Northgate Logistics · Applied Jul 17",
+      "stage": "Applied",
+      "stageClass": "applied-stage",
+      "materials": "Resume v2",
+      "materialsDetail": "Cover letter sent",
+      "contact": "Ms. Alvarez",
+      "contactDetail": "Hiring Manager",
+      "nextAction": "Follow up call",
+      "nextActionDetail": "No response yet",
+      "due": "Jul 24"
+    },
+    {
+      "role": "Cybersecurity Operations Analyst",
+      "roleDetail": "Meridian Grid · Saved Jul 15",
+      "stage": "Preparing",
+      "stageClass": "saved-stage",
+      "materials": "Resume gap review",
+      "materialsDetail": "Cover letter pending",
+      "contact": "Priya Shah",
+      "contactDetail": "Security Manager",
+      "nextAction": "Tailor resume",
+      "nextActionDetail": "Address SIEM qualification gap first",
+      "nextActionView": "resume",
+      "due": "Jul 22"
+    }
+  ]
+}

@@ -1,0 +1,19 @@
+{
+  "updated_at": "2026-07-18T14:52:10.513Z",
+  "rows": [
+    {
+      "role": "Cybersecurity Operations Analyst",
+      "roleDetail": "Meridian Grid · Saved Jul 15",
+      "stage": "Preparing",
+      "stageClass": "saved-stage",
+      "materials": "Resume gap review",
+      "materialsDetail": "Cover letter pending",
+      "contact": "Priya Shah",
+      "contactDetail": "Security Manager",
+      "nextAction": "Tailor resume",
+      "nextActionDetail": "Address SIEM qualification gap first",
+      "nextActionView": "resume",
+      "due": "Jul 22"
+    }
+  ]
+}

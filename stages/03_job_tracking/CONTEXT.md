@@ -10,7 +10,7 @@ roles appear there as rows with stage **Saved** alongside in-flight applications
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Saved roles with fit evidence | `stages/02_job_search/output/` | 4 (prior stage) |
+| Saved roles with fit evidence | `stages/02_job_search/output/saved-roles.json` | 4 (prior stage) |
 | Pipeline conventions | `stages/03_job_tracking/references/conventions.md` | 3 (stable) |
 | Company brief writer's contract | `stages/03_job_tracking/references/brief-guide.md` | 3 (stable) |
 | Candidate resume text (for the brief's fit section) | persisted resume document | 4 |
@@ -26,7 +26,7 @@ roles appear there as rows with stage **Saved** alongside in-flight applications
 
 | Output | Written to |
 |--------|-----------|
-| Roles promoted to started applications | `stages/03_job_tracking/output/` (currently held in app session state; handed to stage 05) |
+| Pre-application pipeline state (Saved / Preparing roles) | `stages/03_job_tracking/output/tracked-roles.json` (materialized by the app on every change; handed to stage 05) |
 | AI-generated company briefs (`POST /api/brief`, prompt assembled from `brief-guide.md` + shared voice) | `stages/03_job_tracking/output/<slug>-brief.json`, viewed at `/brief/<slug>` |
 
 Downstream: stage 05 (`stages/05_applications/`) receives started applications; stage 04 targets its cover
