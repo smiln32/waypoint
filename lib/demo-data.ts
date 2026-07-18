@@ -1,0 +1,106 @@
+import type { ApplicationRow, Finding, JobMatch, JobResult } from "./types";
+
+export const findings: Finding[] = [
+  {
+    level: "High",
+    title: "Military shorthand obscures the result",
+    quote: "Led 18 technicians and maintained a 96% MC rate during high-tempo flight operations.",
+    why: "A civilian reader may not know “MC,” and the sentence combines leadership with a unit readiness result without showing how your work contributed to that result.",
+    task: "Define the readiness measure in civilian language, then identify your specific, verifiable contribution to the outcome.",
+  },
+  {
+    level: "High",
+    title: "The translation overstates civilian equivalence",
+    quote: "Served as the company’s Chief Information Security Officer.",
+    why: "This title can imply board reporting, regulatory ownership, and budget authority that may not have belonged to the billet.",
+    task: "Describe the actual security scope and authority without borrowing an executive title.",
+  },
+  {
+    level: "Medium",
+    title: "The technical claim lacks evidence",
+    quote: "Resolved complex avionics discrepancies under time pressure.",
+    why: "“Complex” and “under time pressure” are conclusions. The reader cannot see the system involved, your diagnostic action, the constraint, or the observable result.",
+    task: "Choose one defensible example and identify the system, diagnostic action, constraint, and result without disclosing sensitive information.",
+  },
+];
+
+export const matches: JobMatch[] = [
+  ["88", "Technical Operations Manager", "AeroNorth Systems", "Jacksonville, FL · Hybrid", "Budget ownership"],
+  ["82", "Maintenance Planning Lead", "Harbor Aviation", "Savannah, GA · On-site", "FAA repair-station terminology"],
+  ["74", "Cybersecurity Operations Analyst", "Meridian Grid", "Remote · United States", "SIEM certification"],
+];
+
+export const searchResults: JobResult[] = [
+  {
+    title: "Technical Operations Manager",
+    company: "AeroNorth Systems",
+    place: "Jacksonville, FL · Hybrid",
+    pay: "$94,000–$118,000",
+    age: "Posted 3 hours ago",
+    type: "Full-time",
+    apply: "Quick apply",
+    fit: "88% fit",
+  },
+  {
+    title: "Maintenance Planning Manager",
+    company: "Harbor Aviation",
+    place: "Savannah, GA · On-site",
+    pay: "$86,000–$104,000",
+    age: "Posted 1 day ago",
+    type: "Full-time",
+    apply: "Company site",
+    fit: "82% fit",
+  },
+  {
+    title: "Field Service Operations Lead",
+    company: "Atlas Flight Systems",
+    place: "Remote · Southeast",
+    pay: "$88,000–$112,000",
+    age: "Posted 2 days ago",
+    type: "Full-time",
+    apply: "Quick apply",
+    fit: "79% fit",
+  },
+];
+
+export const applicationRows: ApplicationRow[] = [
+  {
+    role: "Technical Operations Manager",
+    roleDetail: "AeroNorth Systems · Applied Jul 10",
+    stage: "Interview 1",
+    stageClass: "interview-stage",
+    materials: "Resume v3",
+    materialsDetail: "Cover letter sent",
+    contact: "Jordan Lee",
+    contactDetail: "Operations Director",
+    nextAction: "Practice leadership answer",
+    nextActionDetail: "Company brief ready",
+    due: "Jul 19",
+  },
+  {
+    role: "Maintenance Planning Lead",
+    roleDetail: "Harbor Aviation · Applied Jul 15",
+    stage: "Applied",
+    stageClass: "applied-stage",
+    materials: "Resume v2",
+    materialsDetail: "Cover letter sent",
+    contact: "Recruiting team",
+    contactDetail: "No direct contact yet",
+    nextAction: "Send concise follow-up",
+    nextActionDetail: "Draft not started",
+    due: "Jul 21",
+  },
+  {
+    role: "Cybersecurity Operations Analyst",
+    roleDetail: "Meridian Grid · Saved Jul 15",
+    stage: "Preparing",
+    stageClass: "saved-stage",
+    materials: "Resume gap review",
+    materialsDetail: "Cover letter pending",
+    contact: "Priya Shah",
+    contactDetail: "Security Manager",
+    nextAction: "Address SIEM qualification gap",
+    nextActionDetail: "Then tailor resume",
+    due: "Jul 22",
+  },
+];
