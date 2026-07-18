@@ -60,12 +60,10 @@ export function ApplicationsPage() {
                 </td>
                 <td>
                   {row.materials}
-                  <br />
                   <small>{row.materialsDetail}</small>
                 </td>
                 <td>
                   {row.contact}
-                  <br />
                   <small>{row.contactDetail}</small>
                 </td>
                 <td>

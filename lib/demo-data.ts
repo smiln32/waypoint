@@ -81,9 +81,8 @@ export const applicationRows: ApplicationRow[] = [
     materialsDetail: "Cover letter sent",
     contact: "Recruiting team",
     contactDetail: "No direct contact yet",
-    nextAction: "Write follow-up",
-    nextActionDetail: "Draft not started",
-    nextActionView: "coverletter",
+    nextAction: "Follow up call",
+    nextActionDetail: "No response since applying",
     due: "Jul 21",
   },
   {

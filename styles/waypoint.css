@@ -1704,14 +1704,16 @@ th {
   color: var(--muted);
 }
 
-td:first-child {
-  display: flex;
-  flex-direction: column;
-  gap: 4px;
+/* Keep cells real table cells (flex here broke row borders); stack with block children. */
+td:first-child b {
+  display: block;
+  margin-bottom: 4px;
 }
 
 td small {
   color: var(--muted);
+  display: block;
+  margin-top: 2px;
 }
 
 /* ================================================================ */
