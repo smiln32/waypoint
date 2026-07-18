@@ -460,7 +460,7 @@ nav .active {
 
 .heading small,
 .interview > section > small {
-  color: oklch(0.42 0.075 214.9);
+  color: oklch(0.42 0.075 262);
 }
 
 
@@ -1416,7 +1416,7 @@ td small {
 
 .applied-stage {
   background: var(--info-soft);
-  color: oklch(0.36 0.065 214.9);
+  color: oklch(0.36 0.065 262);
 }
 
 .saved-stage {
