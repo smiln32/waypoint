@@ -1,0 +1,57 @@
+{
+  "requested_at": "2026-07-18T14:09:37.914Z",
+  "model": "claude-opus-4-8",
+  "input_excerpt": "James Carter\n\nJacksonville, NC · (910) 555-0148 · jcarter88@email.com\n\nSUMMARY\n\nU.S. Marine Corps veteran with six years of experience leading teams, managing equipment, and getting results under pressure. Known for reliability, discipline, and strong leadership. Looking to bring these skills to a civilian team in operations, logistics, or a related field.\n\nEXPERIENCE\nTeam Leader / Sergeant (E-5),",
+  "findings": [
+    {
+      "level": "High",
+      "title": "Clearance currency unverifiable",
+      "quote": "Active Secret Security Clearance",
+      "why": "The resume shows separation in 2025. Clearances lapse without a sponsoring position, and a recruiter who checks JPAS/DISS will read an inaccurate 'Active' as either carelessness or inflation — on the one line where precision matters most for operations and logistics employers.",
+      "task": "State only the status you can verify today, with its date (for example, eligibility within the reinstatement window). Confirm the true current status before listing it."
+    },
+    {
+      "level": "High",
+      "title": "Asserted traits carry no evidence",
+      "quote": "Known for reliability, discipline, and strong leadership.",
+      "why": "'Known for' asks the reader to take your word for it. A civilian hiring reader treats unverifiable trait claims as filler and skips them — this spends prime summary space proving nothing.",
+      "task": "Cut this sentence or replace it with one specific outcome your leadership produced that a bullet on the page can back up. You decide which fact best fits the target role."
+    },
+    {
+      "level": "High",
+      "title": "Vague scope on core duty",
+      "quote": "Supervised and trained a team of up to 12 people, managing their performance, safety, and daily tasks.",
+      "why": "'Up to 12' and 'managing daily tasks' leave a civilian operations reader unable to gauge your actual authority or the consistency of your span of control. 'Up to' signals a peak, not a norm, and reads as inflation.",
+      "task": "State the team size you consistently led and the one supervisory responsibility most relevant to the target role. Draft the revision yourself using numbers you can defend."
+    },
+    {
+      "level": "Medium",
+      "title": "Equipment claim lacks operating context",
+      "quote": "Maintained 100% accountability of equipment valued at over $500,000 with no losses.",
+      "why": "'Accountability' in a civilian logistics context could mean inventory control, signed custody, or physical security — the reader cannot tell which, or what your decision authority was. The dollar figure alone does not show the process you ran.",
+      "task": "Name what you actually did to maintain accountability (tracking method, custody role, audit outcome) so a logistics reader can map it to inventory or asset-management work. Verify the figure is one you can document."
+    },
+    {
+      "level": "Medium",
+      "title": "Outcome-free planning claim",
+      "quote": "Planned and carried out operations and training, consistently meeting deadlines and standards.",
+      "why": "'Operations and training' is undefined to a civilian, and 'meeting deadlines and standards' is the baseline expectation, not an achievement. The reader learns nothing about scale, complexity, or result.",
+      "task": "Pick one planning example and add its observable result (what was produced, for how many, under what constraint). Translate 'operations' into plain terms the target employer uses."
+    },
+    {
+      "level": "Medium",
+      "title": "Leadership course not translated",
+      "quote": "Completed Marine Corps leadership courses (supervisor-level).",
+      "why": "A civilian reader cannot tell what 'supervisor-level' course covered, how long it ran, or whether it maps to any recognized supervisory credential. As written it reads as an unverifiable placeholder.",
+      "task": "Name the specific course(s) and the concrete skills covered, or state the duration/format, so the reader can judge relevance. Do not imply civilian certification equivalence unless you can confirm it."
+    },
+    {
+      "level": "Low",
+      "title": "Recognition claim is vague",
+      "quote": "earned recognition for leadership and dependability",
+      "why": "Unnamed 'recognition' reads as filler, especially when your Awards section already lists specific medals. A civilian reader discounts unattributed praise.",
+      "task": "Either tie this to the specific award it refers to or cut it to avoid duplicating the Awards section. You decide which is stronger."
+    }
+  ],
+  "note": "The draft leans on unverifiable traits and an 'active' clearance claim while leaving scope, authority, and outcomes too vague for a civilian operations or logistics reader to assess; tighten currency, evidence, and translation first."
+}

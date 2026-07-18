@@ -31,7 +31,7 @@ Waypoint is built on the **Interpretable Context Methodology** (Van Clief & McDe
 stages/
 ├── 01_resume/        CONTEXT.md · references/ (identity, rules, review framework, examples) · output/
 ├── 02_job_search/    CONTEXT.md · references/ · output/
-├── 03_job_tracking/  CONTEXT.md · references/ · output/
+├── 03_job_tracking/  CONTEXT.md · references/ (incl. the company-brief writer's rules) · output/
 ├── 04_cover_letter/  CONTEXT.md · references/ (incl. the in-app example letter) · output/
 ├── 05_applications/  CONTEXT.md · references/ · output/
 └── 06_interview/     CONTEXT.md · references/ (incl. the 0–4 response rubric) · output/
@@ -49,7 +49,7 @@ A five-step path from service record to job offer, with one workspace per step:
 |------|-----------|--------------|
 | 1 | **Resume Studio** | Upload or paste a resume; the editor returns evidence-quoted findings; edit in place and resubmit until clear |
 | 2 | **Job Search** | Find roles and see fit as evidence, not a verdict |
-| 3 | **Job Tracking** | Saved roles and applications in one tracker — stage, materials, contacts, and a clickable next action per row |
+| 3 | **Job Tracking** | Saved roles and applications in one tracker — stage, materials, contacts, a clickable next action per row, and an AI-generated company brief per position |
 | 4 | **Cover Letter** | Draft against a critique-only editor; a strong finished example is one click away |
 | 5 | **Interview Prep** | Practice responses scored 0–4 on relevance, ownership, evidence, and translation |
 
@@ -64,6 +64,8 @@ More: [Job Search](docs/screenshots/job-search.png) · [Cover Letter](docs/scree
 ## The AI layer
 
 The editors are Claude. `POST /api/critique/[stage]` (resume · cover-letter · interview) assembles its system prompt from the stage's ICM references plus shared ground rules and calls Claude with a strict JSON schema — findings must be verbatim substrings of the submitted text, which is what makes in-document highlighting reliable. If the API is ever unreachable, the app degrades to offline demo evaluators so nothing breaks — and those results are **clearly labeled as demo findings** in the UI. The demo is a resilience layer, not a mode.
+
+The same pattern powers `POST /api/brief`: a pre-interview **company brief** for any tracked position, written under the honesty rules in `stages/03_job_tracking/references/brief-guide.md` — no invented company facts (it says what to verify instead), fit claims drawn only from the candidate's actual resume, and every brief ends with one honest gap and how to address it plainly. Briefs have no fabricated fallback — fake research would break the product's core promise.
 
 ## Quickstart
 
@@ -81,7 +83,7 @@ MOS-to-career mappings are treated as hypotheses, never proof of experience. Pro
 
 ## Privacy
 
-Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The demo keeps everything in browser session state; uploaded files never leave the machine.
+Do not upload classified, controlled, export-restricted, medical, or unnecessary personally identifying information. A production release requires authentication, encrypted storage, retention controls, deletion, and access logs. The app keeps everything in the browser's own storage; uploaded files are parsed locally and never leave the machine.
 
 ## Built for real use
 
@@ -89,5 +91,6 @@ Do not upload classified, controlled, export-restricted, medical, or unnecessary
 - **Real job listings.** Job Search connects to the **USAJOBS API** — federal hiring, where veterans' preference actually applies (free key at developer.usajobs.gov). Without credentials, clearly-labeled sample roles keep the page fully functional.
 - **Any resume file.** PDF, DOCX, TXT, MD, RTF, or pasted text — parsed entirely in the browser (pdf.js + mammoth), so the file never leaves the machine.
 - **Manual tracking.** Add positions directly in Job Tracking alongside roles saved from search; every next action links to the workspace where it happens.
+- **Company briefs on demand.** One click per tracked position generates a five-section pre-interview brief — who they are, what the role owns, why *your* record fits, likely questions, and one honest gap — viewable in its own tab and logged to the ICM stage.
 
-Roadmap: accounts and cloud sync, additional job boards, materialized ICM `output/` files for the non-AI stages.
+Roadmap: accounts and cloud sync, additional job boards, materialized ICM `output/` files for the remaining non-AI stages.
