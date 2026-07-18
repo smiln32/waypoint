@@ -1343,7 +1343,12 @@ td small {
   border-top: 2px solid var(--ink);
   display: grid;
   grid-template-columns: repeat(3, 1fr);
-  margin-bottom: 6px;
+  margin-bottom: 0;
+}
+
+/* The summary sits directly on the table's top rule so the dividers meet it. */
+.application-table table {
+  margin-top: 0;
 }
 
 .application-summary section {
