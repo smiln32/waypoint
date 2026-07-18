@@ -49,7 +49,6 @@ export function InterviewPage() {
             />
           </label>
           <div className="actions">
-            <span>{answer.split(/\s+/).length} words</span>
             <button className="primary" disabled={reviewing} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to response editor"}
             </button>
