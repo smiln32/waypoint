@@ -13,16 +13,17 @@ Saved rows). Each next action links to the workspace where that step happens.
 | Started applications | `stages/03_job_tracking/output/runtime/tracked-roles.json` (roles leave it when they become applications) | 4 (prior stage) |
 | Tailored materials status (résumé version, cover letter) | `stages/01_resume/output/runtime/`, `stages/04_cover_letter/output/runtime/` | 4 |
 | Tracker conventions | `stages/05_applications/references/` | 3 (stable) |
+| Shared opportunity identity, ISO dates, contacts, and next actions | `_config/shared/opportunity-record.md` | shared |
 
 ## Process
 
-1. Hold each application with its hiring stage (Application Started / Applied / Screening / Interview / Offer / Closed), materials status,
+1. Hold each canonical opportunity record with its permanent ID, hiring status (Application Started / Applied / Screening / Interview / Offer / Closed), structured materials,
    contact, next action, and due date.
 2. Surface the actions due this week; every application always has exactly one next action.
 3. When an interview is scheduled, hand the role to stage 06 for practice.
 
-Current app status: "Add Position" opens a real intake form (role, company, stage, contact, next
-action and its destination, due date) that creates a persisted tracker row.
+Current app status: "Add Position" opens a real intake form (role, company, status, contact, next
+action kind, due date) that creates a versioned canonical opportunity record.
 
 ## Outputs
 

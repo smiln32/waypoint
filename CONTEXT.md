@@ -30,6 +30,7 @@ status, and a due-date calendar, all derived from stage data.
 |------|------------|
 | `_config/shared/product-voice.md` | Ground rules every AI editor persona loads: critique-only, no invented facts, civilian-reader test |
 | `_config/shared/finding-format.md` | The finding JSON contract `{level, title, quote, why, task}` + interview score scale |
+| `_config/shared/opportunity-record.md` | Stable opportunity identity, structured fields, ISO dates, and Stage 03/05 ownership rules |
 | `PRODUCT.md` | Brand, audience, design principles, accessibility bar |
 
 ## How the app uses the stages

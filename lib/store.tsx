@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { createContext, useCallback, useContext, useEffect, useRef, useState } from "react";
 import type { CompanyBrief } from "./briefs";
 import { opportunityRecords } from "./demo-data";

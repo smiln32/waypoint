@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { useWaypoint } from "@/lib/store";
 import type { NextActionKind, OpportunityStatus } from "@/lib/types";

@@ -21,6 +21,9 @@
 - JSON schema, allowed severities, seven-finding limit, and exact-quote validation remain enforced in TypeScript.
 - Privacy language matches the local-browser plus explicit hosted-AI-review behavior.
 - Documented runtime paths match application write paths.
+- Opportunity records now preserve permanent Waypoint IDs, external posting identity, structured company and role fields, semantic next actions, and ISO dates.
+- Version 2 storage migrates legacy arrays once, preserves valid empty state, and never re-appends demo rows.
+- Runtime partition checks confirm Stage 03 and Stage 05 records are mutually exclusive.
 
 ## Open Findings
 
@@ -36,6 +39,8 @@ None in the ICM foundation repair scope after verification. Later evidence, matc
 - ICM-06: Moved stale tracker snapshots into clearly labeled example folders.
 - ICM-07: Corrected Start Application detail preservation and stage transfer.
 - ICM-08: Derived tracker summaries from current data and removed the technical Ownership column.
+- ICM-09: Replaced UI-shaped tracker rows with canonical, versioned opportunity records and verified legacy migration, empty-state preservation, duplicate posting identity, and stage handoff integrity.
+- ICM-10: Removed stale committed company briefs containing résumé-derived content and aligned all output READMEs with the ignored runtime path.
 
 ## Audit History
 
@@ -44,3 +49,4 @@ None in the ICM foundation repair scope after verification. Later evidence, matc
 - 2026-07-18: ICM-01 and ICM-02 resolved; structure reached 24/24 under the original rubric.
 - 2026-07-18: Foundation pass introduced formatting, runtime-path, stale-artifact, transition, and tracker-summary regressions.
 - 2026-07-18: Repair pass resolved ICM-03 through ICM-08 and re-verified structural and operational conformance.
+- 2026-07-18: Record Integrity pass resolved ICM-09 and ICM-10 after deterministic migration tests, duplicate-identity checks, live stage partition checks, UI inspection, lint, production build, diff validation, and runtime-ignore verification.

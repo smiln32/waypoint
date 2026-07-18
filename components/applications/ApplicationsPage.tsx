@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useState } from "react";
 import { briefSlug, resumeTextFromStorage, type CompanyBrief } from "@/lib/briefs";
 import { Heading } from "@/components/ui/Heading";

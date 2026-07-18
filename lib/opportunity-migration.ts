@@ -1,4 +1,4 @@
-﻿import { deterministicIdFromParts } from "./opportunities";
+import { deterministicIdFromParts } from "./opportunities";
 import type {
   NextActionKind,
   OpportunityContact,

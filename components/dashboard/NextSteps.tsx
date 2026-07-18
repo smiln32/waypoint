@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { findings } from "@/lib/demo-data";
 import { formatFriendlyDate, nextActionViewFor } from "@/lib/opportunities";
 import { useWaypoint } from "@/lib/store";

@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 import { useSyncExternalStore } from "react";
 import { useWaypoint } from "@/lib/store";
 import { useGo } from "@/lib/use-go";

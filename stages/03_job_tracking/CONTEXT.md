@@ -12,14 +12,15 @@ roles appear there as rows with stage **Saved** alongside in-flight applications
 |-------|--------|-------|
 | Saved roles with fit evidence | `stages/02_job_search/output/runtime/saved-roles.json` | 4 (prior stage) |
 | Pipeline conventions | `stages/03_job_tracking/references/conventions.md` | 3 (stable) |
+| Shared opportunity identity, ISO dates, and structured fields | `_config/shared/opportunity-record.md` | shared |
 | Company brief writer's contract | `stages/03_job_tracking/references/brief-guide.md` | 3 (stable) |
 | Candidate resume text (for the brief's fit section) | persisted resume document | 4 |
 
 ## Process
 
-1. Hold each saved role with its fit score, evidence tags, and the qualification to address.
+1. Hold each canonical opportunity record with its permanent ID, source identity, structured company and role, fit context, and qualification to address.
 2. The veteran advances a role's status as research completes: Saved → Researching → Preparing → Ready to Apply.
-3. "Start application" promotes the role out of this pipeline into stage 05's tracker.
+3. Start Application preserves the record ID and structured fields, updates status and status-change time, and transfers runtime ownership to stage 05.
 4. "Prepare for this role" routes to stage 06 for interview practice against the role's gap.
 
 ## Outputs
