@@ -1,0 +1,67 @@
+/*
+  Waypoint design tokens
+  ----------------------
+  Single source of truth for the color palette and spacing scale.
+  This is the winning :root from the former cascade (colorize.css
+  superseded globals.css; its later --task-mustard block is merged in).
+*/
+:root {
+  /* Recommended palette, converted exactly to OKLCH */
+  --palette-violet: oklch(0.2817 0.1045 286.7);
+  --palette-teal: oklch(0.607 0.0686 214.9);
+  --palette-mint: oklch(0.773 0.0932 153.9);
+  --palette-chartreuse: oklch(0.9545 0.0756 115.8);
+
+  /* Surfaces and neutrals */
+  --bg: oklch(0.985 0.014 115.8);
+  --surface: oklch(0.965 0.022 214.9);
+  --surface-raised: oklch(1 0 0);
+  --soft: var(--palette-chartreuse);
+  --ink: oklch(0.22 0.065 286.7);
+  --muted: oklch(0.42 0.035 286.7);
+  --line: oklch(0.86 0.025 214.9);
+
+  /* Actions */
+  --primary: var(--palette-mint);
+  --primary-hover: var(--palette-chartreuse);
+  --primary-soft: oklch(0.93 0.045 153.9);
+  --deep: var(--palette-violet);
+
+  /* Status */
+  --success: oklch(0.48 0.105 153.9);
+  --success-soft: oklch(0.92 0.055 153.9);
+  --info: var(--palette-teal);
+  --info-soft: oklch(0.93 0.035 214.9);
+  --warning: oklch(0.43 0.115 70);
+  --warning-soft: oklch(0.93 0.075 82);
+  --danger: oklch(0.48 0.17 28);
+  --danger-soft: oklch(0.92 0.055 28);
+  --focus: var(--palette-teal);
+
+  /* Legacy aliases (older rules reference these names) */
+  --green: var(--primary);
+  --warn: var(--warning-soft);
+  --red: var(--danger);
+
+  /* Shared task-surface accent */
+  --task-mustard: oklch(0.9238 0.1167 94.2); /* #FFE588 */
+
+  /* Spacing scale — 8 / 12 / 24 / 48 / 64 / 96 px.
+     Names kept as --overview-space-* because existing rules reference them. */
+  --overview-space-xs: 8px;
+  --overview-space-sm: 12px;
+  --overview-space-md: 24px;
+  --overview-space-lg: 48px;
+  --overview-space-xl: 64px;
+  --overview-space-2xl: 96px;
+}
+
+/*
+  Standardized breakpoints (all media queries use max-width):
+    1100px — wide-desktop tighten (résumé editor columns, dashboard status
+             2-up, cover-letter workspace stacks)
+    900px  — tablet: sidebar collapses to a top bar, all two-column layouts
+             stack, dashboard/search layouts go single-column
+    680px  — applications summary/actions stack
+    560px  — phone: typography scales down, remaining grids go single-column
+*/
