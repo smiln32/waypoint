@@ -15,6 +15,7 @@ export function JobSearchPage() {
   const [results, setResults] = useState<JobResult[]>(searchResults);
   const [source, setSource] = useState<"usajobs" | "sample">("sample");
   const [searching, setSearching] = useState(false);
+  const [resolved, setResolved] = useState(false);
 
   const runSearch = useCallback(async (q: string, loc: string) => {
     setSearching(true);
@@ -29,6 +30,7 @@ export function JobSearchPage() {
       setSource("sample");
     }
     setSearching(false);
+    setResolved(true);
   }, []);
 
   // Load live results on arrival when the API is configured.
@@ -86,7 +88,7 @@ export function JobSearchPage() {
           Alert me to new jobs
         </label>
       </div>
-      {source === "sample" && (
+      {resolved && !searching && source === "sample" && (
         <p className="demo-notice" role="status">
           <b>Sample roles.</b> Live federal listings need a free USAJOBS key — set{" "}
           <code>USAJOBS_API_KEY</code> and <code>USAJOBS_EMAIL</code> in <code>.env.local</code>.

@@ -30,7 +30,11 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
   useEffect(() => {
     const timer = setTimeout(() => {
       const saved = loadPersisted<ApplicationRow[]>("waypoint.applications");
-      if (saved && Array.isArray(saved)) setApplications(saved);
+      if (saved && Array.isArray(saved)) {
+        // Merge in demo rows added after this session was first persisted.
+        const merged = [...saved, ...applicationRows.filter((demo) => !saved.some((row) => row.role === demo.role))];
+        setApplications(merged);
+      }
       const savedBriefs = loadPersisted<Record<string, CompanyBrief>>("waypoint.briefs");
       if (savedBriefs) setBriefs(savedBriefs);
       hydratedRef.current = true;

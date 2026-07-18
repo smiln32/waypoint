@@ -500,7 +500,8 @@ nav .active {
 }
 
 .primary:disabled {
-  background: var(--line);
+  background: var(--surface);
+  border: 1px solid var(--line);
   color: var(--muted);
   cursor: not-allowed;
 }
