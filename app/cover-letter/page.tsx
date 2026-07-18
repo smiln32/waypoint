@@ -1,6 +1,6 @@
 import { CoverLetterPage } from "@/components/cover-letter/CoverLetterPage";
-import { loadCoverLetterTemplates } from "@/lib/cover-letter-templates.server";
+import { loadCoverLetterExample } from "@/lib/cover-letter-example.server";
 
 export default function Page() {
-  return <CoverLetterPage templates={loadCoverLetterTemplates()} />;
+  return <CoverLetterPage example={loadCoverLetterExample()} />;
 }

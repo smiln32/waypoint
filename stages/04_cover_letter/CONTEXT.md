@@ -11,7 +11,7 @@ This stage does not write letters, critique the résumé, or track applications.
 | Verified résumé evidence (latest critique run) | `stages/01_resume/output/` | 4 (prior stage) |
 | Target role being readied | `stages/03_job_tracking/output/` | 4 (prior stage) |
 | Editor persona: identity, rules, examples, connection framework | `stages/04_cover_letter/references/` | 3 (stable) |
-| Letter templates (structure-only skeletons offered in the app) | `stages/04_cover_letter/references/templates.md` | 3 (stable) |
+| Example letter (revealed on request in the app) | `stages/04_cover_letter/references/example-letter.md` | 3 (stable) |
 | Shared ground rules + finding contract | `_config/shared/product-voice.md`, `_config/shared/finding-format.md` | shared |
 
 ## Process

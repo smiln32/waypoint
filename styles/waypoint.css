@@ -1119,20 +1119,25 @@ blockquote {
 .dashboard-status {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
+  gap: 18px;
   margin-bottom: 42px;
-  background: var(--surface);
-  border: 1px solid var(--line);
 }
 
 .dashboard-status > div {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px oklch(0.2817 0.1045 286.7 / 0.04), 0 6px 18px oklch(0.2817 0.1045 286.7 / 0.06);
   display: flex;
   flex-direction: column;
-  min-height: 184px;
-  padding: 24px;
+  min-height: 160px;
+  padding: 20px 22px;
+  transition: box-shadow 180ms ease-out, transform 180ms ease-out;
 }
 
-.dashboard-status > div + div {
-  border-left: 1px solid var(--line);
+.dashboard-status > div:hover {
+  box-shadow: 0 2px 4px oklch(0.2817 0.1045 286.7 / 0.05), 0 10px 26px oklch(0.2817 0.1045 286.7 / 0.1);
+  transform: translateY(-2px);
 }
 
 .dashboard-status b {
@@ -2002,15 +2007,6 @@ td small {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .dashboard-status > div:nth-child(3) {
-    border-left: 0;
-    border-top: 1px solid var(--line);
-  }
-
-  .dashboard-status > div:nth-child(4) {
-    border-top: 1px solid var(--line);
-  }
-
   .cover-letter-workspace {
     grid-template-columns: 1fr;
   }
@@ -2248,11 +2244,6 @@ td small {
     grid-template-columns: 1fr;
   }
 
-  .dashboard-status > div + div {
-    border-left: 0;
-    border-top: 1px solid var(--line);
-  }
-
   .results-heading {
     align-items: flex-start;
     flex-direction: column;
@@ -2269,85 +2260,61 @@ td small {
   }
 }
 
-/* ==== Cover letter template picker ==== */
-.template-picker {
-  margin-bottom: 34px;
+/* ==== Example cover letter reveal ==== */
+.example-letter {
+  margin-bottom: 28px;
 }
 
-.template-picker-intro {
-  margin-bottom: 14px;
+.example-letter > .secondary {
+  min-height: 44px;
+  padding: 0 16px;
 }
 
-.template-picker-intro h2 {
-  font-size: 20px;
-  margin: 0 0 5px;
-}
-
-.template-picker-intro p {
-  color: var(--muted);
-  margin: 0;
-  max-width: 640px;
-}
-
-.template-list {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 16px;
+.example-letter-body {
   align-items: start;
+  display: grid;
+  gap: 18px;
+  grid-template-columns: minmax(0, 1.4fr) minmax(0, 1fr);
+  margin-top: 14px;
 }
 
-.template-list article {
-  background: var(--surface);
-  border: 1px solid var(--line);
-  border-radius: 12px;
-  display: flex;
-  flex-direction: column;
-  gap: 9px;
-  padding: 18px;
-}
-
-.template-list article b {
-  font-size: 15px;
-}
-
-.template-list article > span {
-  color: var(--muted);
-  font-size: 13px;
-  line-height: 1.5;
-}
-
-.template-list article .secondary {
-  align-self: flex-start;
-  min-height: 40px;
-  padding: 0 14px;
-}
-
-.template-list details summary {
-  color: var(--deep);
-  cursor: pointer;
-  font-size: 13px;
-  font-weight: 750;
-  padding: 4px 0;
-}
-
-.template-list details summary:focus-visible {
-  outline: 3px solid var(--focus);
-  outline-offset: 2px;
-}
-
-.template-list details pre {
+.example-letter-body pre {
   background: var(--surface-raised);
   border: 1px solid var(--line);
-  border-radius: 8px;
+  border-radius: 12px;
   color: var(--ink);
-  font: 13px/1.55 Arial, sans-serif;
-  margin-top: 8px;
-  padding: 14px;
+  font: 14px/1.6 Georgia, serif;
+  margin: 0;
+  padding: 24px 26px;
   white-space: pre-wrap;
 }
 
+.example-letter-notes {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  font-size: 13px;
+  padding: 18px;
+}
+
+.example-letter-notes b {
+  display: block;
+  margin-bottom: 8px;
+}
+
+.example-letter-notes ul {
+  color: var(--muted);
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  line-height: 1.5;
+  list-style: disc;
+  margin: 0;
+  padding-left: 18px;
+}
+
 @media (max-width: 900px) {
-  .template-list {
+  .example-letter-body {
     grid-template-columns: 1fr;
   }
 }
@@ -2358,4 +2325,47 @@ td small {
   display: inline-block;
   margin-bottom: 4px;
   text-align: left;
+}
+
+/* Compact critique panel beside the resume — 1px smaller, tighter tracking. */
+.editor .review {
+  letter-spacing: -0.012em;
+  padding: 14px;
+}
+
+.editor .finding {
+  padding: 14px;
+  margin-bottom: 10px;
+}
+
+.editor .finding h3 {
+  font-size: 14px;
+}
+
+.editor .finding p,
+.editor .finding section,
+.editor .review blockquote {
+  font-size: 12px;
+}
+
+.editor .review blockquote {
+  margin: 11px 0;
+  padding: 8px 10px;
+}
+
+.editor .finding small {
+  font-size: 9px;
+}
+
+.editor .reviewhead small {
+  font-size: 10px;
+}
+
+.editor .reviewhead em {
+  font-size: 9px;
+}
+
+/* Resume document: section headings up 2px, same face. */
+.paper h4 {
+  font-size: 13px;
 }
