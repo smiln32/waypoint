@@ -11,7 +11,7 @@ export function DashboardPage() {
         <Heading
           kicker="FRIDAY, JULY 17"
           title={'"Improvise, adapt, and overcome."'}
-          text="One decision at a time. Every recommendation shows its work."
+          text="Simple, actionable guidance to help you navigate your next professional chapter."
         />
         <section className="workspace-guide">
           <div className="workspace-guide-intro">
