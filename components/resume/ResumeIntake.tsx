@@ -25,7 +25,7 @@ export function ResumeIntake({
         <p>Start with the resume you have. It becomes the editable draft below, ready for review.</p>
       </div>
       <div className="intake-grid">
-        <section className="intake-card">
+        <section className="intake-card intake-upload">
           <h3>Upload a file</h3>
           <span>TXT, MD, or RTF for this demo. The file stays on your machine.</span>
           <input
