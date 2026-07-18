@@ -6,7 +6,7 @@ const PATH: { view: View; label: string; context: string }[] = [
   {
     view: "resume",
     label: "Add and review your resume",
-    context: "Both happen on one page: load the resume you have, then work through the editor's findings right below it.",
+    context: "Both happen on one page: load the resume you have, then work through the editor's findings right below.",
   },
   {
     view: "search",
