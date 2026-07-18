@@ -118,7 +118,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
       ...row,
       stage: "Application Started",
       stageClass: "applied-stage",
-      roleDetail: row.roleDetail.replace(/ ? (Saved|Added).*$/, " ? Application started"),
+      roleDetail: row.roleDetail.replace(/ · (Saved|Added).*$/, " · Application started"),
     } : row));
   }, []);
 

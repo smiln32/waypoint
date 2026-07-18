@@ -66,7 +66,8 @@ export function InterviewPage() {
               }}
             />
           </label>
-          <AiPrivacyNotice />\n          <div className="actions">
+          <AiPrivacyNotice />
+          <div className="actions">
             <button className="primary" disabled={reviewing || !answer.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to response editor"}
             </button>

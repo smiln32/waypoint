@@ -7,9 +7,9 @@ This stage does not write letters, critique the résumé, or track applications.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Cover letter draft + target role + company | Submitted from the app's Cover Letter Studio (`/cover-letter`); headless runs drop it at `stages/04_cover_letter/output/submitted-letter.md` | per-run (Layer 4) |
-| Verified résumé evidence (latest critique run) | `stages/01_resume/output/` | 4 (prior stage) |
-| Target role being readied | `stages/03_job_tracking/output/` | 4 (prior stage) |
+| Cover letter draft + target role + company | Submitted from the app's Cover Letter Studio (`/cover-letter`); headless runs drop it at `stages/04_cover_letter/output/runtime/submitted-letter.md` | per-run (Layer 4) |
+| Verified résumé evidence (latest critique run) | `stages/01_resume/output/runtime/` | 4 (prior stage) |
+| Target role being readied | `stages/03_job_tracking/output/runtime/` | 4 (prior stage) |
 | Editor persona: identity, rules, examples, connection framework | `stages/04_cover_letter/references/` | 3 (stable) |
 | Example letter (revealed on request in the app) | `stages/04_cover_letter/references/reference/example-letter.md` | 3 (stable) |
 | Shared ground rules + finding contract | `_config/shared/product-voice.md`, `_config/shared/finding-format.md` | shared |
@@ -27,7 +27,7 @@ This stage does not write letters, critique the résumé, or track applications.
 
 | Output | Written to |
 |--------|-----------|
-| Critique run `{requested_at, model, input_excerpt, findings, note}` | `stages/04_cover_letter/output/<timestamp>-critique.json` |
+| Critique run `{requested_at, model, input_excerpt, findings, note}` | `stages/04_cover_letter/output/runtime/<timestamp>-critique.json` |
 
 Downstream: stage 05 (`stages/05_applications/`) records the letter's sent/pending status among the
 application's materials.

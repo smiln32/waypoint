@@ -3,7 +3,7 @@ import { useState } from "react";
 import { briefSlug, resumeTextFromStorage, type CompanyBrief } from "@/lib/briefs";
 import { Heading } from "@/components/ui/Heading";
 import { useWaypoint } from "@/lib/store";
-import { APPLICATION_STATUSES, PRE_APPLICATION_STATUSES, type ApplicationRow } from "@/lib/types";
+import { PRE_APPLICATION_STATUSES, type ApplicationRow } from "@/lib/types";
 import { useGo } from "@/lib/use-go";
 import { AddPositionForm } from "./AddPositionForm";
 
@@ -40,6 +40,14 @@ export function ApplicationsPage() {
     }
     setGeneratingSlug(null);
   };
+  const activeCount = applications.filter((row) => row.stage !== "Closed").length;
+  const interviewCount = applications.filter((row) => row.stage === "Interview").length;
+  const scheduledCount = applications.filter((row) => row.due !== "—").length;
+  const missingDueCount = applications.length - scheduledCount;
+  const activeStageCount = new Set(
+    applications.filter((row) => row.stage !== "Closed").map((row) => row.stage),
+  ).size;
+
   return (
     <div className="page">
       <Heading
@@ -49,19 +57,19 @@ export function ApplicationsPage() {
       />
       <div className="application-summary">
         <section>
-          <b>{applications.filter((row) => row.stage !== "Closed").length}</b>
+          <b>{activeCount}</b>
           <span>Active</span>
-          <small>Across three hiring stages</small>
+          <small>{activeStageCount === 0 ? "No active stages" : `${activeStageCount} active hiring stage${activeStageCount === 1 ? "" : "s"}`}</small>
         </section>
         <section>
-          <b>{applications.filter((row) => row.stage === "Interview").length}</b>
+          <b>{interviewCount}</b>
           <span>Interviews</span>
-          <small>Next: AeroNorth, July 20</small>
+          <small>{interviewCount === 0 ? "No interviews scheduled" : `${interviewCount} role${interviewCount === 1 ? "" : "s"} at interview stage`}</small>
         </section>
         <section>
-          <b>{applications.filter((row) => row.due !== "?").length}/{applications.length}</b>
+          <b>{scheduledCount}/{applications.length}</b>
           <span>Follow-ups scheduled</span>
-          <small>One application needs a date</small>
+          <small>{missingDueCount === 0 ? "Every position has a date" : `${missingDueCount} position${missingDueCount === 1 ? " needs" : "s need"} a date`}</small>
         </section>
       </div>
       <div className="application-toolbar">
@@ -80,7 +88,7 @@ export function ApplicationsPage() {
               <th scope="col">Contact</th>
               <th scope="col">Next action</th>
               <th scope="col">Due</th>
-              <th scope="col">Ownership</th>
+
             </tr>
           </thead>
           <tbody>
@@ -102,6 +110,17 @@ export function ApplicationsPage() {
                   <small>{row.contactDetail}</small>
                 </td>
                 <td>
+                  {PRE_APPLICATION_STATUSES.includes(row.stage) && (
+                    <button
+                      className="secondary"
+                      onClick={() => {
+                        startApplication(row.id);
+                        note(row.role + " moved to Applications");
+                      }}
+                    >
+                      Start Application
+                    </button>
+                  )}
                   {row.nextActionView ? (
                     <button className="link next-action" onClick={() => onGo(row.nextActionView!)}>
                       {row.nextAction} →
@@ -143,14 +162,6 @@ export function ApplicationsPage() {
                   )}
                 </td>
                 <td>{row.due}</td>
-                <td className="ownership-action">
-                  {PRE_APPLICATION_STATUSES.includes(row.stage) && (
-                    <button className="secondary" onClick={() => { startApplication(row.id); note(row.role + " moved to Applications"); }}>
-                      Start Application
-                    </button>
-                  )}
-                  {APPLICATION_STATUSES.includes(row.stage) && <small>Applications</small>}
-                </td>
               </tr>
             ))}
           </tbody>

@@ -7,7 +7,7 @@ materials or track application progress.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Verified résumé evidence (latest critique run) | `stages/01_resume/output/` | 4 (prior stage) |
+| Verified résumé evidence (latest critique run) | `stages/01_resume/output/runtime/` | 4 (prior stage) |
 | Search criteria: keywords, location, filters | Entered in the app's Job Search (`/search`) | per-run |
 | Fit-evidence conventions | `stages/02_job_search/references/` | 3 (stable) |
 
@@ -26,6 +26,6 @@ credentials are configured; otherwise shows clearly-labeled sample roles.
 
 | Output | Written to |
 |--------|-----------|
-| Saved roles with fit score, evidence tags, and qualification gap | `stages/02_job_search/output/saved-roles.json` (materialized by the app on every change; dev best-effort) |
+| Saved roles with fit score, evidence tags, and qualification gap | `stages/02_job_search/output/runtime/saved-roles.json` (materialized by the app on every change; dev best-effort) |
 
 Downstream: stage 03 (`stages/03_job_tracking/`) reads saved roles from this stage's output.

@@ -1,1 +1,46 @@
-# ICM Conformance Log ? Waypoint\n\n_Re-audited: 2026-07-18 after the first foundation pass._\n\n## Result\n\nThe repository remains structurally conformant and now matches its operating model:\n\n- The five user-facing steps remain unchanged.\n- Stage 03 exclusively owns Saved, Researching, Preparing, and Ready to Apply records.\n- Clicking Start Application transfers the stable record ID to Stage 05 ownership.\n- Stage 05 exclusively owns Application Started, Applied, Screening, Interview, Offer, and Closed records.\n- The combined Job Tracking page renders both collections without duplicating a record.\n- Editor judgment loads from stage contracts/references plus shared voice and finding-format files.\n- TypeScript retains JSON schema, severity, array-limit, and exact-quote enforcement.\n- Explicit AI review sends relevant text to the configured hosted provider.\n- Actual local runs write to Git-ignored `stages/*/output/runtime/` folders.\n\n## Open findings\n\nNone in the first-set scope. Later record-type, evidence, matching, sourcing, and test improvements remain roadmap work rather than conformance blockers.\n
+# ICM Conformance Log — Waypoint
+
+## Current Audit
+
+### Structural Conformance
+
+- Root identity and routing preserve the five-step product scope.
+- Six numbered stages each retain a contract, references, and inspectable output structure.
+- Shared product voice and finding format remain visible under `_config/shared/`.
+- Runtime artifacts have one documented location: `stages/*/output/runtime/`.
+- Runtime JSON is ignored while runtime README files remain tracked.
+- Fictional tracker snapshots live in clearly named `examples/demo-*.json` files.
+
+### Operational Conformance
+
+- Stage 03 owns Saved, Researching, Preparing, and Ready to Apply records.
+- Start Application preserves the stable record ID and employer detail while transferring the record to Stage 05.
+- Stage 05 owns Application Started, Applied, Screening, Interview, Offer, and Closed records.
+- The combined Job Tracking page renders both lifecycle groups without duplicating a record.
+- Editor prompts load stage CONTEXT, identity, rules, framework or rubric, examples, shared voice, and shared finding format.
+- JSON schema, allowed severities, seven-finding limit, and exact-quote validation remain enforced in TypeScript.
+- Privacy language matches the local-browser plus explicit hosted-AI-review behavior.
+- Documented runtime paths match application write paths.
+
+## Open Findings
+
+None in the ICM foundation repair scope after verification. Later evidence, matching, sourcing, and broader product work remain outside this audit.
+
+## Resolved Findings
+
+- ICM-01: Materialized Stage 02, 03, and 05 handoff files.
+- ICM-02: Documented canonical headless input paths.
+- ICM-03: Replaced literal backslash-n formatting introduced by PR #1.
+- ICM-04: Corrected runtime ignore rules and verified them with `git check-ignore`.
+- ICM-05: Aligned all stage contracts with `output/runtime/` paths.
+- ICM-06: Moved stale tracker snapshots into clearly labeled example folders.
+- ICM-07: Corrected Start Application detail preservation and stage transfer.
+- ICM-08: Derived tracker summaries from current data and removed the technical Ownership column.
+
+## Audit History
+
+- 2026-07-17: Initial audit found two issues; score 22/24.
+- 2026-07-18: First re-audit after the UI redesign retained the two open issues.
+- 2026-07-18: ICM-01 and ICM-02 resolved; structure reached 24/24 under the original rubric.
+- 2026-07-18: Foundation pass introduced formatting, runtime-path, stale-artifact, transition, and tracker-summary regressions.
+- 2026-07-18: Repair pass resolved ICM-03 through ICM-08 and re-verified structural and operational conformance.

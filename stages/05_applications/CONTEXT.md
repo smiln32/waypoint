@@ -10,8 +10,8 @@ Saved rows). Each next action links to the workspace where that step happens.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Started applications | `stages/03_job_tracking/output/tracked-roles.json` (roles leave it when they become applications) | 4 (prior stage) |
-| Tailored materials status (résumé version, cover letter) | `stages/01_resume/output/`, `stages/04_cover_letter/output/` | 4 |
+| Started applications | `stages/03_job_tracking/output/runtime/tracked-roles.json` (roles leave it when they become applications) | 4 (prior stage) |
+| Tailored materials status (résumé version, cover letter) | `stages/01_resume/output/runtime/`, `stages/04_cover_letter/output/runtime/` | 4 |
 | Tracker conventions | `stages/05_applications/references/` | 3 (stable) |
 
 ## Process
