@@ -1244,7 +1244,7 @@ td {
 }
 
 th {
-  font-size: 13px;
+  font-size: 15px;
   color: var(--muted);
 }
 
@@ -1351,7 +1351,7 @@ td small {
    starts 10px below without a duplicate rule. */
 .application-table table {
   border-top: 0;
-  margin-top: 10px;
+  margin-top: 30px;
 }
 
 .application-summary section {
