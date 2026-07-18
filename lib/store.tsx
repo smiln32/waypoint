@@ -10,6 +10,7 @@ interface WaypointStore {
   applications: ApplicationRow[];
   isJobTracked: (title: string) => boolean;
   toggleTrackedJob: (job: JobResult) => void;
+  addPosition: (row: ApplicationRow) => void;
 }
 
 const WaypointContext = createContext<WaypointStore | null>(null);
@@ -69,8 +70,12 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
     });
   }, []);
 
+  const addPosition = useCallback((row: ApplicationRow) => {
+    setApplications((rows) => [...rows, row]);
+  }, []);
+
   return (
-    <WaypointContext.Provider value={{ toast, note, applications, isJobTracked, toggleTrackedJob }}>
+    <WaypointContext.Provider value={{ toast, note, applications, isJobTracked, toggleTrackedJob, addPosition }}>
       {children}
     </WaypointContext.Provider>
   );

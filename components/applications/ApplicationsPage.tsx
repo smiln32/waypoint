@@ -2,6 +2,7 @@
 import { Heading } from "@/components/ui/Heading";
 import { useWaypoint } from "@/lib/store";
 import { useGo } from "@/lib/use-go";
+import { AddPositionForm } from "./AddPositionForm";
 
 export function ApplicationsPage() {
   const { applications } = useWaypoint();
@@ -14,7 +15,10 @@ export function ApplicationsPage() {
         text="Keep every posting, tailored document, contact, deadline, and follow-up in one place."
       />
       <div className="application-actions">
-        <span>5 active applications · 2 actions due this week</span>
+        <AddPositionForm />
+        <span>
+          {applications.length} position{applications.length === 1 ? "" : "s"} tracked
+        </span>
       </div>
       <div className="application-summary">
         <section>
