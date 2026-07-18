@@ -1,15 +1,18 @@
 "use client";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { requestCritique } from "@/lib/critique/client";
 import { findings } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
+import { ResumeIntake } from "./ResumeIntake";
 import { ResumePaper } from "./ResumePaper";
 import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
 export function ResumeStudioPage() {
-  const { note, importedResume, consumeImportedResume } = useWaypoint();
+  const { note } = useWaypoint();
+  const [resumeImportText, setResumeImportText] = useState("");
+  const resumeFileRef = useRef<HTMLInputElement>(null);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(
     "Edit the resume directly, then resubmit it for evaluation.",
@@ -84,30 +87,30 @@ export function ResumeStudioPage() {
     setResumeEvaluationNote("Changes not evaluated yet.");
   };
 
-  const loadResumeText = useCallback(
-    (text: string, source: string) => {
-      if (!text.trim() || !resumeRef.current) return;
-      resumeRef.current.innerText = text.trim();
-      const html = resumeRef.current.innerHTML;
-      resumeHistoryRef.current = [html];
-      resumeHistoryIndexRef.current = 0;
-      setResumeHistoryState({ index: 0, length: 1 });
-      setResumeFindings([]);
-      setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
-      note(source + " loaded");
-    },
-    [note],
-  );
+  const loadResumeText = (text: string, source: string) => {
+    if (!text.trim() || !resumeRef.current) return;
+    resumeRef.current.innerText = text.trim();
+    const html = resumeRef.current.innerHTML;
+    resumeHistoryRef.current = [html];
+    resumeHistoryIndexRef.current = 0;
+    setResumeHistoryState({ index: 0, length: 1 });
+    setResumeFindings([]);
+    setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
+    setResumeImportText("");
+    note(source + " loaded");
+  };
 
-  // Consume a resume added on the Start Here page (async so the DOM ref is mounted).
-  useEffect(() => {
-    if (!importedResume) return;
-    const timer = setTimeout(() => {
-      loadResumeText(importedResume.text, importedResume.source);
-      consumeImportedResume();
-    }, 0);
-    return () => clearTimeout(timer);
-  }, [importedResume, consumeImportedResume, loadResumeText]);
+  const uploadResume = (file?: File) => {
+    if (!file) return;
+    if (!/\.(txt|md|rtf)$/i.test(file.name)) {
+      note("For this demo, upload a TXT, MD, or RTF resume.");
+      return;
+    }
+    const reader = new FileReader();
+    reader.onload = () => loadResumeText(String(reader.result ?? ""), file.name);
+    reader.onerror = () => note("That file could not be read.");
+    reader.readAsText(file);
+  };
 
   const evaluateResume = async () => {
     if (evaluating) return;
@@ -126,6 +129,13 @@ export function ResumeStudioPage() {
       <div className="heading">
         <small>RESUME STUDIO</small>
       </div>
+      <ResumeIntake
+        fileRef={resumeFileRef}
+        importText={resumeImportText}
+        onImportTextChange={setResumeImportText}
+        onUpload={uploadResume}
+        onUsePasted={() => loadResumeText(resumeImportText, "Pasted resume")}
+      />
       <div className="intake-heading">
         <h2>Review Your Resume</h2>
       </div>
