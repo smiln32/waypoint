@@ -51,7 +51,7 @@ export function DueCalendar() {
           Open Job Tracking →
         </button>
       </div>
-      <div className="month-cal">
+      <div className="month-cal" aria-hidden="true">
         {WEEKDAYS.map((weekday) => (
           <div key={weekday} className="cal-weekday">
             {weekday}
@@ -80,6 +80,22 @@ export function DueCalendar() {
             </div>
           );
         })}
+      </div>
+      <div className="sr-only">
+        <h3>Follow-ups due in {monthName}</h3>
+        {dueByDay.size === 0 ? (
+          <p>No follow-ups due this month.</p>
+        ) : (
+          <ul>
+            {[...dueByDay.entries()].flatMap(([day, items]) =>
+              items.map((item) => (
+                <li key={item.id}>
+                  {monthName} {day}: {item.label} for {item.role}
+                </li>
+              )),
+            )}
+          </ul>
+        )}
       </div>
     </section>
   );

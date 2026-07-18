@@ -116,6 +116,7 @@ export function ApplicationsPage() {
       </div>
       <div className="application-table">
         <table>
+          <caption className="sr-only">Tracked job opportunities and next actions</caption>
           <thead>
             <tr>
               <th scope="col">Role</th>
@@ -127,6 +128,11 @@ export function ApplicationsPage() {
             </tr>
           </thead>
           <tbody>
+            {opportunities.length === 0 && (
+              <tr>
+                <td colSpan={6}>No positions tracked yet. Save a role from Job Search or add one here.</td>
+              </tr>
+            )}
             {opportunities.map((record) => {
               const actionView = nextActionViewFor(record.nextAction.kind);
               const slug = briefSlug(record.company, record.role);

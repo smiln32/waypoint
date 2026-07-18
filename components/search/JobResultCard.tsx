@@ -25,6 +25,7 @@ export function JobResultCard({
         </div>
         <button
           className="save-job"
+          aria-label={`${button.label} ${job.title} at ${job.company}`}
           aria-pressed={button.pressed}
           disabled={button.disabled}
           onClick={onToggleSave}

@@ -17,15 +17,20 @@ const NAV_ITEMS: [View, string][] = [
 export function Sidebar() {
   const pathname = usePathname();
   return (
-    <aside className="side">
+    <aside className="side" aria-label="Waypoint sidebar">
       <Link className="logo" href="/">
         <span>W</span>Waypoint
       </Link>
-      <nav>
+      <nav aria-label="Primary navigation">
         {NAV_ITEMS.map(([view, label]) => {
           const href = VIEW_PATHS[view];
           return (
-            <Link className={pathname === href ? "active" : ""} key={view} href={href}>
+            <Link
+              className={pathname === href ? "active" : ""}
+              key={view}
+              href={href}
+              aria-current={pathname === href ? "page" : undefined}
+            >
               {label}
             </Link>
           );

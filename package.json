@@ -10,7 +10,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint app components lib tests vitest.config.ts",
-    "test": "vitest run"
+    "test": "vitest run",
+    "test:a11y": "playwright test"
   },
   "dependencies": {
     "@anthropic-ai/sdk": "^0.112.3",
@@ -21,6 +22,7 @@
     "react-dom": "19.2.6"
   },
   "devDependencies": {
+    "@axe-core/playwright": "^4.12.1",
     "@types/node": "22.19.19",
     "@types/react": "19.2.14",
     "@types/react-dom": "19.2.3",
