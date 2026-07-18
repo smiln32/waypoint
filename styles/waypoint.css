@@ -638,7 +638,7 @@ button.link:not(:disabled):hover,
   padding: 2px 0;
 }
 
-/* Shared Medium impact color (also wins inside the résumé editor panel). */
+/* Shared Medium impact color (also wins inside the resume editor panel). */
 .finding .medium,
 .editor > .review .finding .medium {
   background: var(--task-mustard);
@@ -1311,7 +1311,7 @@ blockquote {
   padding: 2px 3px;
 }
 
-/* Compact evaluation panel beside the résumé, unified on ink text. */
+/* Compact evaluation panel beside the resume, unified on ink text. */
 .editor > .review {
   padding: 14px;
 }
@@ -1421,61 +1421,81 @@ blockquote {
   filter: none;
 }
 
-.resume-import {
-  border: 1px solid var(--line);
-  margin-bottom: 16px;
-  padding: 14px;
+/* ==== Resume intake — top of Resume Studio, one card per way in ==== */
+.resume-intake {
+  margin-bottom: 40px;
 }
 
-.resume-import > div:first-child {
+.intake-heading {
+  margin-bottom: 16px;
+}
+
+.intake-heading h2 {
+  font-size: 20px;
+  margin: 0 0 5px;
+}
+
+.intake-heading p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.intake-grid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 20px;
+  align-items: stretch;
+}
+
+.intake-card {
+  background: var(--surface);
+  border: 1px solid var(--line);
+  border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 3px;
-  margin-bottom: 12px;
+  gap: 10px;
+  padding: 22px;
 }
 
-.resume-import > div:first-child span,
-.resume-import label span {
+.intake-card h3 {
+  font-size: 16px;
+  margin: 0;
+}
+
+.intake-card > span {
   color: var(--muted);
-  font-size: 12px;
+  font-size: 13px;
+  line-height: 1.5;
 }
 
-.resume-import-actions input {
+.intake-card input[type="file"] {
   display: none;
 }
 
-.resume-import-actions {
-  margin-bottom: 12px;
-}
-
-.resume-import-actions button,
-.resume-import .apply-paste {
-  min-height: 38px;
-  padding: 0 13px;
-}
-
-.resume-import label {
-  display: block;
-}
-
-.resume-import label span {
-  display: block;
-  font-weight: 700;
-  margin-bottom: 6px;
-}
-
-.resume-import textarea {
+.intake-card textarea {
+  background: var(--surface-raised);
   border: 1px solid var(--line);
-  border-radius: 7px;
+  border-radius: 8px;
   color: var(--ink);
-  line-height: 1.45;
-  padding: 10px;
+  flex: 1;
+  line-height: 1.5;
+  min-height: 200px;
+  padding: 12px;
   resize: vertical;
   width: 100%;
 }
 
-.resume-import .apply-paste {
-  margin-top: 8px;
+.intake-card .secondary {
+  align-self: flex-start;
+  margin-top: auto;
+  min-height: 44px;
+  padding: 0 16px;
+}
+
+@media (max-width: 900px) {
+  .intake-grid {
+    grid-template-columns: 1fr;
+  }
 }
 
 .evaluation-clear {

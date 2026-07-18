@@ -11,7 +11,7 @@ export function DestinationList() {
       </div>
       <div className="destination-list">
         <button onClick={() => onGo("resume")}>
-          <b>Résumé Studio</b>
+          <b>Resume Studio</b>
           <span>Translate military experience and review editor findings.</span>
           <em>Start a Resume →</em>
         </button>

@@ -8,7 +8,7 @@ export function ResumeHistoryControls({
   onMove: (direction: -1 | 1) => void;
 }) {
   return (
-    <div className="resume-history" aria-label="Résumé edit history">
+    <div className="resume-history" aria-label="Resume edit history">
       <button type="button" className="secondary" disabled={historyState.index <= 0} onClick={() => onMove(-1)}>
         Undo
       </button>

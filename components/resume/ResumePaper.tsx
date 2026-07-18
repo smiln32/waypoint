@@ -2,7 +2,7 @@
 import type { RefObject } from "react";
 
 /**
- * The editable résumé document. The article's inner HTML is owned by the
+ * The editable resume document. The article's inner HTML is owned by the
  * contentEditable DOM (history snapshots restore innerHTML), so this JSX only
  * provides the initial content — do not wrap it conditionally or key it.
  */
@@ -22,7 +22,7 @@ export function ResumePaper({
       contentEditable
       suppressContentEditableWarning
       spellCheck
-      aria-label="Editable operations résumé"
+      aria-label="Editable operations resume"
       onFocus={onFocus}
       onInput={onInput}
     >

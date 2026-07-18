@@ -6,7 +6,7 @@ import { findings } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
-import { ResumeImport } from "./ResumeImport";
+import { ResumeIntake } from "./ResumeIntake";
 import { ResumePaper } from "./ResumePaper";
 import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
@@ -15,7 +15,7 @@ export function ResumeStudioPage() {
   const [selected, setSelected] = useState<number[]>([]);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(
-    "Edit the résumé directly, then resubmit it for evaluation.",
+    "Edit the resume directly, then resubmit it for evaluation.",
   );
   const [resumeImportText, setResumeImportText] = useState("");
   const [evaluating, setEvaluating] = useState(false);
@@ -106,7 +106,7 @@ export function ResumeStudioPage() {
   const uploadResume = (file?: File) => {
     if (!file) return;
     if (!/\.(txt|md|rtf)$/i.test(file.name)) {
-      note("For this demo, upload a TXT, MD, or RTF résumé.");
+      note("For this demo, upload a TXT, MD, or RTF resume.");
       return;
     }
     const reader = new FileReader();
@@ -138,17 +138,17 @@ export function ResumeStudioPage() {
         title="Operations resume · Draft 2"
         text="The editor found language that a civilian reader may misunderstand."
       />
+      <ResumeIntake
+        fileRef={resumeFileRef}
+        importText={resumeImportText}
+        onImportTextChange={setResumeImportText}
+        onUpload={uploadResume}
+        onUsePasted={() => loadResumeText(resumeImportText, "Pasted resume")}
+      />
       <div className="editor">
         <section className="resume-draft">
-          <ResumeImport
-            fileRef={resumeFileRef}
-            importText={resumeImportText}
-            onImportTextChange={setResumeImportText}
-            onUpload={uploadResume}
-            onUsePasted={() => loadResumeText(resumeImportText, "Pasted résumé")}
-          />
           <ResumeHistoryControls historyState={resumeHistoryState} onMove={moveResumeHistory} />
-          <p className="resume-edit-note">Click anywhere in the résumé to edit it.</p>
+          <p className="resume-edit-note">Click anywhere in the resume to edit it.</p>
           <ResumePaper
             paperRef={resumeRef}
             onFocus={seedResumeHistory}

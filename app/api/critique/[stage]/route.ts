@@ -23,7 +23,7 @@ function buildUserMessage(stage: CritiqueStage, text: string, context: CritiqueR
     if (context?.role) parts.push(`Target role: ${context.role}`);
     parts.push("Practice response:\n\n" + text);
   } else {
-    parts.push("Résumé draft:\n\n" + text);
+    parts.push("Resume draft:\n\n" + text);
   }
   return parts.join("\n");
 }

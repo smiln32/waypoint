@@ -34,7 +34,7 @@ export function ResumeReviewPanel({
               finding when creating the next draft
             </label>
             <small className="decision-help">
-              Checking this adds the finding to “Create next draft.” It does not change your résumé yet.
+              Checking this adds the finding to “Create next draft.” It does not change your resume yet.
             </small>
           </article>
         ))

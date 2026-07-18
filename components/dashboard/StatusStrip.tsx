@@ -6,10 +6,10 @@ export function StatusStrip() {
   return (
     <section className="dashboard-status" aria-label="Career transition status">
       <div>
-        <b>Résumé</b>
+        <b>Resume</b>
         <strong>3</strong>
         <span>findings to resolve</span>
-        <button onClick={() => onGo("resume")}>Open résumé studio</button>
+        <button onClick={() => onGo("resume")}>Open resume studio</button>
       </div>
       <div>
         <b>Job search</b>
