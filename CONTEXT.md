@@ -1,4 +1,8 @@
-# Waypoint operating model\n\nWaypoint's user-facing scope is exactly five steps: Resume, Job Search, Job Tracking, Cover Letter, and Interview Practice. React and browser local storage run the app; ICM files define stage responsibilities, editor behavior, and interpretable handoffs. Stage folders are not required to map one-to-one to pages. Imports are parsed locally; explicit AI review sends relevant text to the configured hosted provider.\n\n# Task Routing — Stage Map
+# Waypoint operating model
+
+Waypoint's user-facing scope is exactly five steps: Resume, Job Search, Job Tracking, Cover Letter, and Interview Practice. React and browser local storage run the app; ICM files define stage responsibilities, editor behavior, and interpretable handoffs. Stage folders are not required to map one-to-one to pages. Imports are parsed locally; explicit AI review sends relevant text to the configured hosted provider.
+
+# Task Routing — Stage Map
 
 Layer 1. Start at `CLAUDE.md` for identity; open a stage's `CONTEXT.md` for its contract before working in it.
 
@@ -13,7 +17,7 @@ config) and writes only to its own `output/`.
 | 02 | `stages/02_job_search/` | Find and evaluate roles against verified résumé evidence | `/search` | no |
 | 03 | `stages/03_job_tracking/` | Hold saved roles until an application starts; generate pre-interview company briefs | `/applications` (merged into the tracker) · briefs at `/brief/<slug>` | yes — `POST /api/brief` |
 | 04 | `stages/04_cover_letter/` | Critique the cover letter's employer connection | `/cover-letter` | yes — `POST /api/critique/cover-letter` |
-| 05 | `stages/05_applications/` | Track saved roles and applications: stage, materials, contacts, next actions, deadlines | `/applications` (page titled "Job Tracking") | no |
+| 05 | `stages/05_applications/` | Own true applications after **Start Application**: stage, materials, contacts, next actions, deadlines | `/applications` (page titled "Job Tracking") | no |
 | 06 | `stages/06_interview/` | Critique interview responses against the response rubric | `/interview` | yes — `POST /api/critique/interview` |
 
 Two pages sit outside the stages and own no stage work: Start Here (`/start`) orients a new user with
@@ -30,7 +34,4 @@ status, and a due-date calendar, all derived from stage data.
 
 ## How the app uses the stages
 
-`lib/icm.server.ts` assembles each AI editor's system prompt from the stage's `references/` in layer order
-(identity → rules → rubric/framework → examples) plus `_config/shared/product-voice.md`, then calls Claude.
-Successful runs are written to the stage's `output/` as timestamped JSON (dev only, best-effort). Edit the
-markdown in `references/` to change an editor's behavior — no code change required.
+`lib/icm.server.ts` assembles each AI editor prompt from the stage `CONTEXT.md`, identity, rules, rubric or framework, and examples, plus `_config/shared/product-voice.md` and `_config/shared/finding-format.md`. Successful runs are written to the stage `output/runtime/` as timestamped JSON (development only, best-effort). Editing the declared ICM markdown changes editor behavior without a code change.

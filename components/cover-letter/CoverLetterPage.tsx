@@ -98,7 +98,8 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               rows={20}
             />
           </label>
-          <AiPrivacyNotice />\n          <div className="letter-actions">
+          <AiPrivacyNotice />
+          <div className="letter-actions">
             <span>{draft.trim() ? draft.trim().split(/\s+/).length : 0} words</span>
             <button className="primary" disabled={reviewing || !draft.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to cover letter editor"}

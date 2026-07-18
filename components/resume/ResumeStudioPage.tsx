@@ -201,7 +201,8 @@ export function ResumeStudioPage() {
               persistResume({ note: "Changes not evaluated yet." });
             }}
           />
-          <AiPrivacyNotice />\n          <div className="resume-submit">
+          <AiPrivacyNotice />
+          <div className="resume-submit">
             <span role="status">{resumeEvaluationNote}</span>
             <button className="primary" disabled={evaluating} onClick={evaluateResume}>
               Resubmit for evaluation

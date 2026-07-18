@@ -1,1 +1,3 @@
-# Local runtime output\n\nThis folder receives actual local runs and may contain private career information. Its contents are ignored by Git; only this README is committed. Fictional samples belong in the stage's examples folder.\n
+# Local runtime output
+
+This folder receives actual local runs and may contain private career information. Its contents are ignored by Git; only this README is committed. Fictional samples belong in the stage's examples folder.

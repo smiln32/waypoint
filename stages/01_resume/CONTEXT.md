@@ -7,7 +7,7 @@ jobs, write prose, or track applications.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Resume draft text | Submitted from the app's Resume Studio (`/resume`); headless runs drop it at `stages/01_resume/output/submitted-draft.md` | per-run (Layer 4) |
+| Resume draft text | Submitted from the app's Resume Studio (`/resume`); headless runs drop it at `stages/01_resume/output/runtime/submitted-draft.md` | per-run (Layer 4) |
 | Editor persona: identity, rules, examples, review framework | `stages/01_resume/references/` | 3 (stable) |
 | Shared ground rules + finding contract | `_config/shared/product-voice.md`, `_config/shared/finding-format.md` | shared |
 
@@ -26,7 +26,7 @@ jobs, write prose, or track applications.
 
 | Output | Written to |
 |--------|-----------|
-| Critique run `{requested_at, model, input_excerpt, findings, note}` | `stages/01_resume/output/<timestamp>-critique.json` |
+| Critique run `{requested_at, model, input_excerpt, findings, note}` | `stages/01_resume/output/runtime/<timestamp>-critique.json` |
 
 Downstream: stage 02 (`stages/02_job_search/`) reads the latest critique here as its picture of verified,
 decision-ready résumé evidence.

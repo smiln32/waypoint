@@ -7,8 +7,8 @@ answers, search jobs, or track applications.
 
 | Input | Source | Layer |
 |-------|--------|-------|
-| Practice response text + the question asked | Submitted from the app's Interview Practice (`/interview`); headless runs drop it at `stages/06_interview/output/submitted-response.md` | per-run (Layer 4) |
-| Target role context | `stages/05_applications/output/` (roles at the interview stage) | 4 (prior stage) |
+| Practice response text + the question asked | Submitted from the app's Interview Practice (`/interview`); headless runs drop it at `stages/06_interview/output/runtime/submitted-response.md` | per-run (Layer 4) |
+| Target role context | `stages/05_applications/output/runtime/` (roles at the interview stage) | 4 (prior stage) |
 | Editor persona: identity, rules, examples, response rubric | `stages/06_interview/references/` | 3 (stable) |
 | Shared ground rules + finding contract | `_config/shared/product-voice.md`, `_config/shared/finding-format.md` | shared |
 
@@ -24,6 +24,6 @@ answers, search jobs, or track applications.
 
 | Output | Written to |
 |--------|-----------|
-| Critique run `{requested_at, model, input_excerpt, findings, scores, note}` | `stages/06_interview/output/<timestamp>-critique.json` |
+| Critique run `{requested_at, model, input_excerpt, findings, scores, note}` | `stages/06_interview/output/runtime/<timestamp>-critique.json` |
 
 This is the final stage; improved responses loop back through this editor until the veteran is satisfied.
