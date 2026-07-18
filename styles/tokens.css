@@ -22,9 +22,9 @@
   --line: oklch(0.86 0.025 214.9);
 
   /* Actions */
-  --primary: #dccfc0; /* warm greige (user-picked) */
-  --primary-hover: #cfbfab;
-  --primary-soft: #efe9e0;
+  --primary: #dcd2ae; /* light tan */
+  --primary-hover: #cdc194;
+  --primary-soft: #f0ecdb;
   --deep: var(--palette-violet);
 
   /* Status */
