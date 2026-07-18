@@ -7,14 +7,15 @@ import type { CritiqueResponse, CritiqueStage } from "@/lib/types";
  */
 
 const resumePatterns = [
-  new RegExp("(^|[^A-Za-z])MC([^A-Za-z]|$)", "i"),
-  new RegExp("Chief Information Security Officer", "i"),
-  new RegExp("complex avionics|under time pressure", "i"),
+  new RegExp("Known for reliability", "i"),
+  new RegExp("Planned and carried out operations", "i"),
+  new RegExp("earned recognition for leadership", "i"),
 ];
 
 export function resumeFallback(text: string): CritiqueResponse {
   const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
   const next = resumeDemoFindings.flatMap((finding, index) => {
+    if (text.includes(finding.quote)) return [finding];
     const quote = lines.find((line) => resumePatterns[index].test(line));
     return quote ? [{ ...finding, quote }] : [];
   });

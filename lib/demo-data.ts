@@ -3,24 +3,24 @@ import type { ApplicationRow, Finding, JobResult } from "./types";
 export const findings: Finding[] = [
   {
     level: "High",
-    title: "Military shorthand obscures the result",
-    quote: "Led 18 technicians and maintained a 96% MC rate during high-tempo flight operations.",
-    why: "A civilian reader may not know “MC,” and the sentence combines leadership with a unit readiness result without showing how your work contributed to that result.",
-    task: "Define the readiness measure in civilian language, then identify your specific, verifiable contribution to the outcome.",
+    title: "The traits are asserted, not demonstrated",
+    quote: "Known for reliability, discipline, and strong leadership.",
+    why: "“Known for” asks the reader to take your word for it. A civilian hiring reader treats unverifiable trait claims as filler and skips past them — the sentence spends prime summary space proving nothing.",
+    task: "Replace this sentence with one specific, verifiable outcome your leadership produced. Keep the traits only if an example on the page backs them.",
   },
   {
     level: "High",
-    title: "The translation overstates civilian equivalence",
-    quote: "Served as the company’s Chief Information Security Officer.",
-    why: "This title can imply board reporting, regulatory ownership, and budget authority that may not have belonged to the billet.",
-    task: "Describe the actual security scope and authority without borrowing an executive title.",
+    title: "“Operations” carries no civilian meaning here",
+    quote: "Planned and carried out operations and training, consistently meeting deadlines and standards.",
+    why: "The reader cannot see what was planned, for how many people, under what constraints, or what meeting the standard looked like. As written, the bullet could describe almost any job at any level.",
+    task: "Choose one training event or operation you planned. Name what you organized, for how many people, and one observable result — without disclosing sensitive details.",
   },
   {
     level: "Medium",
-    title: "The technical claim lacks evidence",
-    quote: "Resolved complex avionics discrepancies under time pressure.",
-    why: "“Complex” and “under time pressure” are conclusions. The reader cannot see the system involved, your diagnostic action, the constraint, or the observable result.",
-    task: "Choose one defensible example and identify the system, diagnostic action, constraint, and result without disclosing sensitive information.",
+    title: "The recognition is real but unnamed",
+    quote: "Completed an overseas deployment and earned recognition for leadership and dependability.",
+    why: "Your awards section names a Navy and Marine Corps Achievement Medal, but this bullet hides it behind the vague word “recognition” — which reads weaker than the specific award you actually earned.",
+    task: "Name the award here and add one clause, in civilian terms, saying what it was awarded for.",
   },
 ];
 

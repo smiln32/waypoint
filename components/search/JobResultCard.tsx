@@ -29,10 +29,6 @@ export function JobResultCard({
         <span>{job.type}</span>
         <span>{job.apply}</span>
       </div>
-      <p className="job-preview">
-        Lead maintenance planning, technical teams, readiness reporting, and cross-functional operational
-        decisions in a safety-critical environment.
-      </p>
       <div className="job-result-actions">
         <b>{job.fit}</b>
       </div>

@@ -5,7 +5,7 @@ export function Topbar() {
         <i />
         Profile evidence verified
       </span>
-      <button>Alex Morgan⌄</button>
+      <button>James Carter⌄</button>
     </header>
   );
 }

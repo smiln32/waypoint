@@ -132,7 +132,7 @@ export function ResumeStudioPage() {
     <div className="page">
       <Heading
         kicker="RESUME STUDIO"
-        title="Operations resume · Draft 2"
+        title="Infantry team leader resume · Draft 1"
         text="The editor found language that a civilian reader may misunderstand."
       />
       <ResumeIntake
