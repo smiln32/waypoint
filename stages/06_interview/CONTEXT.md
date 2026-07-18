@@ -14,7 +14,7 @@ answers, search jobs, or track applications.
 
 ## Process
 
-1. Load the persona in layer order: `identity.md` → `rules.md` → `response-rubric.md` → `examples.md`,
+1. Load the persona in layer order: `identity.md` → `rules.md` → `reference/response-rubric.md` → `examples.md`,
    plus the shared ground rules.
 2. Score the response 0–4 on relevance, ownership, evidence, and translation per the rubric.
 3. Produce findings in the shared finding format identifying the exact phrases that hide judgment,

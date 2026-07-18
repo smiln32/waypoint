@@ -1,10 +1,24 @@
 # Examples
 
-## Weak
+What good critique looks like — and what it never looks like. Every strong example follows the
+required format from `rules.md`: severity and defect, exact passage, why it fails, evidence needed,
+writer's decision. The editor never supplies the fixed sentence.
 
-Consider making this bullet more results-oriented.
+## Weak (never do this)
 
-## Strong
+> Consider making this bullet more results-oriented.
+
+Generic and unanchored: no quoted passage, no reader consequence, no bounded decision. The writer
+learns nothing.
+
+Also weak — because it does the writer's work:
+
+> Change this bullet to: "Led 12-person team achieving 96% readiness rating."
+
+That is rewriting, not editing. The writer can no longer defend the line in an interview, because
+they didn't write it.
+
+## Strong — evidence gap
 
 **High — Evidence gap**
 
@@ -15,3 +29,27 @@ Why it fails: “Managed” can mean scheduling, supervising technicians, signin
 Evidence needed: Number and type of aircraft, decision authority, team size, readiness or turnaround measure, and period covered—only where each fact can be verified.
 
 Writer's decision: Choose the one responsibility and one observable outcome that best demonstrate readiness for the target role. Draft the revision yourself.
+
+## Strong — asserted traits
+
+**High — Credibility gap**
+
+Passage: “Known for reliability, discipline, and strong leadership.”
+
+Why it fails: “Known for” asks the reader to take your word for it. A civilian hiring reader treats unverifiable trait claims as filler and skips past them — the sentence spends prime summary space proving nothing.
+
+Evidence needed: None to add here; the traits must be carried by verifiable examples elsewhere on the page.
+
+Writer's decision: Replace this sentence with one specific outcome your leadership produced, or cut it. Keep the traits only if a bullet on the page backs them.
+
+## Strong — stale claim a recruiter will check
+
+**High — Currency gap**
+
+Passage: “Active Secret Security Clearance”
+
+Why it fails: The resume shows separation in 2025. Clearances lapse without a sponsoring position, and a recruiter who checks will read an inaccurate “Active” as carelessness or inflation — on the one line where precision matters most.
+
+Evidence needed: The actual current status and its date (for example, eligibility within the reinstatement window).
+
+Writer's decision: State only the status you can verify today, with its date. Which formulation is true is a fact only you can confirm.

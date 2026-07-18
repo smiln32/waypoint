@@ -8,13 +8,13 @@ export interface CoverLetterExample {
 
 /**
  * Server-only: load the example letter from the ICM stage references.
- * Editing stages/04_cover_letter/references/example-letter.md changes the
+ * Editing stages/04_cover_letter/references/reference/example-letter.md changes the
  * example shown in the app — no code change required.
  */
 export function loadCoverLetterExample(): CoverLetterExample | null {
   try {
     const raw = fs.readFileSync(
-      path.join(process.cwd(), "stages", "04_cover_letter", "references", "example-letter.md"),
+      path.join(process.cwd(), "stages", "04_cover_letter", "references", "reference", "example-letter.md"),
       "utf8",
     );
     const letter = raw.match(/```letter\r?\n([\s\S]*?)```/)?.[1]?.trim();

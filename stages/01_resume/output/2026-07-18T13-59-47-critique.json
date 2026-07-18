@@ -1,0 +1,22 @@
+{
+  "requested_at": "2026-07-18T13:59:47.313Z",
+  "model": "claude-opus-4-8",
+  "input_excerpt": "Known for reliability, discipline, and strong leadership. Managed maintenance operations for squadron aircraft.",
+  "findings": [
+    {
+      "level": "High",
+      "title": "Asserted traits without evidence",
+      "quote": "Known for reliability, discipline, and strong leadership.",
+      "why": "A civilian hiring reader treats \"Known for\" trait claims as filler because they ask the reader to take your word for it. This sentence spends prime resume space proving nothing verifiable, and the reader will skip past it.",
+      "task": "Cut this sentence or replace it with one specific outcome your leadership produced that a bullet elsewhere on the page can back up. Draft that example yourself."
+    },
+    {
+      "level": "High",
+      "title": "Ambiguous scope and no outcome",
+      "quote": "Managed maintenance operations for squadron aircraft.",
+      "why": "\"Managed\" can mean scheduling, supervising technicians, signing off records, or personally performing repairs. A civilian maintenance or operations reader cannot determine your authority, the scale you handled, or what result you produced. \"Squadron aircraft\" also assumes military context the reader may not share.",
+      "task": "Decide which single responsibility and one observable outcome best fit your target role. Identify the facts you can verify — number and type of aircraft, your decision authority, team size, and a readiness or turnaround measure — and draft a revision using only those you can defend in an interview."
+    }
+  ],
+  "note": "Both lines rely on unverifiable trait claims and undefined military scope, so a civilian reader learns nothing about your actual authority or results."
+}

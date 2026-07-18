@@ -13,7 +13,7 @@ jobs, write prose, or track applications.
 
 ## Process
 
-1. Load the persona in layer order: `identity.md` → `rules.md` → `review-framework.md` → `examples.md`,
+1. Load the persona in layer order: `identity.md` → `rules.md` → `reference/review-framework.md` → `examples.md`,
    plus the shared ground rules.
 2. Review the draft as a civilian hiring reader per the review framework (truth → translation → evidence →
    relevance → readability).

@@ -30,5 +30,5 @@ The interview editor additionally returns four dimension scores:
 { "scores": { "relevance": 0, "ownership": 0, "evidence": 0, "translation": 0 } }
 ```
 
-Scale (see `stages/06_interview/references/response-rubric.md`):
+Scale (see `stages/06_interview/references/reference/response-rubric.md`):
 **0** no evidence yet · **1** limited · **2** developing · **3** strong · **4** exceptional

@@ -16,9 +16,9 @@ const STAGE_DIRS: Record<CritiqueStage, string> = {
 
 /** ICM layer order: identity → rules → framework/rubric → examples. */
 const REFERENCE_ORDER: Record<CritiqueStage, string[]> = {
-  resume: ["identity.md", "rules.md", "review-framework.md", "examples.md"],
-  "cover-letter": ["identity.md", "rules.md", "connection-framework.md", "examples.md"],
-  interview: ["identity.md", "rules.md", "response-rubric.md", "examples.md"],
+  resume: ["identity.md", "rules.md", "reference/review-framework.md", "examples.md"],
+  "cover-letter": ["identity.md", "rules.md", "reference/connection-framework.md", "examples.md"],
+  interview: ["identity.md", "rules.md", "reference/response-rubric.md", "examples.md"],
 };
 
 const OUTPUT_CONTRACT = `# Output contract
@@ -37,7 +37,9 @@ function readStageFile(...segments: string[]): string {
 
 export function buildSystemPrompt(stage: CritiqueStage): string {
   const dir = STAGE_DIRS[stage];
-  const sections = REFERENCE_ORDER[stage].map((file) => readStageFile("stages", dir, "references", file));
+  const sections = REFERENCE_ORDER[stage].map((file) =>
+    readStageFile("stages", dir, "references", ...file.split("/")),
+  );
   sections.push(readStageFile("_config", "shared", "product-voice.md"));
   sections.push(OUTPUT_CONTRACT);
   return sections.join("\n\n---\n\n");
