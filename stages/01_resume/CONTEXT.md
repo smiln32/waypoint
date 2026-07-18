@@ -19,8 +19,8 @@ jobs, write prose, or track applications.
    relevance → readability).
 3. Produce at most seven prioritized findings in the shared finding format. Quotes must be verbatim
    substrings of the draft.
-4. The veteran accepts, rejects, or revises each finding in the app; checking a finding selects it for the
-   next draft — it never edits the résumé.
+4. The veteran acts on each finding by editing the resume in place, then resubmits for a fresh
+   evaluation. Findings critique; they never edit the resume.
 
 ## Outputs
 

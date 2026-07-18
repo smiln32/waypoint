@@ -12,7 +12,6 @@ import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
 export function ResumeStudioPage() {
   const { note } = useWaypoint();
-  const [selected, setSelected] = useState<number[]>([]);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(
     "Edit the resume directly, then resubmit it for evaluation.",
@@ -97,7 +96,6 @@ export function ResumeStudioPage() {
     resumeHistoryIndexRef.current = 0;
     setResumeHistoryState({ index: 0, length: 1 });
     setResumeFindings([]);
-    setSelected([]);
     setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
     setResumeImportText("");
     note(source + " loaded");
@@ -125,7 +123,6 @@ export function ResumeStudioPage() {
     setResumeEvaluationNote("Evaluating…");
     const result = await requestCritique("resume", text);
     setResumeFindings(result.findings);
-    setSelected([]);
     setResumeEvaluationNote(result.note);
     setEvaluating(false);
     note(result.note);
@@ -164,14 +161,7 @@ export function ResumeStudioPage() {
             </button>
           </div>
         </section>
-        <ResumeReviewPanel
-          findings={resumeFindings}
-          selected={selected}
-          onToggle={(i) =>
-            setSelected(selected.includes(i) ? selected.filter((n) => n !== i) : [...selected, i])
-          }
-          onCreateDraft={() => note(`${selected.length} decisions sent to drafting`)}
-        />
+        <ResumeReviewPanel findings={resumeFindings} />
       </div>
     </div>
   );
