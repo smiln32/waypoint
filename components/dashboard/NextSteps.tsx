@@ -15,7 +15,7 @@ export function NextSteps() {
   const { applications } = useWaypoint();
   const onGo = useGo();
 
-  const steps: Step[] = [
+  const allSteps: Step[] = [
     {
       label: `Resolve ${findings.length} resume findings`,
       context: "The editor flagged passages a civilian reader may misread",
@@ -32,7 +32,8 @@ export function NextSteps() {
           view: row.nextActionView ?? "applications",
         }),
       ),
-  ].slice(0, 4);
+  ];
+  const steps = allSteps.slice(0, 4);
 
   return (
     <section className="dash-section" aria-label="Your next steps">
