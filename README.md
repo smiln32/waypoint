@@ -1,10 +1,8 @@
 # Waypoint
 
-**An AI career-transition workspace for veterans that translates a service record without erasing the person who earned it.**
+**An AI career-transition workspace for veterans that refines service records into civilian-ready assets.** Editors, not ghostwriters: every finding cites its evidence and is editable in the app. Craft a resume, search for jobs, write a cover letter, practice for interviews and track each step toward a new career.
 
-Every year, roughly 200,000 U.S. service members leave the military and run into the same wall: their experience is real, but their language doesn't translate. "Maintained a 96% MC rate" means nothing to a civilian recruiter. Generic AI tools "fix" this by ghostwriting — replacing the veteran's record with fluent text they can't defend in an interview.
-
-Waypoint takes the opposite bet: **the AI critiques, and never ghostwrites.**
+Every year, roughly 200,000 U.S. service members leave the military and run into the same wall: their experience is real, but their language doesn't translate. "Maintained a 96% MC rate" means nothing to a civilian recruiter. Generic AI tools "fix" this by ghostwriting — replacing the veteran's record with fluent text they can't defend in an interview. Waypoint takes the opposite bet.
 
 ![Resume Studio — the editor highlights exact passages and explains, with evidence, why each one fails for a civilian reader](docs/screenshots/resume-studio.png)
 
