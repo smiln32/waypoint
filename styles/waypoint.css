@@ -2376,35 +2376,57 @@ td small {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 16px;
+  align-items: start;
 }
 
-.template-list button {
+.template-list article {
   background: var(--surface);
   border: 1px solid var(--line);
   border-radius: 12px;
   display: flex;
   flex-direction: column;
-  gap: 7px;
+  gap: 9px;
   padding: 18px;
-  text-align: left;
 }
 
-.template-list button b {
+.template-list article b {
   font-size: 15px;
 }
 
-.template-list button span {
+.template-list article > span {
   color: var(--muted);
   font-size: 13px;
   line-height: 1.5;
-  flex: 1;
 }
 
-.template-list button em {
+.template-list article .secondary {
+  align-self: flex-start;
+  min-height: 40px;
+  padding: 0 14px;
+}
+
+.template-list details summary {
   color: var(--deep);
+  cursor: pointer;
   font-size: 13px;
-  font-style: normal;
   font-weight: 750;
+  padding: 4px 0;
+}
+
+.template-list details summary:focus-visible {
+  outline: 3px solid var(--focus);
+  outline-offset: 2px;
+}
+
+.template-list details pre {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  color: var(--ink);
+  font: 13px/1.55 Arial, sans-serif;
+  margin-top: 8px;
+  padding: 14px;
+  white-space: pre-wrap;
 }
 
 @media (max-width: 900px) {

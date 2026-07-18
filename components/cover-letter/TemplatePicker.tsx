@@ -14,17 +14,26 @@ export function TemplatePicker({
       <div className="template-picker-intro">
         <h2>Not sure how to start?</h2>
         <p>
-          Load a structure, then replace every bracket with your own facts. The template is the shape of a
-          strong letter — the substance stays yours, and the editor reviews whatever you write.
+          Each template is a letter with the sentences already written — you replace the bracketed parts
+          with your own facts. Open the finished example to see how one reads when it&apos;s done. The editor
+          reviews whatever you write.
         </p>
       </div>
       <div className="template-list">
         {templates.map((template) => (
-          <button key={template.name} type="button" onClick={() => onPick(template)}>
+          <article key={template.name}>
             <b>{template.name}</b>
             <span>{template.description}</span>
-            <em>Use this structure →</em>
-          </button>
+            <button type="button" className="secondary" onClick={() => onPick(template)}>
+              Use this structure
+            </button>
+            {template.example && (
+              <details>
+                <summary>See a finished example</summary>
+                <pre>{template.example}</pre>
+              </details>
+            )}
+          </article>
         ))}
       </div>
     </section>

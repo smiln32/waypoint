@@ -5,6 +5,8 @@ export interface CoverLetterTemplate {
   name: string;
   description: string;
   body: string;
+  /** A finished sample letter to mirror. */
+  example?: string;
 }
 
 /**
@@ -25,7 +27,8 @@ export function loadCoverLetterTemplates(): CoverLetterTemplate[] {
         const name = section.split("\n")[0].trim();
         const description = section.match(/^_(.+)_\s*$/m)?.[1] ?? "";
         const body = section.match(/```template\r?\n([\s\S]*?)```/)?.[1]?.trim() ?? "";
-        return { name, description, body };
+        const example = section.match(/```example\r?\n([\s\S]*?)```/)?.[1]?.trim();
+        return { name, description, body, example };
       })
       .filter((template) => template.name && template.body);
   } catch {
