@@ -1993,6 +1993,7 @@ td small {
   border: 0;
   border-radius: 0;
   box-shadow: none;
+  max-width: 720px;
   gap: 5px;
   overflow: visible;
 }
