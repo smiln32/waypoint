@@ -1986,10 +1986,28 @@ td small {
   }
 }
 
-/* Start Here path — larger rows and explanations than the dashboard list. */
+/* Start Here path — larger rows and explanations than the dashboard list,
+   each step its own card. */
+.how-steps {
+  background: none;
+  border: 0;
+  border-radius: 0;
+  box-shadow: none;
+  gap: 5px;
+  overflow: visible;
+}
+
+.how-steps li {
+  background: var(--surface-raised);
+  border: 1px solid var(--line);
+  border-radius: 14px;
+  box-shadow: 0 1px 2px oklch(0.2817 0.1045 286.7 / 0.04), 0 6px 18px oklch(0.2817 0.1045 286.7 / 0.06);
+  overflow: hidden;
+}
+
 .how-steps button {
   gap: 20px;
-  padding: 24px 26px;
+  padding: 22px 26px;
 }
 
 .how-steps .step-index {
