@@ -25,11 +25,17 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+
       - name: Check diff hygiene
         run: git diff --check "${{ github.event.pull_request.base.sha }}...HEAD"
 
       - name: Run automated tests
         run: npm test
+
+      - name: Run accessibility tests
+        run: npm run test:a11y
 
       - name: Run lint
         run: npm run lint
