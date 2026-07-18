@@ -115,6 +115,10 @@ export interface OpportunityRecord {
   nextAction: OpportunityNextAction;
 }
 
+export interface PersistedOpportunityState {
+  version: 2;
+  records: OpportunityRecord[];
+}
 /** Legacy persisted shape; only migration code should consume this after conversion. */
 export interface ApplicationRow {
   /** Stable across the Stage 03 -> Stage 05 ownership transfer. */
