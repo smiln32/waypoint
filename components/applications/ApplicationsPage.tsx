@@ -47,12 +47,6 @@ export function ApplicationsPage() {
         title="Nothing gets lost."
         text="Keep every posting, tailored document, contact, deadline, and follow-up in one place."
       />
-      <div className="application-actions">
-        <AddPositionForm />
-        <span>
-          {applications.length} position{applications.length === 1 ? "" : "s"} tracked
-        </span>
-      </div>
       <div className="application-summary">
         <section>
           <b>5</b>
@@ -69,6 +63,12 @@ export function ApplicationsPage() {
           <span>Follow-ups scheduled</span>
           <small>One application needs a date</small>
         </section>
+      </div>
+      <div className="application-toolbar">
+        <span>
+          {applications.length} position{applications.length === 1 ? "" : "s"} tracked
+        </span>
+        <AddPositionForm />
       </div>
       <div className="application-table">
         <table>

@@ -63,9 +63,12 @@ export function AddPositionForm() {
 
   if (!open) {
     return (
-      <button className="primary" onClick={() => setOpen(true)}>
-        Add New Position
-      </button>
+      <div className="add-position-trigger">
+        <button className="primary" onClick={() => setOpen(true)}>
+          Add Position
+        </button>
+        <small>from another source</small>
+      </div>
     );
   }
 
