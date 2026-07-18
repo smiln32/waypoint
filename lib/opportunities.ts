@@ -82,6 +82,63 @@ export function jobTrackingStateFor(
   return match.status === "Saved" ? "saved" : "tracked";
 }
 
+export function jobTrackingButtonFor(state: JobTrackingState): {
+  label: "Save" | "Saved" | "Tracked";
+  disabled: boolean;
+  pressed: boolean;
+} {
+  return {
+    label: state === "not-tracked" ? "Save" : state === "saved" ? "Saved" : "Tracked",
+    disabled: state === "tracked",
+    pressed: state !== "not-tracked",
+  };
+}
+
+export function toggleTrackedJobRecords(
+  records: OpportunityRecord[],
+  job: JobResult,
+  now: string,
+  newId: string,
+): OpportunityRecord[] {
+  const existing = records.find((record) => opportunityMatchesJob(record, job));
+  if (existing) {
+    if (existing.status !== "Saved") return records;
+    return records.filter((record) => record.id !== existing.id);
+  }
+
+  return [
+    ...records,
+    {
+      id: newId,
+      company: job.company,
+      role: job.title,
+      ...(job.place ? { location: job.place } : {}),
+      source: "job-search",
+      sourceId: jobIdentity(job),
+      status: "Saved",
+      createdAt: now,
+      statusChangedAt: now,
+      materials: { resume: "Resume not tailored yet", coverLetter: "Cover letter not started" },
+      nextAction: {
+        kind: "review-resume",
+        label: "Review resume",
+        detail: job.fit ? `Fit: ${job.fit}` : "Saved from Job Search",
+      },
+    },
+  ];
+}
+
+export function startApplicationRecord(
+  records: OpportunityRecord[],
+  id: string,
+  now: string,
+): OpportunityRecord[] {
+  return records.map((record) => record.id === id ? {
+    ...record,
+    status: "Application Started",
+    statusChangedAt: now,
+  } : record);
+}
 export function deterministicIdFromParts(...parts: string[]): string {
   const input = parts.map((part) => part.trim().toLowerCase()).join("|");
   let hash = 2166136261;
