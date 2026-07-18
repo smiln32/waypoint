@@ -52,7 +52,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
 
   try {
     const client = new Anthropic();
-    const model = process.env.ANTHROPIC_MODEL ?? "claude-opus-4-8";
+    const model = process.env.ANTHROPIC_MODEL || "claude-opus-4-8";
     const response = await client.messages.create({
       model,
       max_tokens: 8192,
@@ -76,7 +76,8 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
     const result: CritiqueResponse = { source: "claude", ...parsed };
     writeRunOutput(stage, model, text, result);
     return NextResponse.json(result);
-  } catch {
+  } catch (error) {
+    console.error("[critique] falling back to demo:", error);
     return NextResponse.json(fallbackCritique(stage, text));
   }
 }
