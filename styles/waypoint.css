@@ -2164,3 +2164,20 @@ td small {
     min-height: 44px;
   }
 }
+
+/* Demo-fallback notice — the demo must never pass for the real editor. */
+.demo-notice {
+  background: var(--warning-soft);
+  border: 1px solid var(--warning);
+  border-radius: 8px;
+  color: var(--ink);
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0 0 12px;
+  padding: 10px 12px;
+}
+
+.demo-notice code {
+  font-family: ui-monospace, Consolas, monospace;
+  font-size: 11px;
+}

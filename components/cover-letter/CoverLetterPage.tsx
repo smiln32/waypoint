@@ -67,7 +67,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
         </section>
         {review ? (
           <LetterReviewPanel
-            findings={review.findings}
+            review={review}
             onRevise={() => {
               setReview(null);
               note("Draft reopened for revision");

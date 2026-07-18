@@ -1,4 +1,5 @@
 "use client";
+import { DemoNotice } from "@/components/review/DemoNotice";
 import { ReviewHead } from "@/components/ui/ReviewHead";
 import type { CritiqueResponse } from "@/lib/types";
 import { ScoreGuide } from "./ScoreGuide";
@@ -14,6 +15,7 @@ export function InterviewReviewPanel({ review, onTryAgain }: { review: CritiqueR
   return (
     <aside className="review">
       <ReviewHead label="Evidence-based critique" />
+      <DemoNotice source={review.source} />
       {review.scores && (
         <div className="scores">
           {SCORE_ORDER.map(([key, label]) => (

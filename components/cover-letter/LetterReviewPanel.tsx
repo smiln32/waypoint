@@ -1,11 +1,14 @@
 "use client";
+import { DemoNotice } from "@/components/review/DemoNotice";
 import { ReviewHead } from "@/components/ui/ReviewHead";
-import type { Finding } from "@/lib/types";
+import type { CritiqueResponse } from "@/lib/types";
 
-export function LetterReviewPanel({ findings, onRevise }: { findings: Finding[]; onRevise: () => void }) {
+export function LetterReviewPanel({ review, onRevise }: { review: CritiqueResponse; onRevise: () => void }) {
+  const findings = review.findings;
   return (
     <aside className="review cover-review">
       <ReviewHead label={`${findings.length} decisions`} />
+      <DemoNotice source={review.source} />
       {findings.map((f) => (
         <article className="finding" key={f.title}>
           <div>

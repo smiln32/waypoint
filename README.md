@@ -57,16 +57,17 @@ More: [Job Search](docs/screenshots/job-search.png) · [Cover Letter](docs/scree
 
 ## The AI layer
 
-`POST /api/critique/[stage]` (resume · cover-letter · interview) builds its system prompt from the stage's ICM references plus shared ground rules, calls Claude with a strict JSON schema (findings must be verbatim substrings, so highlighting always works), and falls back to grounded demo evaluators on any failure — **the app is fully functional offline, with no API key.**
+The editors are Claude. `POST /api/critique/[stage]` (resume · cover-letter · interview) assembles its system prompt from the stage's ICM references plus shared ground rules and calls Claude with a strict JSON schema — findings must be verbatim substrings of the submitted text, which is what makes in-document highlighting reliable. If the API is ever unreachable, the app degrades to offline demo evaluators so nothing breaks — and those results are **clearly labeled as demo findings** in the UI. The demo is a resilience layer, not a mode.
 
 ## Quickstart
 
 ```
 npm install
-npm run dev      # http://localhost:3000
+cp .env.example .env.local    # set ANTHROPIC_API_KEY — the editors are Claude-powered
+npm run dev                   # http://localhost:3000
 ```
 
-Optional real AI critique: copy `.env.example` to `.env.local` and set `ANTHROPIC_API_KEY`. Verification: `npm run lint` · `npm run build`.
+Verification: `npm run lint` · `npm run build`. Without a key the app still runs, with editors showing clearly-labeled demo findings.
 
 ## Grounding and boundaries
 

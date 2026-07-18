@@ -1,11 +1,19 @@
 "use client";
+import { DemoNotice } from "@/components/review/DemoNotice";
 import { ReviewHead } from "@/components/ui/ReviewHead";
 import type { Finding } from "@/lib/types";
 
-export function ResumeReviewPanel({ findings }: { findings: Finding[] }) {
+export function ResumeReviewPanel({
+  findings,
+  source,
+}: {
+  findings: Finding[];
+  source: "claude" | "demo" | null;
+}) {
   return (
     <aside className="review">
       <ReviewHead label={`${findings.length} decisions`} />
+      <DemoNotice source={source} />
       {findings.length ? (
         findings.map((f) => (
           <article className="finding" key={f.title}>

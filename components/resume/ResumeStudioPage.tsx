@@ -18,6 +18,7 @@ export function ResumeStudioPage() {
     "Edit the resume directly, then resubmit it for evaluation.",
   );
   const [evaluating, setEvaluating] = useState(false);
+  const [critiqueSource, setCritiqueSource] = useState<"claude" | "demo" | null>(null);
   const resumeRef = useRef<HTMLElement>(null);
   const resumeHistoryRef = useRef<string[]>([]);
   const resumeHistoryIndexRef = useRef(-1);
@@ -120,6 +121,7 @@ export function ResumeStudioPage() {
     const result = await requestCritique("resume", text);
     setResumeFindings(result.findings);
     setResumeEvaluationNote(result.note);
+    setCritiqueSource(result.source);
     setEvaluating(false);
     note(result.note);
   };
@@ -158,7 +160,7 @@ export function ResumeStudioPage() {
             </button>
           </div>
         </section>
-        <ResumeReviewPanel findings={resumeFindings} />
+        <ResumeReviewPanel findings={resumeFindings} source={critiqueSource} />
       </div>
     </div>
   );
