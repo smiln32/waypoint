@@ -1,6 +1,5 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
-import { Heading } from "@/components/ui/Heading";
 import { requestCritique } from "@/lib/critique/client";
 import { findings } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
@@ -130,11 +129,9 @@ export function ResumeStudioPage() {
 
   return (
     <div className="page">
-      <Heading
-        kicker="RESUME STUDIO"
-        title="Infantry team leader resume · Draft 1"
-        text="The editor found language that a civilian reader may misunderstand."
-      />
+      <div className="heading">
+        <small>RESUME STUDIO</small>
+      </div>
       <ResumeIntake
         fileRef={resumeFileRef}
         importText={resumeImportText}
