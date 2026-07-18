@@ -38,7 +38,7 @@ export function HowItWorks() {
         <h2>How Waypoint works</h2>
         <p>Follow the path in order — each step opens its workspace.</p>
       </div>
-      <ol className="next-steps">
+      <ol className="next-steps how-steps">
         {PATH.map((step, index) => (
           <li key={step.view}>
             <button type="button" onClick={() => onGo(step.view)}>

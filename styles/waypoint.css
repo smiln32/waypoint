@@ -1985,3 +1985,28 @@ td small {
     display: none;
   }
 }
+
+/* Start Here path — larger rows and explanations than the dashboard list. */
+.how-steps button {
+  gap: 20px;
+  padding: 24px 26px;
+}
+
+.how-steps .step-index {
+  font-size: 15px;
+  height: 38px;
+  width: 38px;
+}
+
+.how-steps .step-main {
+  gap: 5px;
+}
+
+.how-steps .step-main b {
+  font-size: 18px;
+}
+
+.how-steps .step-main small {
+  font-size: 14px;
+  line-height: 1.5;
+}
