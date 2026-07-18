@@ -1289,7 +1289,7 @@ td small {
   border-radius: 0;
   color: var(--ink);
   display: block;
-  font-family: Georgia, serif;
+  font-family: var(--font-sans), "Segoe UI", Arial, sans-serif;
   font-size: 15px;
   line-height: 1.65;
   margin-top: 7px;
@@ -1754,7 +1754,7 @@ td small {
   border: 1px solid var(--line);
   border-radius: 12px;
   color: var(--ink);
-  font: 14px/1.6 Georgia, serif;
+  font: 14px/1.6 var(--font-sans), "Segoe UI", Arial, sans-serif;
   margin: 0;
   padding: 24px 26px;
   white-space: pre-wrap;
