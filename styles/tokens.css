@@ -8,18 +8,18 @@
 :root {
   /* Recommended palette, converted exactly to OKLCH */
   --palette-violet: oklch(0.2817 0.1045 286.7);
-  --palette-teal: oklch(0.5 0.042 248); /* grey slate blue */
+  --palette-teal: oklch(0.5 0.055 245); /* grey slate blue */
   --palette-mint: oklch(0.773 0.0932 153.9);
   --palette-chartreuse: oklch(0.9545 0.0756 115.8);
 
   /* Surfaces and neutrals */
   --bg: oklch(0.985 0.014 115.8);
-  --surface: oklch(0.942 0.01 248);
+  --surface: oklch(0.942 0.014 245);
   --surface-raised: oklch(1 0 0);
   --soft: var(--palette-chartreuse);
   --ink: oklch(0.22 0.065 286.7);
   --muted: oklch(0.42 0.035 286.7);
-  --line: oklch(0.84 0.012 248);
+  --line: oklch(0.84 0.017 245);
 
   /* Actions */
   --primary: #dcd2ae; /* light tan */
@@ -31,7 +31,7 @@
   --success: oklch(0.48 0.105 153.9);
   --success-soft: oklch(0.92 0.055 153.9);
   --info: var(--palette-teal);
-  --info-soft: oklch(0.912 0.015 248);
+  --info-soft: oklch(0.912 0.02 245);
   --warning: oklch(0.43 0.115 70);
   --warning-soft: oklch(0.93 0.075 82);
   --danger: oklch(0.48 0.17 28);
