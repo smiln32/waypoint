@@ -1,7 +1,7 @@
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { fallbackCritique } from "@/lib/critique/fallback";
-import { critiqueSchema } from "@/lib/critique/schema";
+import { critiqueSchema, validateCritiqueResult } from "@/lib/critique/schema";
 import { buildSystemPrompt, writeRunOutput } from "@/lib/icm.server";
 import type { CritiqueResponse, CritiqueStage, Finding } from "@/lib/types";
 
@@ -70,7 +70,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
       return NextResponse.json(fallbackCritique(stage, text));
     }
     const parsed = JSON.parse(textBlock.text) as { findings: Finding[]; note: string; scores?: CritiqueResponse["scores"] };
-    if (!Array.isArray(parsed.findings) || typeof parsed.note !== "string") {
+    if (!validateCritiqueResult(stage, text, parsed)) {
       return NextResponse.json(fallbackCritique(stage, text));
     }
     const result: CritiqueResponse = { source: "claude", ...parsed };

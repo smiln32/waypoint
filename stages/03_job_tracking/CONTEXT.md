@@ -26,7 +26,7 @@ roles appear there as rows with stage **Saved** alongside in-flight applications
 
 | Output | Written to |
 |--------|-----------|
-| Pre-application pipeline state (Saved / Preparing roles) | `stages/03_job_tracking/output/tracked-roles.json` (materialized by the app on every change; handed to stage 05) |
+| Pre-application pipeline state (Saved / Researching / Preparing / Ready to Apply roles) | `stages/03_job_tracking/output/runtime/tracked-roles.json` (materialized by the app on every change; handed to stage 05) |
 | AI-generated company briefs (`POST /api/brief`, prompt assembled from `brief-guide.md` + shared voice) | `stages/03_job_tracking/output/<slug>-brief.json`, viewed at `/brief/<slug>` |
 
 Downstream: stage 05 (`stages/05_applications/`) receives started applications; stage 04 targets its cover

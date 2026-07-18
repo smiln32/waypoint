@@ -2,6 +2,7 @@ import fs from "fs";
 import path from "path";
 import { NextResponse } from "next/server";
 import type { ApplicationRow } from "@/lib/types";
+import { APPLICATION_STATUSES, PRE_APPLICATION_STATUSES } from "@/lib/types";
 
 /**
  * Materialize the tracker's state as ICM Layer 4 artifacts, so the stage
@@ -30,7 +31,9 @@ export async function POST(request: Request) {
 
   const snapshot = (rows: ApplicationRow[]) => JSON.stringify({ updated_at: new Date().toISOString(), rows }, null, 2) + "\n";
   const write = (stage: string, file: string, rows: ApplicationRow[]) => {
-    fs.writeFileSync(path.join(process.cwd(), "stages", stage, "output", file), snapshot(rows), "utf8");
+    const dir = path.join(process.cwd(), "stages", stage, "output", "runtime");
+    fs.mkdirSync(dir, { recursive: true });
+    fs.writeFileSync(path.join(dir, file), snapshot(rows), "utf8");
   };
 
   try {
@@ -38,9 +41,9 @@ export async function POST(request: Request) {
     write(
       "03_job_tracking",
       "tracked-roles.json",
-      applications.filter((row) => row.stage === "Saved" || row.stage === "Preparing"),
+      applications.filter((row) => PRE_APPLICATION_STATUSES.includes(row.stage)),
     );
-    write("05_applications", "applications.json", applications);
+    write("05_applications", "applications.json", applications.filter((row) => APPLICATION_STATUSES.includes(row.stage)));
     return NextResponse.json({ written: true });
   } catch {
     return NextResponse.json({ written: false });

@@ -48,10 +48,27 @@ export interface CritiqueResponse {
   note: string;
 }
 
+export type OpportunityStatus =
+  | "Saved"
+  | "Researching"
+  | "Preparing"
+  | "Ready to Apply"
+  | "Application Started"
+  | "Applied"
+  | "Screening"
+  | "Interview"
+  | "Offer"
+  | "Closed";
+
+export const PRE_APPLICATION_STATUSES: OpportunityStatus[] = ["Saved", "Researching", "Preparing", "Ready to Apply"];
+export const APPLICATION_STATUSES: OpportunityStatus[] = ["Application Started", "Applied", "Screening", "Interview", "Offer", "Closed"];
+
 export interface ApplicationRow {
+  /** Stable across the Stage 03 -> Stage 05 ownership transfer. */
+  id: string;
   role: string;
   roleDetail: string;
-  stage: string;
+  stage: OpportunityStatus;
   stageClass: string;
   materials: string;
   materialsDetail: string;

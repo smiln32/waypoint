@@ -5,6 +5,7 @@ import { requestCritique } from "@/lib/critique/client";
 import { loadPersisted, persist } from "@/lib/persist";
 import type { CritiqueResponse } from "@/lib/types";
 import { InterviewReviewPanel } from "./InterviewReviewPanel";
+import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
 
 interface SavedInterview {
   answer: string;
@@ -65,7 +66,7 @@ export function InterviewPage() {
               }}
             />
           </label>
-          <div className="actions">
+          <AiPrivacyNotice />\n          <div className="actions">
             <button className="primary" disabled={reviewing || !answer.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to response editor"}
             </button>

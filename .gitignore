@@ -41,3 +41,4 @@ next-env.d.ts
 /.wrangler/
 /outputs/
 /work/
+\n# Local ICM runtime artifacts (may contain private career information)\n/stages/*/output/runtime/*\n!/stages/*/output/runtime/README.md\n

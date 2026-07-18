@@ -14,7 +14,7 @@ Recently separated enlisted U.S. Marines and other veterans translating verified
 
 ## Product Purpose
 
-Turn verified experience into a transparent career-search workspace: a civilian resume, editor-guided revisions, job matching, application tracking, company research, and repeatable interview practice.
+Provide a five-step career-transition workspace: Resume, Job Search, Job Tracking, Cover Letter, and Interview Practice. React and browser local storage run the app; ICM files define editor behavior, stage responsibilities, and interpretable handoffs. Imported files are parsed locally, and relevant text is sent to the configured hosted AI provider only when the user requests review.
 
 ## Positioning
 

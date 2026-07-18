@@ -59,9 +59,10 @@ export const searchResults: JobResult[] = [
 
 export const applicationRows: ApplicationRow[] = [
   {
+    id: "demo-aeronorth-technical-operations-manager",
     role: "Technical Operations Manager",
     roleDetail: "AeroNorth Systems · Applied Jul 10",
-    stage: "Interview 1",
+    stage: "Interview",
     stageClass: "interview-stage",
     materials: "Resume v3",
     materialsDetail: "Cover letter sent",
@@ -74,6 +75,7 @@ export const applicationRows: ApplicationRow[] = [
     due: "Jul 19",
   },
   {
+    id: "demo-harbor-maintenance-planning-lead",
     role: "Maintenance Planning Lead",
     roleDetail: "Harbor Aviation · Applied Jul 15",
     stage: "Applied",
@@ -87,6 +89,7 @@ export const applicationRows: ApplicationRow[] = [
     due: "Jul 21",
   },
   {
+    id: "demo-northgate-operations-supervisor",
     role: "Operations Supervisor",
     roleDetail: "Northgate Logistics · Applied Jul 17",
     stage: "Applied",
@@ -100,6 +103,7 @@ export const applicationRows: ApplicationRow[] = [
     due: "Jul 24",
   },
   {
+    id: "demo-meridian-cybersecurity-operations-analyst",
     role: "Cybersecurity Operations Analyst",
     roleDetail: "Meridian Grid · Saved Jul 15",
     stage: "Preparing",

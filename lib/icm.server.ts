@@ -21,27 +21,17 @@ const REFERENCE_ORDER: Record<CritiqueStage, string[]> = {
   interview: ["identity.md", "rules.md", "reference/response-rubric.md", "examples.md"],
 };
 
-const OUTPUT_CONTRACT = `# Output contract
-
-Return JSON matching the provided schema. Rules:
-- Every "quote" MUST be a verbatim substring of the submitted text, character for character — the
-  workspace highlights it by exact match. Quote the smallest exact passage containing the problem.
-- At most 7 findings, ordered most consequential first. Zero findings is a valid result; then "note"
-  should say the review set is clear.
-- "note" is one sentence summarizing the evaluation for the writer.
-- Findings critique; they never contain replacement prose.`;
-
 function readStageFile(...segments: string[]): string {
   return fs.readFileSync(path.join(process.cwd(), ...segments), "utf8");
 }
 
 export function buildSystemPrompt(stage: CritiqueStage): string {
   const dir = STAGE_DIRS[stage];
-  const sections = REFERENCE_ORDER[stage].map((file) =>
-    readStageFile("stages", dir, "references", ...file.split("/")),
-  );
+  const sections = [readStageFile("stages", dir, "CONTEXT.md"), ...REFERENCE_ORDER[stage].map((file) =>
+    readStageFile("stages", dir, "references", ...file.split("/"))),
+  ];
   sections.push(readStageFile("_config", "shared", "product-voice.md"));
-  sections.push(OUTPUT_CONTRACT);
+  sections.push(readStageFile("_config", "shared", "finding-format.md"));
   return sections.join("\n\n---\n\n");
 }
 
@@ -50,7 +40,8 @@ export function writeRunOutput(stage: CritiqueStage, model: string, inputText: s
   if (process.env.NODE_ENV === "production") return;
   try {
     const stamp = new Date().toISOString().replace(/[:.]/g, "-").slice(0, 19);
-    const file = path.join(process.cwd(), "stages", STAGE_DIRS[stage], "output", `${stamp}-critique.json`);
+    const file = path.join(process.cwd(), "stages", STAGE_DIRS[stage], "output", "runtime", `${stamp}-critique.json`);
+    fs.mkdirSync(path.dirname(file), { recursive: true });
     const payload = {
       requested_at: new Date().toISOString(),
       model,

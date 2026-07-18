@@ -12,6 +12,7 @@ interface WaypointStore {
   isJobTracked: (title: string) => boolean;
   toggleTrackedJob: (job: JobResult) => void;
   addPosition: (row: ApplicationRow) => void;
+  startApplication: (id: string) => void;
   briefs: Record<string, CompanyBrief>;
   saveBrief: (brief: CompanyBrief) => void;
 }
@@ -33,7 +34,8 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
       const saved = loadPersisted<ApplicationRow[]>("waypoint.applications");
       if (saved && Array.isArray(saved)) {
         // Merge in demo rows added after this session was first persisted.
-        const merged = [...saved, ...applicationRows.filter((demo) => !saved.some((row) => row.role === demo.role))];
+        const normalized = saved.map((row) => ({ ...row, id: row.id || crypto.randomUUID() }));
+        const merged = [...normalized, ...applicationRows.filter((demo) => !normalized.some((row) => row.id === demo.id))];
         setApplications(merged);
       }
       const savedBriefs = loadPersisted<Record<string, CompanyBrief>>("waypoint.briefs");
@@ -89,6 +91,7 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
       return [
         ...rows,
         {
+          id: crypto.randomUUID(),
           role: job.title,
           roleDetail: `${job.company} · Saved from Job Search`,
           stage: "Saved",
@@ -110,9 +113,18 @@ export function WaypointProvider({ children }: { children: React.ReactNode }) {
     setApplications((rows) => [...rows, row]);
   }, []);
 
+  const startApplication = useCallback((id: string) => {
+    setApplications((rows) => rows.map((row) => row.id === id ? {
+      ...row,
+      stage: "Application Started",
+      stageClass: "applied-stage",
+      roleDetail: row.roleDetail.replace(/ ? (Saved|Added).*$/, " ? Application started"),
+    } : row));
+  }, []);
+
   return (
     <WaypointContext.Provider
-      value={{ toast, note, applications, isJobTracked, toggleTrackedJob, addPosition, briefs, saveBrief }}
+      value={{ toast, note, applications, isJobTracked, toggleTrackedJob, addPosition, startApplication, briefs, saveBrief }}
     >
       {children}
     </WaypointContext.Provider>

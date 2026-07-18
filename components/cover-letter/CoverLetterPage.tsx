@@ -8,6 +8,7 @@ import { useWaypoint } from "@/lib/store";
 import type { CritiqueResponse } from "@/lib/types";
 import { ExampleLetter } from "./ExampleLetter";
 import { LetterReviewPanel } from "./LetterReviewPanel";
+import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
 
 interface SavedLetter {
   draft: string;
@@ -97,7 +98,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               rows={20}
             />
           </label>
-          <div className="letter-actions">
+          <AiPrivacyNotice />\n          <div className="letter-actions">
             <span>{draft.trim() ? draft.trim().split(/\s+/).length : 0} words</span>
             <button className="primary" disabled={reviewing || !draft.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to cover letter editor"}

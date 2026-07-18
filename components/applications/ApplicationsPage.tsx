@@ -3,12 +3,12 @@ import { useState } from "react";
 import { briefSlug, resumeTextFromStorage, type CompanyBrief } from "@/lib/briefs";
 import { Heading } from "@/components/ui/Heading";
 import { useWaypoint } from "@/lib/store";
-import type { ApplicationRow } from "@/lib/types";
+import { APPLICATION_STATUSES, PRE_APPLICATION_STATUSES, type ApplicationRow } from "@/lib/types";
 import { useGo } from "@/lib/use-go";
 import { AddPositionForm } from "./AddPositionForm";
 
 export function ApplicationsPage() {
-  const { applications, briefs, saveBrief, note } = useWaypoint();
+  const { applications, briefs, saveBrief, startApplication, note } = useWaypoint();
   const onGo = useGo();
   const [generatingSlug, setGeneratingSlug] = useState<string | null>(null);
 
@@ -49,17 +49,17 @@ export function ApplicationsPage() {
       />
       <div className="application-summary">
         <section>
-          <b>5</b>
+          <b>{applications.filter((row) => row.stage !== "Closed").length}</b>
           <span>Active</span>
           <small>Across three hiring stages</small>
         </section>
         <section>
-          <b>2</b>
+          <b>{applications.filter((row) => row.stage === "Interview").length}</b>
           <span>Interviews</span>
           <small>Next: AeroNorth, July 20</small>
         </section>
         <section>
-          <b>4/5</b>
+          <b>{applications.filter((row) => row.due !== "?").length}/{applications.length}</b>
           <span>Follow-ups scheduled</span>
           <small>One application needs a date</small>
         </section>
@@ -80,11 +80,12 @@ export function ApplicationsPage() {
               <th scope="col">Contact</th>
               <th scope="col">Next action</th>
               <th scope="col">Due</th>
+              <th scope="col">Ownership</th>
             </tr>
           </thead>
           <tbody>
             {applications.map((row) => (
-              <tr key={row.role}>
+              <tr key={row.id}>
                 <td>
                   <b>{row.role}</b>
                   <small>{row.roleDetail}</small>
@@ -142,6 +143,14 @@ export function ApplicationsPage() {
                   )}
                 </td>
                 <td>{row.due}</td>
+                <td className="ownership-action">
+                  {PRE_APPLICATION_STATUSES.includes(row.stage) && (
+                    <button className="secondary" onClick={() => { startApplication(row.id); note(row.role + " moved to Applications"); }}>
+                      Start Application
+                    </button>
+                  )}
+                  {APPLICATION_STATUSES.includes(row.stage) && <small>Applications</small>}
+                </td>
               </tr>
             ))}
           </tbody>
