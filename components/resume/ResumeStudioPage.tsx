@@ -139,6 +139,9 @@ export function ResumeStudioPage() {
         onUpload={uploadResume}
         onUsePasted={() => loadResumeText(resumeImportText, "Pasted resume")}
       />
+      <div className="intake-heading">
+        <h2>Review Your Resume</h2>
+      </div>
       <div className="editor">
         <section className="resume-draft">
           <ResumeHistoryControls historyState={resumeHistoryState} onMove={moveResumeHistory} />
