@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState } from "react";
 import { requestCritique } from "@/lib/critique/client";
 import { findings } from "@/lib/demo-data";
+import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
@@ -138,16 +139,22 @@ export function ResumeStudioPage() {
     note(source + " loaded");
   };
 
-  const uploadResume = (file?: File) => {
+  const uploadResume = async (file?: File) => {
     if (!file) return;
-    if (!/\.(txt|md|rtf)$/i.test(file.name)) {
-      note("For this demo, upload a TXT, MD, or RTF resume.");
+    if (!/\.(txt|md|rtf|pdf|docx)$/i.test(file.name)) {
+      note("Upload a PDF, DOCX, TXT, MD, or RTF resume.");
       return;
     }
-    const reader = new FileReader();
-    reader.onload = () => loadResumeText(String(reader.result ?? ""), file.name);
-    reader.onerror = () => note("That file could not be read.");
-    reader.readAsText(file);
+    try {
+      const text = await extractFileText(file);
+      if (!text.trim()) {
+        note("No readable text found in that file.");
+        return;
+      }
+      loadResumeText(text, file.name);
+    } catch {
+      note("That file could not be read.");
+    }
   };
 
   const evaluateResume = async () => {

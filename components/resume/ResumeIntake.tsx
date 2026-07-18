@@ -27,11 +27,11 @@ export function ResumeIntake({
       <div className="intake-grid">
         <section className="intake-card intake-upload">
           <h3>Upload a file</h3>
-          <span>TXT, MD, or RTF for this demo. The file stays on your machine.</span>
+          <span>PDF, DOCX, TXT, MD, or RTF. Parsed in your browser — the file never leaves your machine.</span>
           <input
             ref={fileRef}
             type="file"
-            accept=".txt,.md,.rtf,text/plain,text/markdown,application/rtf"
+            accept=".pdf,.docx,.txt,.md,.rtf,application/pdf,application/vnd.openxmlformats-officedocument.wordprocessingml.document,text/plain,text/markdown,application/rtf"
             onChange={(e) => onUpload(e.target.files?.[0])}
           />
           <button type="button" className="secondary" onClick={() => fileRef.current?.click()}>
