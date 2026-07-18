@@ -22,9 +22,9 @@
   --line: oklch(0.86 0.025 214.9);
 
   /* Actions */
-  --primary: var(--palette-mint);
-  --primary-hover: var(--palette-chartreuse);
-  --primary-soft: oklch(0.93 0.045 153.9);
+  --primary: oklch(0.81 0.065 286.7); /* soft periwinkle from the brand violet (was mint) */
+  --primary-hover: oklch(0.87 0.05 286.7);
+  --primary-soft: oklch(0.93 0.03 286.7);
   --deep: var(--palette-violet);
 
   /* Status */
