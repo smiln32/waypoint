@@ -188,6 +188,53 @@ describe("USAJOBS fallback identity", () => {
     vi.restoreAllMocks();
   });
 
+  async function upstreamUrl(query = "") {
+    vi.stubEnv("USAJOBS_API_KEY", "test-key");
+    vi.stubEnv("USAJOBS_EMAIL", "test@example.com");
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify({
+      SearchResult: { SearchResultItems: [] },
+    }), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+    await GET(new Request(`http://localhost/api/jobs${query}`));
+    return new URL(String(fetchMock.mock.calls[0][0]));
+  }
+
+  it("omits all optional filters by default", async () => {
+    const url = await upstreamUrl("?q=operations&loc=Norfolk%2C%20VA");
+    expect(url.searchParams.get("Keyword")).toBe("operations");
+    expect(url.searchParams.get("LocationName")).toBe("Norfolk, VA");
+    expect(url.searchParams.get("ResultsPerPage")).toBe("10");
+    expect(url.searchParams.has("DatePosted")).toBe(false);
+    expect(url.searchParams.has("PositionScheduleTypeCode")).toBe(false);
+    expect(url.searchParams.has("RemunerationMinimumAmount")).toBe(false);
+    expect(url.searchParams.has("Radius")).toBe(false);
+  });
+
+  it.each([
+    ["datePosted=7", "DatePosted", "7"],
+    ["schedule=1", "PositionScheduleTypeCode", "1"],
+    ["schedule=2", "PositionScheduleTypeCode", "2"],
+    ["minimumSalary=75000", "RemunerationMinimumAmount", "75000"],
+    ["radius=50", "Radius", "50"],
+  ])("maps %s to %s=%s", async (filter, parameter, expected) => {
+    const url = await upstreamUrl(`?loc=Norfolk%2C%20VA&${filter}`);
+    expect(url.searchParams.get(parameter)).toBe(expected);
+  });
+
+  it("omits Radius without a location", async () => {
+    const url = await upstreamUrl("?radius=50");
+    expect(url.searchParams.has("Radius")).toBe(false);
+  });
+
+  it("does not forward unsupported filter values", async () => {
+    const url = await upstreamUrl(
+      "?loc=Norfolk&datePosted=2&schedule=9&minimumSalary=99999&radius=500",
+    );
+    expect(url.searchParams.has("DatePosted")).toBe(false);
+    expect(url.searchParams.has("PositionScheduleTypeCode")).toBe(false);
+    expect(url.searchParams.has("RemunerationMinimumAmount")).toBe(false);
+    expect(url.searchParams.has("Radius")).toBe(false);
+  });
   it("returns the same deterministic ID when USAJOBS omits posting IDs", async () => {
     vi.stubEnv("USAJOBS_API_KEY", "test-key");
     vi.stubEnv("USAJOBS_EMAIL", "test@example.com");

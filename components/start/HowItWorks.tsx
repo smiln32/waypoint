@@ -11,7 +11,7 @@ const PATH: { view: View; label: string; context: string }[] = [
   {
     view: "search",
     label: "Search for roles that fit",
-    context: "Find roles worth your time and see where your verified skills align.",
+    context: "Find live federal openings and save the roles worth pursuing.",
   },
   {
     view: "applications",

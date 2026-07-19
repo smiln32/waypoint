@@ -62,7 +62,7 @@ A five-step path from service record to job offer, with one workspace per step:
 | Step | Workspace | What happens |
 |------|-----------|--------------|
 | 1 | **Resume Studio** | Upload or paste a resume; the editor returns evidence-quoted findings; edit in place and resubmit until clear |
-| 2 | **Job Search** | Find roles and see fit as evidence, not a verdict |
+| 2 | **Job Search** | Search live federal openings by keyword, location, date, schedule, salary, and radius |
 | 3 | **Job Tracking** | Saved roles and applications in one tracker — stage, materials, contacts, a clickable next action per row, and an AI-generated company brief per position |
 | 4 | **Cover Letter** | Draft against a critique-only editor; a strong finished example is one click away |
 | 5 | **Interview Prep** | Practice responses scored 0–4 on relevance, ownership, evidence, and translation |

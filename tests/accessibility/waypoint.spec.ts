@@ -316,6 +316,64 @@ test("audited controls meet Waypoint's 44px target at responsive viewports", asy
   }
 });
 
+test("Job Search exposes only functional USAJOBS filters and submits current selections", async ({ page }) => {
+  const requests: URL[] = [];
+  await page.route("**/api/jobs?**", async (route) => {
+    requests.push(new URL(route.request().url()));
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ source: "usajobs", results: [] }),
+    });
+  });
+
+  await page.goto("/search");
+  await expect(page.getByRole("heading", { name: "USAJOBS results" })).toBeVisible();
+  expect(requests).toHaveLength(1);
+
+  const expectedOptions = {
+    "Date posted": ["Any time", "Past 24 hours", "Past week", "Past month"],
+    "Work schedule": ["All schedules", "Full-time", "Part-time"],
+    "Minimum salary": ["Any salary", "$50,000+", "$75,000+", "$100,000+", "$125,000+"],
+    "Distance from location": [
+      "Exact location",
+      "Within 25 miles",
+      "Within 50 miles",
+      "Within 75 miles",
+      "Within 100 miles",
+    ],
+  };
+
+  for (const [label, options] of Object.entries(expectedOptions)) {
+    const select = page.getByRole("combobox", { name: label });
+    await expect(select).toBeVisible();
+    expect(await select.locator("option").allTextContents()).toEqual(options);
+  }
+
+  await expect(page.getByRole("combobox")).toHaveCount(4);
+  await expect(page.getByText("Workplace", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Experience", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Job type", { exact: true })).toHaveCount(0);
+  await expect(page.getByText("Quick apply only", { exact: true })).toHaveCount(0);
+
+  await page.getByRole("combobox", { name: "Date posted" }).selectOption("7");
+  await page.getByRole("combobox", { name: "Work schedule" }).selectOption("1");
+  await page.getByRole("combobox", { name: "Minimum salary" }).selectOption("75000");
+  await page.getByRole("combobox", { name: "Distance from location" }).selectOption("50");
+  expect(requests).toHaveLength(1);
+
+  await page.getByRole("button", { name: "Search jobs" }).click();
+  await expect.poll(() => requests.length).toBe(2);
+  const submitted = requests[1].searchParams;
+  expect(submitted.get("q")).toBe("operations");
+  expect(submitted.get("loc")).toBe("Jacksonville, NC");
+  expect(submitted.get("datePosted")).toBe("7");
+  expect(submitted.get("schedule")).toBe("1");
+  expect(submitted.get("minimumSalary")).toBe("75000");
+  expect(submitted.get("radius")).toBe("50");
+
+  const axe = await new AxeBuilder({ page }).analyze();
+  expect(axe.violations).toEqual([]);
+});
 test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ page }) => {
   await page.goto("/search");
   await expect(page.getByRole("heading", { name: "Recommended results" })).toBeVisible();
