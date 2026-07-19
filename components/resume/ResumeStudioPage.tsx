@@ -176,6 +176,7 @@ export function ResumeStudioPage() {
     <div className="page">
       <div className="heading">
         <small>RESUME STUDIO</small>
+        <h1>Resume Studio</h1>
       </div>
       <ResumeIntake
         fileRef={resumeFileRef}
