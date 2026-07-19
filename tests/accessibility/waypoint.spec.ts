@@ -206,6 +206,39 @@ test("primary navigation reflows without horizontal overflow", async ({ page }) 
   await verifyNavigation(320, true);
 });
 
+test("workflow pages begin naturally without the hard-coded profile top bar", async ({ page }) => {
+  const workflowPaths = ["/resume", "/search", "/applications", "/cover-letter", "/interview"];
+  const viewports = [
+    { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
+    { width: 375, height: 812 },
+    { width: 320, height: 812 },
+  ];
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+    for (const path of workflowPaths) {
+      await page.goto(path);
+      await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
+      await expect(page.getByRole("navigation", { name: "Primary navigation" })).toBeVisible();
+      await expect(page.locator(".work > header")).toHaveCount(0);
+      await expect(page.getByText("Profile evidence verified", { exact: true })).toHaveCount(0);
+
+      const layout = await page.locator(".work").evaluate((work) => {
+        const content = work.querySelector(".page");
+        if (!(content instanceof HTMLElement)) throw new Error("Page content not found");
+        return {
+          contentOffset: content.getBoundingClientRect().top - work.getBoundingClientRect().top,
+          pageClientWidth: document.documentElement.clientWidth,
+          pageScrollWidth: document.documentElement.scrollWidth,
+        };
+      });
+      expect(layout.contentOffset).toBeLessThanOrEqual(40);
+      expect(layout.pageScrollWidth).toBeLessThanOrEqual(layout.pageClientWidth);
+    }
+  }
+});
+
 
 test("audited controls meet Waypoint's 44px target at responsive viewports", async ({ page }) => {
   test.setTimeout(180_000);

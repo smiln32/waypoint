@@ -402,7 +402,7 @@ nav .active {
 }
 
 /* ================================================================ */
-/* Topbar                                                           */
+/* Content area                                                      */
 /* ================================================================ */
 
 .work {
@@ -410,37 +410,6 @@ nav .active {
   background: var(--bg);
 }
 
-.work > header {
-  height: 62px;
-  border-bottom: 1px solid var(--line);
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 0 4vw;
-  color: var(--muted);
-  font-size: 0.8125rem;
-  background: var(--surface-raised);
-}
-
-.work > header i {
-  display: inline-block;
-  width: 8px;
-  height: 8px;
-  border-radius: 50%;
-  background: var(--success);
-  margin-right: 7px;
-}
-
-.work > header button {
-  border: 0;
-  background: none;
-}
-
-.work > header button:not(:disabled):hover {
-  background: var(--surface);
-  border-radius: 6px;
-  filter: none;
-}
 
 /* ================================================================ */
 /* Headings                                                         */
@@ -1605,9 +1574,6 @@ td small {
     width: 100%;
   }
 
-  .work > header {
-    height: 54px;
-  }
 
   .page {
     padding: 28px 18px 60px;
@@ -2346,10 +2312,6 @@ td small {
   margin-top: 30px;
 }
 
-/* Topbar profile name (plain text until a real menu exists). */
-.profile-name {
-  color: var(--muted);
-}
 
 /* 44px targets per PRODUCT.md (Undo/Forward stay compact by explicit design choice). */
 .save-job,
