@@ -13,11 +13,29 @@ const routes = [
 for (const [name, path] of routes) {
   test(`${name} has no automatically detectable accessibility violations`, async ({ page }) => {
     await page.goto(path);
-    await expect(page.getByRole("heading", { level: 1 })).toBeVisible();
+    await expect(page.getByRole("heading", { level: 1 }).first()).toBeVisible();
     const results = await new AxeBuilder({ page }).analyze();
     expect(results.violations).toEqual([]);
   });
 }
+
+test("Resume Studio preserves application and editable-document heading structure", async ({ page }) => {
+  await page.goto("/resume");
+
+  const pageHeading = page.getByRole("heading", { level: 1, name: "Resume Studio" });
+  await expect(pageHeading).toBeVisible();
+  await expect(page.locator("h1").first()).toHaveText("Resume Studio");
+  await expect(page.getByRole("heading", { level: 2, name: "1. Add Your Resume" })).toBeVisible();
+  await expect(page.getByRole("heading", { level: 2, name: "2. Review Your Resume" })).toBeVisible();
+
+  const editableResume = page.getByRole("article", { name: "Editable resume" });
+  await expect(editableResume).toBeVisible();
+  await expect(editableResume.getByRole("heading", { level: 1, name: "James Carter" })).toBeVisible();
+  expect(await page.locator("h1").allTextContents()).toEqual(["Resume Studio", "James Carter"]);
+
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
 
 test("shared navigation and skip link work from the keyboard", async ({ page }) => {
   await page.goto("/resume");
