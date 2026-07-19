@@ -88,7 +88,7 @@ export function ApplicationsPage() {
         </section>
         <section>
           <b>{interviewCount}</b>
-          <span>Interviews</span>
+          <span>Interview{interviewCount === 1 ? "" : "s"}</span>
           <small>
             {interviewCount === 0
               ? "No interviews scheduled"

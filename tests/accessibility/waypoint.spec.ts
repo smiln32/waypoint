@@ -349,6 +349,42 @@ test("required Add Position fields use native validation and receive focus", asy
   expect(await role.evaluate((input: HTMLInputElement) => input.validity.valueMissing)).toBe(true);
 });
 
+test("Job Tracking pluralizes its interview summary label", async ({ page }) => {
+  await page.goto("/applications");
+  const summary = page.locator(".application-summary");
+  await expect(summary.getByText("Interview", { exact: true })).toBeVisible();
+
+  await page.evaluate(() => {
+    const record = (id: string, company: string) => ({
+      id,
+      company,
+      role: "Operations Manager",
+      source: "manual",
+      status: "Interview",
+      createdAt: "2026-07-18T12:00:00.000Z",
+      statusChangedAt: "2026-07-18T12:00:00.000Z",
+      materials: {
+        resume: "Resume ready",
+        coverLetter: "Cover letter ready",
+      },
+      nextAction: {
+        kind: "practice-interview",
+        label: "Interview Prep",
+      },
+    });
+    localStorage.setItem(
+      "waypoint.opportunities.v2",
+      JSON.stringify({
+        version: 2,
+        records: [record("interview-1", "AeroNorth Systems"), record("interview-2", "Harbor Aviation")],
+      }),
+    );
+  });
+  await page.reload();
+
+  await expect(summary.getByText("Interviews", { exact: true })).toBeVisible();
+});
+
 test("Job Tracking names its table and preserves a valid empty state", async ({ page }) => {
   await page.addInitScript(() => {
     localStorage.setItem("waypoint.opportunities.v2", JSON.stringify({ version: 2, records: [] }));
