@@ -256,4 +256,35 @@ describe("USAJOBS fallback identity", () => {
     expect(first.results[0].id).toBe(expected);
     expect(second.results[0].id).toBe(expected);
   });
+
+  it("maps only an official USAJOBS posting URL", async () => {
+    vi.stubEnv("USAJOBS_API_KEY", "test-key");
+    vi.stubEnv("USAJOBS_EMAIL", "test@example.com");
+    const payload = {
+      SearchResult: { SearchResultItems: [{ MatchedObjectDescriptor: {
+        PositionID: "posting-1",
+        PositionTitle: "Operations Manager",
+        PositionURI: "https://www.usajobs.gov/job/123456789",
+      } }] },
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 })));
+
+    const response = await (await GET(new Request("http://localhost/api/jobs?q=operations"))).json();
+    expect(response.results[0].url).toBe("https://www.usajobs.gov/job/123456789");
+  });
+
+  it("omits a posting URL when USAJOBS does not return one", async () => {
+    vi.stubEnv("USAJOBS_API_KEY", "test-key");
+    vi.stubEnv("USAJOBS_EMAIL", "test@example.com");
+    const payload = {
+      SearchResult: { SearchResultItems: [{ MatchedObjectDescriptor: {
+        PositionID: "posting-1",
+        PositionTitle: "Operations Manager",
+      } }] },
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 })));
+
+    const response = await (await GET(new Request("http://localhost/api/jobs?q=operations"))).json();
+    expect(response.results[0]).not.toHaveProperty("url");
+  });
 });

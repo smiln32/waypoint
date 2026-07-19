@@ -1,5 +1,6 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator } from "playwright/test";
+import { searchResults } from "../../lib/demo-data";
 
 const expectMinimumTargetSize = async (locator: Locator) => {
   await expect(locator).toBeVisible();
@@ -375,6 +376,12 @@ test("Job Search exposes only functional USAJOBS filters and submits current sel
   expect(axe.violations).toEqual([]);
 });
 test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ page }) => {
+  await page.route("**/api/jobs?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({ source: "sample", results: searchResults }),
+    });
+  });
   await page.goto("/search");
   await expect(page.getByRole("heading", { name: "Recommended results" })).toBeVisible();
 
@@ -396,6 +403,53 @@ test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ p
   await expect(saved).toHaveAttribute("aria-pressed", "true");
   await saved.click();
   await expect(save).toBeVisible();
+});
+
+test("Job Search links live results to official USAJOBS postings only when available", async ({ page }) => {
+  await page.route("**/api/jobs?**", async (route) => {
+    await route.fulfill({
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "usajobs",
+        results: [
+          {
+            id: "posting-with-url",
+            source: "usajobs",
+            title: "Operations Manager",
+            company: "Department of Testing",
+            place: "Norfolk, VA",
+            pay: "$90,000–$110,000",
+            age: "Posted today",
+            type: "Full-time",
+            apply: "USAJOBS.gov",
+            fit: "",
+            url: "https://www.usajobs.gov/job/123456789",
+          },
+          {
+            id: "posting-without-url",
+            source: "usajobs",
+            title: "Logistics Manager",
+            company: "Department of Testing",
+            place: "Norfolk, VA",
+            pay: "$80,000–$100,000",
+            age: "Posted today",
+            type: "Full-time",
+            apply: "USAJOBS.gov",
+            fit: "",
+          },
+        ],
+      }),
+    });
+  });
+
+  await page.goto("/search");
+  const link = page.getByRole("link", { name: "View on USAJOBS" });
+  await expect(link).toHaveCount(1);
+  await expect(link).toHaveAttribute("href", "https://www.usajobs.gov/job/123456789");
+  await expect(link).toHaveAttribute("target", "_blank");
+  await expect(link).toHaveAttribute("rel", "noopener noreferrer");
+  await expect(page.getByRole("button", { name: "Save Operations Manager at Department of Testing" })).toBeEnabled();
+  await expect(page.getByRole("button", { name: "Save Logistics Manager at Department of Testing" })).toBeEnabled();
 });
 
 test("required Add Position fields use native validation and receive focus", async ({ page }) => {

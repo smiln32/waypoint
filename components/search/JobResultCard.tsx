@@ -38,9 +38,14 @@ export function JobResultCard({
           <span key={fact}>{fact}</span>
         ))}
       </div>
-      {job.fit && (
+      {(job.fit || job.url) && (
         <div className="job-result-actions">
-          <b>{job.fit}</b>
+          {job.fit && <b>{job.fit}</b>}
+          {job.url && (
+            <a className="job-result-link secondary" href={job.url} target="_blank" rel="noopener noreferrer">
+              View on USAJOBS
+            </a>
+          )}
         </div>
       )}
     </article>
