@@ -88,7 +88,7 @@ export function ApplicationsPage() {
         </section>
         <section>
           <b>{interviewCount}</b>
-          <span>Interview{interviewCount === 1 ? "" : "s"}</span>
+          <span>{interviewCount === 1 ? "Interview" : "Interviews"}</span>
           <small>
             {interviewCount} role{interviewCount === 1 ? "" : "s"} at interview stage
           </small>
