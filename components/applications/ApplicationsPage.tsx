@@ -88,11 +88,9 @@ export function ApplicationsPage() {
         </section>
         <section>
           <b>{interviewCount}</b>
-          <span>Interviews</span>
+          <span>{interviewCount === 1 ? "Interview" : "Interviews"}</span>
           <small>
-            {interviewCount === 0
-              ? "No interviews scheduled"
-              : `${interviewCount} role${interviewCount === 1 ? "" : "s"} at interview stage`}
+            {interviewCount} role{interviewCount === 1 ? "" : "s"} at interview stage
           </small>
         </section>
         <section>
