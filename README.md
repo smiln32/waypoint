@@ -7,7 +7,7 @@ Every year, roughly 200,000 U.S. service members leave the military and run into
 ## Competition Entry
 
 - **Cohort:** Technical
-- **Domain:** Military-to-Civilian Resume Editor for Recently Separated Enlisted Marines
+- **Domain:** Military-to-Civilian Resume Editor for Recently Separated Enlisted U.S. Service Members
 - **Client brief:** [`brief.md`](brief.md)
 - **Standalone editor folder:** [`stages/01_resume/references/`](stages/01_resume/references/)
 - **Supporting evidence:** The rest of Waypoint demonstrates the same folder system running inside a deployed application.

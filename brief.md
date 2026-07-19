@@ -1,9 +1,9 @@
 # Client Brief
 
 **Cohort:** Technical
-**Domain:** Military-to-Civilian Resume Editor for Recently Separated Enlisted Marines
+**Domain:** Military-to-Civilian Resume Editor for Recently Separated Enlisted U.S. Service Members
 
-A veteran-transition organization needs a repeatable way to review resumes from recently separated enlisted Marines pursuing civilian operations, logistics, maintenance, cybersecurity, and technical-support roles.
+A veteran-transition organization needs a repeatable way to review resumes from recently separated enlisted U.S. service members pursuing civilian operations, logistics, maintenance, cybersecurity, and technical-support roles.
 
 The problem is not a lack of experience. It is that military terminology, unclear scope, unsupported equivalence, and generic leadership claims prevent civilian hiring readers from seeing what the veteran actually did. Generic AI tools often solve this by rewriting the resume, sometimes adding assumptions the veteran cannot verify or defend in an interview.
 
