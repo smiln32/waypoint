@@ -78,6 +78,31 @@ test("Resume Studio preserves application and editable-document heading structur
   expect(results.violations).toEqual([]);
 });
 
+test("editable resume expands to contain its document before following controls", async ({ page }) => {
+  await page.goto("/resume");
+
+  const editableResume = page.getByRole("article", { name: "Editable resume" });
+  const privacyNotice = page.getByRole("complementary", { name: "AI privacy notice" });
+  await expect(editableResume).toBeVisible();
+  await expect(privacyNotice).toBeVisible();
+
+  const layout = await editableResume.evaluate((article) => {
+    const notice = document.querySelector(".resume-draft .ai-privacy-notice");
+    if (!(notice instanceof HTMLElement)) throw new Error("Resume privacy notice not found");
+    const articleRect = article.getBoundingClientRect();
+    const noticeRect = notice.getBoundingClientRect();
+    return {
+      clientHeight: article.clientHeight,
+      scrollHeight: article.scrollHeight,
+      articleBottom: articleRect.bottom,
+      noticeTop: noticeRect.top,
+    };
+  });
+
+  expect(layout.scrollHeight).toBeLessThanOrEqual(layout.clientHeight);
+  expect(layout.noticeTop).toBeGreaterThanOrEqual(layout.articleBottom);
+});
+
 test("shared navigation and skip link work from the keyboard", async ({ page }) => {
   await page.goto("/resume");
   const skipLink = page.getByRole("link", { name: "Skip to content" });

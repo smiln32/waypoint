@@ -849,8 +849,6 @@ blockquote {
   cursor: text;
   outline: none;
   transition: border-color 180ms ease-out, box-shadow 180ms ease-out;
-  aspect-ratio: 8.5 / 11;
-  min-height: 0;
   width: 100%;
 }
 
