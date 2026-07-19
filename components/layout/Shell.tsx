@@ -6,20 +6,20 @@ import { Topbar } from "./Topbar";
 export function Shell({ children }: { children: React.ReactNode }) {
   const { toast } = useWaypoint();
   return (
-    <main className="shell">
+    <div className="shell">
       <a className="skip-link" href="#main">
         Skip to content
       </a>
       <Sidebar />
-      <section className="work" id="main" tabIndex={-1}>
+      <main className="work" id="main" tabIndex={-1}>
         <Topbar />
         {children}
-      </section>
+      </main>
       {toast && (
-        <div className="toast" role="status">
+        <div className="toast" role="status" aria-live="polite" aria-atomic="true">
           {toast}
         </div>
       )}
-    </main>
+    </div>
   );
 }

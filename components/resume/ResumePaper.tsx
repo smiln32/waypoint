@@ -29,13 +29,13 @@ export function ResumePaper({
       <h1>James Carter</h1>
       <p>Jacksonville, NC · (910) 555-0148 · jcarter88@email.com</p>
       <hr />
-      <h4>SUMMARY</h4>
+      <h2>SUMMARY</h2>
       <p>
         U.S. Marine Corps veteran with six years of experience leading teams, managing equipment, and
         getting results under pressure. Known for reliability, discipline, and strong leadership. Looking to
         bring these skills to a civilian team in operations, logistics, or a related field.
       </p>
-      <h4>EXPERIENCE</h4>
+      <h2>EXPERIENCE</h2>
       <h3>Team Leader / Sergeant (E-5), Infantry · United States Marine Corps</h3>
       <p>2019–2025</p>
       <ul>
@@ -46,13 +46,13 @@ export function ResumePaper({
         <li>Mentored junior team members, several of whom were promoted based on their performance.</li>
         <li>Completed an overseas deployment and earned recognition for leadership and dependability.</li>
       </ul>
-      <h4>EDUCATION &amp; TRAINING</h4>
+      <h2>EDUCATION &amp; TRAINING</h2>
       <p>High School Diploma — Lincoln High School, Dayton, OH, 2018</p>
       <p>Leadership Training: Completed Marine Corps leadership courses (supervisor-level).</p>
-      <h4>SKILLS</h4>
+      <h2>SKILLS</h2>
       <p>Team Leadership · Training &amp; Mentoring · Operations Planning · Time Management</p>
       <p>Problem Solving · Attention to Detail · Microsoft Office · Works Well Under Pressure</p>
-      <h4>AWARDS &amp; CLEARANCE</h4>
+      <h2>AWARDS &amp; CLEARANCE</h2>
       <ul>
         <li>Navy and Marine Corps Achievement Medal, Good Conduct Medal</li>
         <li>Active Secret Security Clearance</li>

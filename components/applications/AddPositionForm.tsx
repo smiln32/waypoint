@@ -89,11 +89,13 @@ export function AddPositionForm() {
       onSubmit={submit}
       aria-label="Add a new position"
     >
+      <p id="add-position-required">Fields marked * are required.</p>
       <div className="add-position-grid">
         <label>
           Role title *
           <input
             value={role}
+            required
             onChange={(e) => setRole(e.target.value)}
             placeholder="Operations Supervisor"
           />
@@ -102,6 +104,7 @@ export function AddPositionForm() {
           Company *
           <input
             value={company}
+            required
             onChange={(e) => setCompany(e.target.value)}
             placeholder="Northgate Logistics"
           />
@@ -159,7 +162,7 @@ export function AddPositionForm() {
         <button
           type="submit"
           className="primary"
-          disabled={!role.trim() || !company.trim()}
+          aria-describedby="add-position-required"
         >
           Add position
         </button>

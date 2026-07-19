@@ -287,9 +287,12 @@ button:not(:disabled):hover {
   transform: translateY(-1px);
 }
 
+a:focus-visible,
 button:focus-visible,
 input:focus-visible,
-textarea:focus-visible {
+select:focus-visible,
+textarea:focus-visible,
+[contenteditable]:focus-visible {
   outline: 3px solid var(--focus);
   outline-offset: 2px;
 }
@@ -814,7 +817,7 @@ blockquote {
   margin: 24px 0;
 }
 
-.paper h4 {
+.paper h2 {
   font-size: 0.6875rem;
   letter-spacing: 0.08em;
   margin-top: 30px;
@@ -1848,7 +1851,7 @@ td small {
 }
 
 /* Resume document: section headings up 2px, same face. */
-.paper h4 {
+.paper h2 {
   font-size: 0.8125rem;
 }
 
@@ -2385,3 +2388,17 @@ td small {
 .ai-privacy-notice { margin: 1rem 0; padding: .875rem 1rem; border: 1px solid var(--line); border-radius: 12px; background: var(--surface-2); color: var(--ink); }
 .ai-privacy-notice p { margin: .35rem 0 0; max-width: 72ch; }
 .ownership-action .secondary { min-width: 9rem; }
+
+/* Screen-reader-only text remains available without affecting layout. */
+.sr-only {
+  border: 0;
+  clip: rect(0 0 0 0);
+  clip-path: inset(50%);
+  height: 1px;
+  margin: -1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  white-space: nowrap;
+  width: 1px;
+}
