@@ -353,6 +353,7 @@ test("Job Tracking pluralizes its interview summary label", async ({ page }) => 
   await page.goto("/applications");
   const summary = page.locator(".application-summary");
   await expect(summary.getByText("Interview", { exact: true })).toBeVisible();
+  await expect(summary.getByText("1 interview", { exact: true })).toBeVisible();
 
   await page.evaluate(() => {
     const record = (id: string, company: string) => ({
@@ -383,6 +384,7 @@ test("Job Tracking pluralizes its interview summary label", async ({ page }) => 
   await page.reload();
 
   await expect(summary.getByText("Interviews", { exact: true })).toBeVisible();
+  await expect(summary.getByText("2 interviews", { exact: true })).toBeVisible();
 });
 
 test("Job Tracking names its table and preserves a valid empty state", async ({ page }) => {
