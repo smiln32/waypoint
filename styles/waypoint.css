@@ -370,6 +370,8 @@ nav a {
   border: 0;
   background: none;
   color: oklch(0.93 0.025 286.7);
+  min-height: 44px;
+  min-width: 44px;
   text-align: left;
   padding: 12px;
   border-radius: 8px;
@@ -537,7 +539,8 @@ button.link {
   display: inline-flex;
   font-weight: 600;
   justify-content: center;
-  min-height: 38px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0 14px;
   text-decoration: none;
 }
@@ -942,7 +945,8 @@ blockquote {
 
 .resume-history button {
   font-size: 0.8125rem;
-  min-height: 32px;
+  min-height: 44px;
+  min-width: 44px;
   padding: 0 11px;
 }
 
@@ -1120,7 +1124,7 @@ blockquote {
   border: 1px solid var(--line);
   border-radius: 7px;
   color: var(--ink);
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 11px;
 }
 
@@ -2319,12 +2323,13 @@ td small {
   opacity: 1;
 }
 
-/* Brief actions in the tracker: real target sizes (≥32px), not text-height. */
+/* Brief actions in the tracker meet Waypoint's 44px product target. */
 .application-table td small a,
 .brief-generate {
   align-items: center;
   display: inline-flex;
-  min-height: 32px;
+  min-height: 44px;
+  min-width: 44px;
 }
 
 /* Brief document section heads: h2 semantics, small-caps document look. */

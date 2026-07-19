@@ -1,5 +1,46 @@
 import AxeBuilder from "@axe-core/playwright";
-import { expect, test } from "playwright/test";
+import { expect, test, type Locator } from "playwright/test";
+
+const expectMinimumTargetSize = async (locator: Locator) => {
+  await expect(locator).toBeVisible();
+  const box = await locator.boundingBox();
+  expect(box).not.toBeNull();
+  expect(box!.width).toBeGreaterThanOrEqual(44);
+  expect(box!.height).toBeGreaterThanOrEqual(44);
+};
+
+const expectTargetsToFit = async (locator: Locator) => {
+  const targets = await locator.all();
+  expect(targets.length).toBeGreaterThan(0);
+  for (const target of targets) {
+    await expectMinimumTargetSize(target);
+    expect(
+      await target.evaluate(
+        (element) =>
+          element.scrollWidth <= element.clientWidth &&
+          element.scrollHeight <= element.clientHeight,
+      ),
+    ).toBe(true);
+  }
+};
+
+const expectTargetsNotToOverlap = async (locator: Locator) => {
+  const targets = await locator.all();
+  const boxes: { x: number; y: number; width: number; height: number }[] = [];
+  for (const target of targets) {
+    const box = await target.boundingBox();
+    if (box) boxes.push(box);
+  }
+  for (let first = 0; first < boxes.length; first += 1) {
+    for (let second = first + 1; second < boxes.length; second += 1) {
+      const a = boxes[first];
+      const b = boxes[second];
+      const overlapWidth = Math.min(a.x + a.width, b.x + b.width) - Math.max(a.x, b.x);
+      const overlapHeight = Math.min(a.y + a.height, b.y + b.height) - Math.max(a.y, b.y);
+      expect(overlapWidth > 0 && overlapHeight > 0).toBe(false);
+    }
+  }
+};
 
 const routes = [
   ["Dashboard", "/"],
@@ -137,6 +178,117 @@ test("primary navigation reflows without horizontal overflow", async ({ page }) 
   await verifyNavigation(768);
   await verifyNavigation(375);
   await verifyNavigation(320, true);
+});
+
+
+test("audited controls meet Waypoint's 44px target at responsive viewports", async ({ page }) => {
+  test.setTimeout(180_000);
+  const viewports = [
+    { width: 1440, height: 900 },
+    { width: 768, height: 1024 },
+    { width: 375, height: 812 },
+    { width: 320, height: 812 },
+  ];
+
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "waypoint.briefs",
+      JSON.stringify({
+        "aeronorth-systems-technical-operations-manager": {
+          slug: "aeronorth-systems-technical-operations-manager",
+          company: "AeroNorth Systems",
+          role: "Technical Operations Manager",
+          generatedAt: "2026-07-18T12:00:00.000Z",
+          source: "claude",
+          sections: {
+            whoTheyAre: "",
+            whatTheRoleOwns: "",
+            whyYourRecordFits: "",
+            likelyQuestions: "",
+            honestGap: "",
+          },
+        },
+      }),
+    );
+  });
+
+  for (const viewport of viewports) {
+    await page.setViewportSize(viewport);
+
+    await page.goto("/search");
+    const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+    const navigationLinks = navigation.getByRole("link");
+    await expect(navigationLinks).toHaveCount(7);
+    await expectTargetsToFit(navigationLinks);
+    await expectTargetsToFit(page.locator(".search-bar input"));
+    await expectTargetsToFit(page.locator(".search-filters select"));
+    await expectTargetsNotToOverlap(
+      page.locator("nav a, .search-bar input, .search-filters select"),
+    );
+    await expect(navigation.getByRole("link", { name: "Job Search" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+
+    await page.goto("/");
+    await expectTargetsToFit(page.locator("button.link"));
+    await expectTargetsNotToOverlap(page.locator("button.link"));
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+
+    await page.goto("/resume");
+    const history = page.getByLabel("Resume edit history");
+    const undo = history.getByRole("button", { name: "Undo" });
+    const forward = history.getByRole("button", { name: "Forward" });
+    await expectMinimumTargetSize(undo);
+    await expectMinimumTargetSize(forward);
+    await expect(undo).toBeDisabled();
+    await expect(forward).toBeDisabled();
+    await expectTargetsNotToOverlap(history.getByRole("button"));
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+
+    await page.goto("/cover-letter");
+    await expectTargetsToFit(page.locator(".letter-toolbar input"));
+    await expectTargetsNotToOverlap(page.locator(".letter-toolbar input"));
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+
+    await page.goto("/applications");
+    await expect(page.locator(".application-table td small a")).toHaveCount(1);
+    await expect(page.locator(".brief-generate")).toHaveCount(3);
+    await expectTargetsToFit(page.locator("button.link"));
+    await expectTargetsToFit(page.locator(".application-table td small a"));
+    await expectTargetsToFit(page.locator(".brief-generate"));
+    await expectTargetsNotToOverlap(
+      page.locator("button.link, .application-table td small a, .brief-generate"),
+    );
+    expect(
+      await page.evaluate(
+        () => document.documentElement.scrollWidth <= document.documentElement.clientWidth,
+      ),
+    ).toBe(true);
+
+    for (const path of ["/", "/search", "/resume", "/cover-letter", "/applications"]) {
+      await page.goto(path);
+      const results = await new AxeBuilder({ page }).analyze();
+      expect(results.violations).toEqual([]);
+    }
+  }
 });
 
 test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ page }) => {
