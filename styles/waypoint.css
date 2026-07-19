@@ -1236,6 +1236,15 @@ blockquote {
   margin-right: auto;
 }
 
+.job-result-link {
+  align-items: center;
+  display: inline-flex;
+  justify-content: center;
+  padding: 0 14px;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+
 table {
   width: 100%;
   border-collapse: collapse;

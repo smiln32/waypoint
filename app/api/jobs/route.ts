@@ -17,6 +17,7 @@ interface UsaJobsRemuneration {
 
 interface UsaJobsDescriptor {
   PositionID?: string;
+  PositionURI?: string;
   PositionTitle?: string;
   OrganizationName?: string;
   PositionLocationDisplay?: string;
@@ -51,6 +52,19 @@ function formatPay(pay?: UsaJobsRemuneration): string {
   const max = Math.round(Number(pay.MaximumRange)).toLocaleString("en-US");
   const perHour = pay.RateIntervalCode === "PH" ? "/hr" : "";
   return `$${min}–$${max}${perHour}`;
+}
+
+function officialPostingUrl(value?: string): string | undefined {
+  if (!value) return undefined;
+  try {
+    const url = new URL(value);
+    const hostname = url.hostname.toLowerCase();
+    return url.protocol === "https:" && (hostname === "usajobs.gov" || hostname.endsWith(".usajobs.gov"))
+      ? url.toString()
+      : undefined;
+  } catch {
+    return undefined;
+  }
 }
 
 export async function GET(request: Request) {
@@ -104,6 +118,7 @@ export async function GET(request: Request) {
           type: descriptor.PositionSchedule?.[0]?.Name ?? "Full-time",
           apply: "USAJOBS.gov",
           fit: "",
+          url: officialPostingUrl(descriptor.PositionURI),
         };
       });
     if (!results.length) return NextResponse.json({ source: "usajobs", results: [] });

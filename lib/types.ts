@@ -32,6 +32,8 @@ export interface JobResult {
   type: string;
   apply: string;
   fit: string;
+  /** Official source posting URL when one is supplied and validated. */
+  url?: string;
 }
 
 export type CritiqueStage = "resume" | "cover-letter" | "interview";
