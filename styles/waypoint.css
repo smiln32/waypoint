@@ -1588,8 +1588,10 @@ td small {
   }
 
   nav {
-    flex-direction: row;
-    min-width: max-content;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    min-width: 0;
+    width: 100%;
   }
 
   .work > header {
@@ -1657,6 +1659,10 @@ td small {
 }
 
 @media (max-width: 560px) {
+  nav {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
   .heading h1 {
     font-size: 1.6875rem;
   }
@@ -1742,6 +1748,12 @@ td small {
   .letter-draft textarea {
     min-height: 520px;
     padding: 24px;
+  }
+}
+
+@media (max-width: 360px) {
+  nav {
+    grid-template-columns: 1fr;
   }
 }
 
