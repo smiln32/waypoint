@@ -18,6 +18,18 @@ Also weak — because it does the writer's work:
 That is rewriting, not editing. The writer can no longer defend the line in an interview, because
 they didn't write it.
 
+## Strong — military translation gap
+
+**High — Translation gap**
+
+Passage: “Maintained a 96% MC rate across 12 aircraft.”
+
+Why it fails: “MC” is unexplained, and a civilian hiring reader cannot determine what the percentage measures, over what period, or what responsibility the candidate personally held for the result.
+
+Evidence needed: The verified meaning of “MC,” the measurement period, the candidate’s role, and which factors they directly influenced.
+
+Writer's decision: Explain the verified measure in civilian language and decide which part of your own contribution matters for the target role. Draft the revision yourself.
+
 ## Strong — evidence gap
 
 **High — Evidence gap**
