@@ -5,22 +5,27 @@ import { searchResults } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 import type { JobResult } from "@/lib/types";
 import { JobResultCard } from "./JobResultCard";
-import { SearchFilters } from "./SearchFilters";
+import { defaultJobSearchFilters, SearchFilters, type JobSearchFilters } from "./SearchFilters";
 
 export function JobSearchPage() {
   const { note, jobTrackingState, toggleTrackedJob } = useWaypoint();
   const [query, setQuery] = useState("operations");
   const [location, setLocation] = useState("Jacksonville, NC");
   const [alert, setAlert] = useState(false);
+  const [filters, setFilters] = useState<JobSearchFilters>(defaultJobSearchFilters);
   const [results, setResults] = useState<JobResult[]>([]);
   const [source, setSource] = useState<"usajobs" | "sample">("sample");
   const [searching, setSearching] = useState(false);
   const [resolved, setResolved] = useState(false);
 
-  const runSearch = useCallback(async (q: string, loc: string) => {
+  const runSearch = useCallback(async (q: string, loc: string, selectedFilters: JobSearchFilters) => {
     setSearching(true);
     try {
-      const res = await fetch(`/api/jobs?q=${encodeURIComponent(q)}&loc=${encodeURIComponent(loc)}`);
+      const params = new URLSearchParams({ q, loc });
+      Object.entries(selectedFilters).forEach(([name, value]) => {
+        if (value) params.set(name, value);
+      });
+      const res = await fetch(`/api/jobs?${params.toString()}`);
       if (!res.ok) throw new Error(String(res.status));
       const data = (await res.json()) as { source: "usajobs" | "sample"; results: JobResult[] };
       setResults(data.results);
@@ -36,7 +41,7 @@ export function JobSearchPage() {
   // Load live results on arrival when the API is configured.
   useEffect(() => {
     const timer = setTimeout(() => {
-      runSearch("operations", "Jacksonville, NC");
+      runSearch("operations", "Jacksonville, NC", defaultJobSearchFilters);
     }, 0);
     return () => clearTimeout(timer);
   }, [runSearch]);
@@ -46,7 +51,7 @@ export function JobSearchPage() {
       <Heading
         kicker="JOB SEARCH"
         title="Find work worth pursuing."
-        text="Search broadly, then use your verified evidence to decide where to invest your time."
+        text="Search live federal openings by keyword, location, date posted, schedule, salary, and distance."
       />
       <section className="search-bar">
         <label>
@@ -61,14 +66,14 @@ export function JobSearchPage() {
           className="primary"
           disabled={searching}
           onClick={async () => {
-            await runSearch(query, location);
+            await runSearch(query, location, filters);
             note("Search results updated");
           }}
         >
           {searching ? "Searching…" : "Search jobs"}
         </button>
       </section>
-      <SearchFilters />
+      <SearchFilters value={filters} onChange={setFilters} />
       <div className="results-heading">
         <div>
           <h2>{!resolved ? "Finding roles" : source === "usajobs" ? "USAJOBS results" : "Recommended results"}</h2>

@@ -34,6 +34,17 @@ interface UsaJobsPayload {
   SearchResult?: { SearchResultItems?: UsaJobsItem[] };
 }
 
+const allowedFilters = {
+  datePosted: new Set(["", "1", "7", "30"]),
+  schedule: new Set(["", "1", "2"]),
+  minimumSalary: new Set(["", "50000", "75000", "100000", "125000"]),
+  radius: new Set(["", "25", "50", "75", "100"]),
+} as const;
+
+function allowedValue(searchParams: URLSearchParams, name: keyof typeof allowedFilters): string {
+  const value = searchParams.get(name)?.trim() ?? "";
+  return allowedFilters[name].has(value) ? value : "";
+}
 function formatPay(pay?: UsaJobsRemuneration): string {
   if (!pay?.MinimumRange || !pay?.MaximumRange) return "";
   const min = Math.round(Number(pay.MinimumRange)).toLocaleString("en-US");
@@ -46,6 +57,10 @@ export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keyword = searchParams.get("q")?.trim() ?? "";
   const location = searchParams.get("loc")?.trim() ?? "";
+  const datePosted = allowedValue(searchParams, "datePosted");
+  const schedule = allowedValue(searchParams, "schedule");
+  const minimumSalary = allowedValue(searchParams, "minimumSalary");
+  const radius = allowedValue(searchParams, "radius");
   const key = process.env.USAJOBS_API_KEY;
   const email = process.env.USAJOBS_EMAIL;
 
@@ -55,6 +70,10 @@ export async function GET(request: Request) {
     const url = new URL("https://data.usajobs.gov/api/search");
     if (keyword) url.searchParams.set("Keyword", keyword);
     if (location) url.searchParams.set("LocationName", location);
+    if (datePosted) url.searchParams.set("DatePosted", datePosted);
+    if (schedule) url.searchParams.set("PositionScheduleTypeCode", schedule);
+    if (minimumSalary) url.searchParams.set("RemunerationMinimumAmount", minimumSalary);
+    if (location && radius) url.searchParams.set("Radius", radius);
     url.searchParams.set("ResultsPerPage", "10");
     const response = await fetch(url, {
       headers: { "Authorization-Key": key, "User-Agent": email },
