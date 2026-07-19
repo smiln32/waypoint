@@ -39,6 +39,88 @@ test("shared navigation and skip link work from the keyboard", async ({ page }) 
   await expect(navigation.getByRole("link", { name: "Resume" })).toHaveAttribute("aria-current", "page");
 });
 
+test("primary navigation reflows without horizontal overflow", async ({ page }) => {
+  const expectedLinks = [
+    "Start Here",
+    "Dashboard",
+    "Resume",
+    "Job Search",
+    "Job Tracking",
+    "Cover Letter",
+    "Interview Prep",
+  ];
+
+  const verifyNavigation = async (width: number, enlargeText = false) => {
+    await page.setViewportSize({ width, height: width === 768 ? 1024 : 812 });
+    await page.goto("/search");
+    const navigation = page.getByRole("navigation", { name: "Primary navigation" });
+    if (enlargeText) {
+      await navigation.evaluate((element) => {
+        element.style.fontSize = "200%";
+      });
+    }
+    const links = navigation.getByRole("link");
+    await expect(links).toHaveCount(expectedLinks.length);
+    await expect(links).toHaveText(expectedLinks);
+    await expect(navigation.getByRole("link", { name: "Job Search" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+
+    const layout = await navigation.evaluate((element) => ({
+      clientWidth: element.clientWidth,
+      scrollWidth: element.scrollWidth,
+      pageClientWidth: document.documentElement.clientWidth,
+      pageScrollWidth: document.documentElement.scrollWidth,
+      links: Array.from(element.querySelectorAll("a")).map((link) => {
+        const rect = link.getBoundingClientRect();
+        return {
+          clientHeight: link.clientHeight,
+          clientWidth: link.clientWidth,
+          left: rect.left,
+          right: rect.right,
+          scrollHeight: link.scrollHeight,
+          scrollWidth: link.scrollWidth,
+          top: rect.top,
+        };
+      }),
+    }));
+
+    expect(layout.scrollWidth).toBeLessThanOrEqual(layout.clientWidth);
+    expect(layout.pageScrollWidth).toBeLessThanOrEqual(layout.pageClientWidth);
+    for (const link of layout.links) {
+      expect(link.left).toBeGreaterThanOrEqual(0);
+      expect(link.right).toBeLessThanOrEqual(layout.pageClientWidth);
+      expect(link.scrollWidth).toBeLessThanOrEqual(link.clientWidth);
+      expect(link.scrollHeight).toBeLessThanOrEqual(link.clientHeight);
+    }
+
+    for (let index = 1; index < layout.links.length; index += 1) {
+      const previous = layout.links[index - 1];
+      const current = layout.links[index];
+      expect(current.top > previous.top || current.left > previous.left).toBe(true);
+    }
+
+    await page.keyboard.press("Tab");
+    await expect(page.getByRole("link", { name: "Skip to content" })).toBeFocused();
+    for (const name of expectedLinks) {
+      await page.keyboard.press("Tab");
+      const link = navigation.getByRole("link", { name });
+      await expect(link).toBeFocused();
+      expect(
+        await link.evaluate((element) => {
+          const rect = element.getBoundingClientRect();
+          return rect.left >= 0 && rect.right <= document.documentElement.clientWidth;
+        }),
+      ).toBe(true);
+    }
+  };
+
+  await verifyNavigation(768);
+  await verifyNavigation(375);
+  await verifyNavigation(320, true);
+});
+
 test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ page }) => {
   await page.goto("/search");
   await expect(page.getByRole("heading", { name: "Recommended results" })).toBeVisible();
