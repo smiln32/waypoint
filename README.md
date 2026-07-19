@@ -4,6 +4,14 @@
 
 Every year, roughly 200,000 U.S. service members leave the military and run into the same wall: their experience is real, but their language doesn't translate. "Maintained a 96% MC rate" means nothing to a civilian recruiter. Generic AI tools "fix" this by ghostwriting — replacing the veteran's record with fluent text they can't defend in an interview. Waypoint takes the opposite bet.
 
+## Competition Entry
+
+- **Cohort:** Technical
+- **Domain:** Military-to-Civilian Resume Editor for Recently Separated Enlisted Marines
+- **Client brief:** [`brief.md`](brief.md)
+- **Standalone editor folder:** [`stages/01_resume/references/`](stages/01_resume/references/)
+- **Supporting evidence:** The rest of Waypoint demonstrates the same folder system running inside a deployed application.
+
 ![Resume Studio — the editor highlights exact passages and explains, with evidence, why each one fails for a civilian reader](docs/screenshots/resume-studio.png)
 
 ## The editor — portable and deployed
