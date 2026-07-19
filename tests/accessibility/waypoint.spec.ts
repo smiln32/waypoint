@@ -349,16 +349,12 @@ test("required Add Position fields use native validation and receive focus", asy
   expect(await role.evaluate((input: HTMLInputElement) => input.validity.valueMissing)).toBe(true);
 });
 
-test("Job Tracking pluralizes its interview summary label", async ({ page }) => {
-  await page.goto("/applications");
-  const summary = page.locator(".application-summary");
-  await expect(summary.getByText("Interview", { exact: true })).toBeVisible();
-  await expect(summary.getByText("1 interview", { exact: true })).toBeVisible();
-
-  await page.evaluate(() => {
-    const record = (id: string, company: string) => ({
-      id,
-      company,
+test("Job Tracking pluralizes interview summary wording for zero, one, and two", async ({ page }) => {
+  await page.addInitScript(() => {
+    const count = Number(new URL(window.location.href).searchParams.get("interviewCount") ?? "0");
+    const records = Array.from({ length: count }, (_, index) => ({
+      id: "interview-" + (index + 1),
+      company: "Company " + (index + 1),
       role: "Operations Manager",
       source: "manual",
       status: "Interview",
@@ -372,19 +368,25 @@ test("Job Tracking pluralizes its interview summary label", async ({ page }) => 
         kind: "practice-interview",
         label: "Interview Prep",
       },
-    });
+    }));
     localStorage.setItem(
       "waypoint.opportunities.v2",
-      JSON.stringify({
-        version: 2,
-        records: [record("interview-1", "AeroNorth Systems"), record("interview-2", "Harbor Aviation")],
-      }),
+      JSON.stringify({ version: 2, records }),
     );
   });
-  await page.reload();
 
-  await expect(summary.getByText("Interviews", { exact: true })).toBeVisible();
-  await expect(summary.getByText("2 interviews", { exact: true })).toBeVisible();
+  const cases = [
+    { count: 0, label: "Interviews", detail: "0 roles at interview stage" },
+    { count: 1, label: "Interview", detail: "1 role at interview stage" },
+    { count: 2, label: "Interviews", detail: "2 roles at interview stage" },
+  ];
+
+  for (const scenario of cases) {
+    await page.goto("/applications?interviewCount=" + scenario.count);
+    const summary = page.locator(".application-summary");
+    await expect(summary.getByText(scenario.label, { exact: true })).toBeVisible();
+    await expect(summary.getByText(scenario.detail, { exact: true })).toBeVisible();
+  }
 });
 
 test("Job Tracking names its table and preserves a valid empty state", async ({ page }) => {
