@@ -60,8 +60,8 @@ Writer's decision: Replace this sentence with one specific outcome your leadersh
 
 Passage: “Active Secret Security Clearance”
 
-Why it fails: The resume shows separation in 2025. Clearances lapse without a sponsoring position, and a recruiter who checks will read an inaccurate “Active” as carelessness or inflation — on the one line where precision matters most.
+Why it fails: “Active” is a precise, time-sensitive status claim. The resume does not establish whether the applicant currently has eligibility, access, or an active affiliation requiring access. A recruiter who verifies the claim may read inaccurate terminology as carelessness or inflation — on the one line where precision matters most.
 
-Evidence needed: The actual current status and its date (for example, eligibility within the reinstatement window).
+Evidence needed: The applicant’s current eligibility, access, and affiliation status, verified through the appropriate Security Officer or Facility Security Officer, along with the verification date.
 
 Writer's decision: State only the status you can verify today, with its date. Which formulation is true is a fact only you can confirm.
