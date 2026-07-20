@@ -3,6 +3,7 @@ import { NextResponse } from "next/server";
 import { fallbackCritique } from "@/lib/critique/fallback";
 import { critiqueSchema, validateCritiqueResult } from "@/lib/critique/schema";
 import { buildSystemPrompt, writeRunOutput } from "@/lib/icm.server";
+import { liveAiEnabled } from "@/lib/live-config";
 import type { CritiqueResponse, CritiqueStage, Finding } from "@/lib/types";
 
 const STAGES: CritiqueStage[] = ["resume", "cover-letter", "interview"];
@@ -46,7 +47,10 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
     return NextResponse.json({ error: "Missing text to evaluate" }, { status: 400 });
   }
 
-  if (!process.env.ANTHROPIC_API_KEY) {
+  // Sample-only by default: no external Anthropic request unless the operator
+  // has explicitly enabled live AI AND supplied a key. A key alone is never
+  // enough, so a public fork that inherits a key still sends nothing outward.
+  if (!liveAiEnabled() || !process.env.ANTHROPIC_API_KEY) {
     return NextResponse.json(fallbackCritique(stage, text));
   }
 
@@ -69,7 +73,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
     if (!textBlock || textBlock.type !== "text") {
       return NextResponse.json(fallbackCritique(stage, text));
     }
-    const parsed = JSON.parse(textBlock.text) as { findings: Finding[]; note: string; scores?: CritiqueResponse["scores"] };
+    const parsed = JSON.parse(textBlock.text) as { findings: Finding[]; note: string; scores?: CritiqueResponse["scores"]; decisions?: string[] };
     if (!validateCritiqueResult(stage, text, parsed)) {
       return NextResponse.json(fallbackCritique(stage, text));
     }

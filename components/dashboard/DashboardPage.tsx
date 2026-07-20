@@ -1,4 +1,5 @@
 "use client";
+import { DemoBanner } from "@/components/layout/DemoMode";
 import { DueCalendar } from "./DueCalendar";
 import { MaterialsRow } from "./MaterialsRow";
 import { NextSteps } from "./NextSteps";
@@ -11,6 +12,7 @@ export function DashboardPage() {
 
   return (
     <div className="page dashboard-page">
+      <DemoBanner />
       <div className="heading">
         <small suppressHydrationWarning>{today}</small>
         <h1>Welcome back, James.</h1>

@@ -592,6 +592,32 @@ button.link:not(:disabled):hover {
   border-radius: 9px;
 }
 
+.review .decisions {
+  background: var(--surface-raised);
+  padding: 17px;
+  margin-top: 4px;
+  border-radius: 9px;
+  border-top: 3px solid var(--deep);
+}
+
+.review .decisions h3 {
+  font-size: 0.9375rem;
+  margin: 0 0 10px;
+}
+
+.review .decisions ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.review .decisions li {
+  margin-top: 8px;
+}
+
+.review .decisions li:first-child {
+  margin-top: 0;
+}
+
 .finding > div {
   display: flex;
   gap: 8px;
@@ -773,10 +799,16 @@ blockquote {
   padding: 44px;
   min-height: 690px;
   background: var(--surface-raised);
+  font-size: 1.0625rem;
+  line-height: 1.6;
 }
 
 .paper h1 {
-  font-size: 1.875rem;
+  font-size: 2.125rem;
+}
+
+.paper h3 {
+  font-size: 1.0625rem;
 }
 
 .paper > p {
@@ -1841,7 +1873,7 @@ td small {
 
 /* Resume document: section headings up 2px, same face. */
 .paper h2 {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 /* ================================================================ */
@@ -2174,6 +2206,22 @@ td small {
 .demo-notice code {
   font-family: ui-monospace, Consolas, monospace;
   font-size: 0.6875rem;
+}
+
+/* Small, understated sample-mode note (no background, no border, secondary text) */
+.demo-note {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  line-height: 1.5;
+  margin: 0 0 16px;
+}
+
+.results-heading + .demo-note {
+  margin-top: -4px;
+}
+
+.sample-pdf-link {
+  font-weight: 600;
 }
 
 /* ==== Add position form ==== */

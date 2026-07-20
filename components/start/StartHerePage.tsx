@@ -1,9 +1,11 @@
 "use client";
+import { DemoBanner } from "@/components/layout/DemoMode";
 import { HowItWorks } from "./HowItWorks";
 
 export function StartHerePage() {
   return (
     <div className="page">
+      <DemoBanner />
       <div className="heading">
         <small>START HERE</small>
         <h1>Welcome to Waypoint.</h1>

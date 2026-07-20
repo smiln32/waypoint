@@ -12,16 +12,27 @@ export const findings: Finding[] = [
     level: "High",
     title: "“Operations” carries no civilian meaning here",
     quote: "Planned and carried out operations and training, consistently meeting deadlines and standards.",
-    why: "The reader cannot see what was planned, for how many people, under what constraints, or what meeting the standard looked like. As written, the bullet could describe almost any job at any level.",
+    why: "The reader cannot see what was planned, for how many people, under what constraints, or what meeting the standard looked like. As written, this summary line could describe almost any job at any level.",
     task: "Choose one training event or operation you planned. Name what you organized, for how many people, and one observable result — without disclosing sensitive details.",
   },
   {
     level: "Medium",
     title: "The recognition is real but unnamed",
     quote: "Completed an overseas deployment and earned recognition for leadership and dependability.",
-    why: "Your awards section names a Navy and Marine Corps Achievement Medal, but this bullet hides it behind the vague word “recognition” — which reads weaker than the specific award you actually earned.",
-    task: "Name the award here and add one clause, in civilian terms, saying what it was awarded for.",
+    why: "Nowhere on the page does the résumé say what the recognition was — no award name, level, or reason appears. A civilian reader discounts an unnamed “recognition” as self-description; a specific award or a concrete reason would carry the weight this vague noun cannot.",
+    task: "Name the specific recognition — the award, its level, or who gave it — and add one clause, in civilian terms, for what it was awarded. If it cannot be substantiated, cut the clause.",
   },
+];
+
+/**
+ * The highest-leverage revision decisions for the seeded sample résumé, one per
+ * finding above and in the same order. Each is a decision for the veteran to
+ * make — never replacement prose, never a fact the résumé does not already hold.
+ */
+export const resumeDecisions: string[] = [
+  "Decide which leadership claim you can back with one verified outcome, and cut the rest.",
+  "Choose one operation or training example whose scope — what, for how many, with what result — you can state accurately.",
+  "Name the specific recognition, or remove the unsupported reference.",
 ];
 
 export const searchResults: JobResult[] = [
@@ -32,10 +43,10 @@ export const searchResults: JobResult[] = [
     company: "AeroNorth Systems",
     place: "Jacksonville, FL · Hybrid",
     pay: "$94,000–$118,000",
-    age: "Posted 3 hours ago",
+    age: "",
     type: "Full-time",
-    apply: "Quick apply",
-    fit: "88% fit",
+    apply: "",
+    fit: "",
   },
   {
     id: "sample-harbor-maintenance-planning-manager",
@@ -44,10 +55,10 @@ export const searchResults: JobResult[] = [
     company: "Harbor Aviation",
     place: "Savannah, GA · On-site",
     pay: "$86,000–$104,000",
-    age: "Posted 1 day ago",
+    age: "",
     type: "Full-time",
-    apply: "Company site",
-    fit: "82% fit",
+    apply: "",
+    fit: "",
   },
   {
     id: "sample-atlas-field-service-operations-lead",
@@ -56,10 +67,10 @@ export const searchResults: JobResult[] = [
     company: "Atlas Flight Systems",
     place: "Remote · Southeast",
     pay: "$88,000–$112,000",
-    age: "Posted 2 days ago",
+    age: "",
     type: "Full-time",
-    apply: "Quick apply",
-    fit: "79% fit",
+    apply: "",
+    fit: "",
   },
 ];
 

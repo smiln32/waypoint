@@ -1,4 +1,4 @@
-import { findings as resumeDemoFindings } from "@/lib/demo-data";
+import { findings as resumeDemoFindings, resumeDecisions } from "@/lib/demo-data";
 import type { CritiqueResponse, CritiqueStage } from "@/lib/types";
 
 /**
@@ -14,15 +14,25 @@ const resumePatterns = [
 
 export function resumeFallback(text: string): CritiqueResponse {
   const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  // Each surviving finding keeps its paired highest-leverage decision (same
+  // index), so the decisions shown always match the findings still present.
+  const decisions: string[] = [];
   const next = resumeDemoFindings.flatMap((finding, index) => {
-    if (text.includes(finding.quote)) return [finding];
+    if (text.includes(finding.quote)) {
+      decisions.push(resumeDecisions[index]);
+      return [finding];
+    }
     const quote = lines.find((line) => resumePatterns[index].test(line));
-    return quote ? [{ ...finding, quote }] : [];
+    if (quote) {
+      decisions.push(resumeDecisions[index]);
+      return [{ ...finding, quote }];
+    }
+    return [];
   });
   const note = next.length
     ? "Evaluation updated: " + next.length + " finding" + (next.length === 1 ? "" : "s") + " to review."
     : "Evaluation updated: no current findings from this review set.";
-  return { source: "demo", findings: next, note };
+  return { source: "demo", findings: next, decisions, note };
 }
 
 export function coverLetterFallback(): CritiqueResponse {
@@ -33,13 +43,13 @@ export function coverLetterFallback(): CritiqueResponse {
         level: "High",
         title: "The employer connection is asserted, not demonstrated",
         quote: "I would welcome the opportunity to bring that judgment to AeroNorth Systems.",
-        why: "The letter names AeroNorth, but it does not identify a company need, operating environment, or responsibility from the posting. This sentence could be sent to any aviation employer.",
+        why: "The letter names AeroNorth, but it does not identify a company need, operating environment, or responsibility from the posting. This sentence could be sent to any employer.",
         task: "Choose one responsibility from the posting and explain which verified experience prepares you to address it. Do not invent knowledge about the company.",
       },
       {
         level: "Medium",
         title: "The strongest evidence lacks a result",
-        quote: "I coordinated daily maintenance priorities for 12 F/A-18 aircraft and led 18 technicians across three shifts.",
+        quote: "I coordinated daily maintenance priorities for 12 tactical vehicles and led 18 Marines across two shifts.",
         why: "The scale is clear, but the reader cannot see what improved, stayed reliable, or became possible because of your coordination.",
         task: "Add one defensible operational result or decision outcome already supported by your record.",
       },

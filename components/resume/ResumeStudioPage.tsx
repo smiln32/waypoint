@@ -1,29 +1,35 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { requestCritique } from "@/lib/critique/client";
-import { findings } from "@/lib/demo-data";
+import { findings, resumeDecisions } from "@/lib/demo-data";
 import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
+import { RESUME_SAMPLE_ID, shouldRestoreResume } from "@/lib/resume-sample";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
+import { DemoBanner } from "@/components/layout/DemoMode";
 
 interface SavedResume {
   html: string;
   findings: Finding[];
+  decisions: string[];
   note: string;
   source: "claude" | "demo" | null;
+  /** Identifies which seeded sample this state derives from; absent for user uploads in live mode. */
+  sampleId?: string;
 }
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
 import { ResumeIntake } from "./ResumeIntake";
 import { ResumePaper } from "./ResumePaper";
 import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
-export function ResumeStudioPage() {
+export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) {
   const { note } = useWaypoint();
   const [resumeImportText, setResumeImportText] = useState("");
   const resumeFileRef = useRef<HTMLInputElement>(null);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
+  const [resumeDecisionList, setResumeDecisionList] = useState<string[]>(resumeDecisions);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(
     "Edit the resume directly, then resubmit it for evaluation.",
   );
@@ -40,8 +46,12 @@ export function ResumeStudioPage() {
     persist("waypoint.resume", {
       html,
       findings: resumeFindings,
+      decisions: resumeDecisionList,
       note: resumeEvaluationNote,
       source: critiqueSource,
+      // Tag sample-mode state with the current sample id; leave a live-mode
+      // upload untagged so it is never mistaken for the seeded sample.
+      sampleId: liveAiEnabled ? undefined : RESUME_SAMPLE_ID,
       ...partial,
     });
   };
@@ -49,17 +59,26 @@ export function ResumeStudioPage() {
   // Restore a persisted session (deferred a tick so the contentEditable ref is mounted).
   useEffect(() => {
     const timer = setTimeout(() => {
+      if (!resumeRef.current) return;
       const saved = loadPersisted<SavedResume>("waypoint.resume");
-      if (!saved || !resumeRef.current) return;
-      resumeRef.current.innerHTML = saved.html;
-      resumeHistoryRef.current = [saved.html];
+      if (!shouldRestoreResume(saved, liveAiEnabled)) {
+        // Stale or foreign saved résumé (older/absent sample id in sample mode):
+        // keep the freshly seeded James Carter résumé and its findings/decisions,
+        // and migrate any existing stored value to the current sample.
+        if (saved) persistResume();
+        return;
+      }
+      resumeRef.current.innerHTML = saved!.html;
+      resumeHistoryRef.current = [saved!.html];
       resumeHistoryIndexRef.current = 0;
       setResumeHistoryState({ index: 0, length: 1 });
-      setResumeFindings(saved.findings);
-      setResumeEvaluationNote(saved.note);
-      setCritiqueSource(saved.source);
+      setResumeFindings(saved!.findings);
+      setResumeDecisionList(saved!.decisions ?? []);
+      setResumeEvaluationNote(saved!.note);
+      setCritiqueSource(saved!.source);
     }, 0);
     return () => clearTimeout(timer);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   useEffect(() => {
@@ -134,9 +153,10 @@ export function ResumeStudioPage() {
     resumeHistoryIndexRef.current = 0;
     setResumeHistoryState({ index: 0, length: 1 });
     setResumeFindings([]);
+    setResumeDecisionList([]);
     setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
     setResumeImportText("");
-    persistResume({ findings: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
+    persistResume({ findings: [], decisions: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
     note(source + " loaded");
   };
 
@@ -165,20 +185,23 @@ export function ResumeStudioPage() {
     setResumeEvaluationNote("Evaluating…");
     const result = await requestCritique("resume", text);
     setResumeFindings(result.findings);
+    setResumeDecisionList(result.decisions ?? []);
     setResumeEvaluationNote(result.note);
     setCritiqueSource(result.source);
     setEvaluating(false);
-    persistResume({ findings: result.findings, note: result.note, source: result.source });
+    persistResume({ findings: result.findings, decisions: result.decisions ?? [], note: result.note, source: result.source });
     note(result.note);
   };
 
   return (
     <div className="page">
+      <DemoBanner />
       <div className="heading">
         <small>RESUME STUDIO</small>
         <h1>Resume Studio</h1>
       </div>
       <ResumeIntake
+        liveAiEnabled={liveAiEnabled}
         fileRef={resumeFileRef}
         importText={resumeImportText}
         onImportTextChange={setResumeImportText}
@@ -189,6 +212,12 @@ export function ResumeStudioPage() {
         <h2>2. Review Your Resume</h2>
         <p>Submit your resume for evaluation and make edits as needed.</p>
         <p>Click anywhere in the resume to edit it.</p>
+        <p>
+          <a className="sample-pdf-link" href="/Waypoint_Sample_Resume_Final.pdf" target="_blank" rel="noopener noreferrer">
+            View sample PDF
+          </a>{" "}
+          — the fictional résumé this demonstration is built around.
+        </p>
       </div>
       <div className="editor">
         <section className="resume-draft">
@@ -202,7 +231,7 @@ export function ResumeStudioPage() {
               persistResume({ note: "Changes not evaluated yet." });
             }}
           />
-          <AiPrivacyNotice />
+          <AiPrivacyNotice liveAiEnabled={liveAiEnabled} />
           <div className="resume-submit">
             <span role="status">{resumeEvaluationNote}</span>
             <button className="primary" disabled={evaluating} onClick={evaluateResume}>
@@ -210,7 +239,7 @@ export function ResumeStudioPage() {
             </button>
           </div>
         </section>
-        <ResumeReviewPanel findings={resumeFindings} source={critiqueSource} />
+        <ResumeReviewPanel findings={resumeFindings} decisions={resumeDecisionList} source={critiqueSource} />
       </div>
     </div>
   );

@@ -79,6 +79,53 @@ test("Resume Studio preserves application and editable-document heading structur
   expect(results.violations).toEqual([]);
 });
 
+test("Resume review shows findings and highest-leverage decisions separately", async ({ page }) => {
+  await page.goto("/resume");
+
+  // The count now reads findings, not decisions.
+  await expect(page.getByText("3 findings", { exact: true })).toBeVisible();
+
+  // Three findings render as their own articles.
+  await expect(page.locator(".review .finding")).toHaveCount(3);
+
+  // The three decisions render in a separate, labeled region — never inside a finding.
+  const decisions = page.getByRole("region", { name: "Highest-leverage decisions" });
+  await expect(decisions.getByRole("heading", { name: "Highest-leverage decisions" })).toBeVisible();
+  await expect(decisions.locator("ol > li")).toHaveCount(3);
+  await expect(page.locator(".finding .decisions")).toHaveCount(0);
+
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+
+test("an old saved résumé does not override the current James Carter sample", async ({ page }) => {
+  // Seed a stale value with no sample id, as a returning visitor's browser would hold.
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "waypoint.resume",
+      JSON.stringify({
+        html: "<h1>Jordan Reyes</h1><p>Stale resume from an earlier sample.</p>",
+        findings: [],
+        decisions: [],
+        note: "old",
+        source: "demo",
+      }),
+    );
+  });
+  await page.goto("/resume");
+
+  const editableResume = page.getByRole("article", { name: "Editable resume" });
+  await expect(editableResume.getByRole("heading", { level: 1, name: "James Carter" })).toBeVisible();
+  await expect(page.getByText("Jordan Reyes")).toHaveCount(0);
+  await expect(page.getByText("Stale resume from an earlier sample.")).toHaveCount(0);
+
+  // The seeded findings and decisions come back with the current sample.
+  await expect(page.locator(".review .finding")).toHaveCount(3);
+  await expect(
+    page.getByRole("region", { name: "Highest-leverage decisions" }).locator("ol > li"),
+  ).toHaveCount(3);
+});
+
 test("editable resume expands to contain its document before following controls", async ({ page }) => {
   await page.goto("/resume");
 
@@ -416,7 +463,7 @@ test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ p
     });
   });
   await page.goto("/search");
-  await expect(page.getByRole("heading", { name: "Recommended results" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sample results" })).toBeVisible();
 
   const tracked = page.getByRole("button", {
     name: "Tracked Technical Operations Manager at AeroNorth Systems",
@@ -483,6 +530,29 @@ test("Job Search links live results to official USAJOBS postings only when avail
   await expect(link).toHaveAttribute("rel", "noopener noreferrer");
   await expect(page.getByRole("button", { name: "Save Operations Manager at Department of Testing" })).toBeEnabled();
   await expect(page.getByRole("button", { name: "Save Logistics Manager at Department of Testing" })).toBeEnabled();
+});
+
+test("Job Search shows an explicit error without fictional results", async ({ page }) => {
+  await page.route("**/api/jobs?**", async (route) => {
+    await route.fulfill({
+      status: 502,
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "error",
+        message: "Live USAJOBS search is temporarily unavailable.",
+      }),
+    });
+  });
+
+  await page.goto("/search");
+  await expect(page.getByRole("heading", { name: "Search unavailable" })).toBeVisible();
+  await expect(page.getByText("Live USAJOBS search is temporarily unavailable.")).toBeVisible();
+  await expect(page.locator(".search-results article")).toHaveCount(0);
+  await expect(page.getByText(/% fit/)).toHaveCount(0);
+  await expect(page.getByText("Sample roles.", { exact: false })).toHaveCount(0);
+
+  const axe = await new AxeBuilder({ page }).analyze();
+  expect(axe.violations).toEqual([]);
 });
 
 test("required Add Position fields use native validation and receive focus", async ({ page }) => {

@@ -2,7 +2,9 @@ import type { Metadata } from "next";
 import { Public_Sans } from "next/font/google";
 import "../styles/tokens.css";
 import "../styles/waypoint.css";
+import { DemoModeProvider } from "@/components/layout/DemoMode";
 import { Shell } from "@/components/layout/Shell";
+import { liveAiEnabled, liveJobsEnabled } from "@/lib/live-config";
 import { WaypointProvider } from "@/lib/store";
 
 const publicSans = Public_Sans({
@@ -26,7 +28,9 @@ export default function RootLayout({ children }: Readonly<{ children: React.Reac
     <html lang="en" className={publicSans.variable}>
       <body>
         <WaypointProvider>
-          <Shell>{children}</Shell>
+          <DemoModeProvider demonstration={!liveAiEnabled() && !liveJobsEnabled()}>
+            <Shell>{children}</Shell>
+          </DemoModeProvider>
         </WaypointProvider>
       </body>
     </html>
