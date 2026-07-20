@@ -44,8 +44,8 @@ export default function Page() {
         <h2>ONE HONEST GAP</h2>
         <p>
           You have not owned a budget. If asked, say so plainly, then describe the closest verified
-          equivalent: accountability for $500,000 of equipment with clean audits, and the discipline that
-          record required.
+          equivalent: accountability for equipment readiness across a 12-vehicle fleet and an 18-Marine
+          team, sustained through an overseas deployment, and the discipline that record required.
         </p>
       </article>
     </div>

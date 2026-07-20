@@ -773,10 +773,16 @@ blockquote {
   padding: 44px;
   min-height: 690px;
   background: var(--surface-raised);
+  font-size: 1.0625rem;
+  line-height: 1.6;
 }
 
 .paper h1 {
-  font-size: 1.875rem;
+  font-size: 2.125rem;
+}
+
+.paper h3 {
+  font-size: 1.0625rem;
 }
 
 .paper > p {
@@ -1841,7 +1847,7 @@ td small {
 
 /* Resume document: section headings up 2px, same face. */
 .paper h2 {
-  font-size: 0.8125rem;
+  font-size: 0.875rem;
 }
 
 /* ================================================================ */
