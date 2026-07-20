@@ -81,7 +81,7 @@ export function JobSearchPage() {
       <div className="results-heading">
         <div>
           <h2>
-            {!resolved ? "Finding roles" : source === "error" ? "Search unavailable" : source === "usajobs" ? "USAJOBS results" : "Recommended results"}
+            {!resolved ? "Finding roles" : source === "error" ? "Search unavailable" : source === "usajobs" ? "USAJOBS results" : "Sample results"}
           </h2>
           <span>
             {!resolved
@@ -108,7 +108,8 @@ export function JobSearchPage() {
       )}
       {resolved && !searching && source === "sample" && (
         <p className="demo-notice" role="status">
-          <b>Local sample roles.</b> Enabled explicitly for local development.
+          <b>Sample roles.</b> Waypoint ships with example listings so you can explore without an
+          API key. Live federal search requires your own USAJOBS credentials.
         </p>
       )}
       <div className="search-results">

@@ -124,12 +124,19 @@ export async function GET(request: Request) {
   const rawEmail = process.env.USAJOBS_EMAIL;
   const key = rawKey?.trim();
   const email = rawEmail?.trim();
-  const useLocalSamples = process.env.NODE_ENV === "development"
-    && process.env.WAYPOINT_USE_SAMPLE_JOBS === "true";
+  const liveEnabled = process.env.WAYPOINT_ENABLE_LIVE_JOBS === "true";
 
-  if (useLocalSamples) return NextResponse.json({ source: "sample", results: searchResults });
+  // Default: serve clearly-labeled sample roles. Waypoint ships public — open
+  // repository, shared/competition deployments — with no USAJOBS credentials, so
+  // there is nothing to abuse. Live federal search is opt-in: an operator sets
+  // their own credentials AND enables it explicitly. A configured key alone never
+  // goes live, so a leaked or inherited key cannot be exploited from a fork.
+  if (!liveEnabled) return NextResponse.json({ source: "sample", results: searchResults });
+
+  // Live path (opt-in). Failures stay honest here — never a silent sample
+  // fallback — so an operator who chose live sees real misconfigurations.
   if (!key || !email) {
-    logUsaJobsError("Live search is not configured.");
+    logUsaJobsError("Live search is enabled but not configured.");
     return configurationError();
   }
   if (rejectInvalidHeader("USAJOBS_API_KEY", "Authorization-Key", key)) return configurationError();

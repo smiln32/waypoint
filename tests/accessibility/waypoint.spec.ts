@@ -416,7 +416,7 @@ test("Job Search exposes Save, Saved, and Tracked states by posting", async ({ p
     });
   });
   await page.goto("/search");
-  await expect(page.getByRole("heading", { name: "Recommended results" })).toBeVisible();
+  await expect(page.getByRole("heading", { name: "Sample results" })).toBeVisible();
 
   const tracked = page.getByRole("button", {
     name: "Tracked Technical Operations Manager at AeroNorth Systems",

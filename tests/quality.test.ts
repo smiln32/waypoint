@@ -1,5 +1,6 @@
-import { afterEach, describe, expect, it, vi } from "vitest";
+import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GET } from "../app/api/jobs/route";
+import { searchResults } from "../lib/demo-data";
 import {
   isOpportunityRecord,
   isPersistedOpportunityState,
@@ -182,7 +183,48 @@ describe("stage ownership and application transitions", () => {
   });
 });
 
-describe("USAJOBS fallback identity", () => {
+describe("Job Search sample-by-default mode", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  it("serves clearly-labeled sample roles when live search is not enabled", async () => {
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("sample");
+    expect(body.results).toEqual(searchResults);
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+
+  it("stays on samples even when credentials are present but live is not enabled", async () => {
+    // A configured key alone must never reach USAJOBS — that is the abuse guard
+    // for public forks that might inherit a key without intending live search.
+    vi.stubEnv("USAJOBS_API_KEY", "secret-api-key");
+    vi.stubEnv("USAJOBS_EMAIL", "private@example.com");
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("sample");
+    expect(fetchMock).not.toHaveBeenCalled();
+  });
+});
+
+describe("USAJOBS live search (opt-in)", () => {
+  beforeEach(() => {
+    // Every test in this block exercises the opt-in live path.
+    vi.stubEnv("WAYPOINT_ENABLE_LIVE_JOBS", "true");
+  });
+
   afterEach(() => {
     vi.unstubAllEnvs();
     vi.restoreAllMocks();
@@ -374,7 +416,7 @@ describe("USAJOBS fallback identity", () => {
     expect(JSON.stringify(body)).not.toContain(secret);
   });
 
-  it("returns an explicit error instead of samples when credentials are missing", async () => {
+  it("returns an explicit error instead of samples when live is enabled but credentials are missing", async () => {
     vi.stubEnv("USAJOBS_API_KEY", "");
     vi.stubEnv("USAJOBS_EMAIL", "");
     const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
@@ -385,7 +427,7 @@ describe("USAJOBS fallback identity", () => {
     expect(response.status).toBe(503);
     expect(body).toEqual({ source: "error", message: "Live USAJOBS search is not configured." });
     expect(body).not.toHaveProperty("results");
-    expect(log).toHaveBeenCalledWith("[USAJOBS] Live search is not configured.");
+    expect(log).toHaveBeenCalledWith("[USAJOBS] Live search is enabled but not configured.");
   });
 
   it.each([401, 403, 500])("returns a sanitized error instead of samples for USAJOBS %s", async (status) => {
