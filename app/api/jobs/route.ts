@@ -81,6 +81,23 @@ function logUsaJobsError(message: string, key?: string, email?: string) {
   console.error(`[USAJOBS] ${sanitize(message, [key, email])}`);
 }
 
+function configurationError() {
+  return NextResponse.json(
+    { source: "error", message: "Live USAJOBS search is not configured." },
+    { status: 503 },
+  );
+}
+
+function hasHeaderControlCharacters(value: string): boolean {
+  return /[\u0000-\u001f\u007f]/.test(value);
+}
+
+function rejectInvalidHeader(name: "USAJOBS_API_KEY" | "USAJOBS_EMAIL", value: string): boolean {
+  if (!hasHeaderControlCharacters(value)) return false;
+  console.error(`[USAJOBS] Invalid configured header value: ${name} contains control characters.`);
+  return true;
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keyword = searchParams.get("q")?.trim() ?? "";
@@ -89,19 +106,20 @@ export async function GET(request: Request) {
   const schedule = allowedValue(searchParams, "schedule");
   const minimumSalary = allowedValue(searchParams, "minimumSalary");
   const radius = allowedValue(searchParams, "radius");
-  const key = process.env.USAJOBS_API_KEY;
-  const email = process.env.USAJOBS_EMAIL;
+  const rawKey = process.env.USAJOBS_API_KEY;
+  const rawEmail = process.env.USAJOBS_EMAIL;
+  const key = rawKey?.trim();
+  const email = rawEmail?.trim();
   const useLocalSamples = process.env.NODE_ENV === "development"
     && process.env.WAYPOINT_USE_SAMPLE_JOBS === "true";
 
   if (useLocalSamples) return NextResponse.json({ source: "sample", results: searchResults });
   if (!key || !email) {
     logUsaJobsError("Live search is not configured.");
-    return NextResponse.json(
-      { source: "error", message: "Live USAJOBS search is not configured." },
-      { status: 503 },
-    );
+    return configurationError();
   }
+  if (rejectInvalidHeader("USAJOBS_API_KEY", key)) return configurationError();
+  if (rejectInvalidHeader("USAJOBS_EMAIL", email)) return configurationError();
 
   try {
     const url = new URL("https://data.usajobs.gov/api/search");

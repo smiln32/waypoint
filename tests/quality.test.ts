@@ -288,6 +288,82 @@ describe("USAJOBS fallback identity", () => {
     expect(response.results[0]).not.toHaveProperty("url");
   });
 
+  async function expectNormalizedCredentials(
+    rawKey: string,
+    rawEmail: string,
+    expectedKey: string,
+    expectedEmail: string,
+  ) {
+    vi.stubEnv("USAJOBS_API_KEY", rawKey);
+    vi.stubEnv("USAJOBS_EMAIL", rawEmail);
+    const payload = {
+      SearchResult: { SearchResultItems: [{ MatchedObjectId: "live-normalized", MatchedObjectDescriptor: {
+        PositionTitle: "Operations Manager",
+        PositionURI: "https://www.usajobs.gov/job/123456789",
+      } }] },
+    };
+    const fetchMock = vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 }));
+    vi.stubGlobal("fetch", fetchMock);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+
+    expect(fetchMock).toHaveBeenCalledWith(
+      expect.any(URL),
+      expect.objectContaining({
+        headers: { "Authorization-Key": expectedKey, "User-Agent": expectedEmail },
+      }),
+    );
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("usajobs");
+    expect(body.results[0]).toMatchObject({
+      id: "live-normalized",
+      source: "usajobs",
+      title: "Operations Manager",
+      fit: "",
+      url: "https://www.usajobs.gov/job/123456789",
+    });
+  }
+
+  it("trims leading and trailing spaces from the USAJOBS key", async () => {
+    await expectNormalizedCredentials("  test-key  ", "test@example.com", "test-key", "test@example.com");
+  });
+
+  it("trims leading and trailing spaces from the USAJOBS email", async () => {
+    await expectNormalizedCredentials("test-key", "  test@example.com  ", "test-key", "test@example.com");
+  });
+
+  it("trims trailing CRLF from the USAJOBS key", async () => {
+    await expectNormalizedCredentials("test-key\r\n", "test@example.com", "test-key", "test@example.com");
+  });
+
+  it("trims trailing CRLF from the USAJOBS email", async () => {
+    await expectNormalizedCredentials("test-key", "test@example.com\r\n", "test-key", "test@example.com");
+  });
+
+  it.each([
+    ["USAJOBS_API_KEY", "secret\ninjected", "test@example.com", "secret\ninjected"],
+    ["USAJOBS_EMAIL", "test-key", "private@example.com\ninjected", "private@example.com\ninjected"],
+  ])("rejects internal control characters in %s without revealing its value", async (name, key, email, secret) => {
+    vi.stubEnv("USAJOBS_API_KEY", key);
+    vi.stubEnv("USAJOBS_EMAIL", email);
+    const fetchMock = vi.fn();
+    vi.stubGlobal("fetch", fetchMock);
+    const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+    const logged = log.mock.calls.flat().join(" ");
+
+    expect(response.status).toBe(503);
+    expect(body).toEqual({ source: "error", message: "Live USAJOBS search is not configured." });
+    expect(body).not.toHaveProperty("results");
+    expect(fetchMock).not.toHaveBeenCalled();
+    expect(logged).toBe(`[USAJOBS] Invalid configured header value: ${name} contains control characters.`);
+    expect(logged).not.toContain(secret);
+    expect(JSON.stringify(body)).not.toContain(secret);
+  });
+
   it("returns an explicit error instead of samples when credentials are missing", async () => {
     vi.stubEnv("USAJOBS_API_KEY", "");
     vi.stubEnv("USAJOBS_EMAIL", "");
