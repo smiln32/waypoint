@@ -4,7 +4,7 @@ export function AiPrivacyNotice({ liveAiEnabled = false }: { liveAiEnabled?: boo
       <aside className="ai-privacy-notice" aria-label="AI privacy notice">
         <b>Your document stays in your browser</b>
         <p>This is a demonstration deployment. Evaluation runs on built-in sample logic — the text is <b>not</b> sent to any AI provider.</p>
-        <p>Live AI review is turned off here; an operator can enable it with their own key.</p>
+        <p>Live AI review is turned off here; it is available when enabled by the operator.</p>
       </aside>
     );
   }

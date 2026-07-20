@@ -98,6 +98,34 @@ test("Resume review shows findings and highest-leverage decisions separately", a
   expect(results.violations).toEqual([]);
 });
 
+test("an old saved résumé does not override the current James Carter sample", async ({ page }) => {
+  // Seed a stale value with no sample id, as a returning visitor's browser would hold.
+  await page.addInitScript(() => {
+    localStorage.setItem(
+      "waypoint.resume",
+      JSON.stringify({
+        html: "<h1>Jordan Reyes</h1><p>Stale resume from an earlier sample.</p>",
+        findings: [],
+        decisions: [],
+        note: "old",
+        source: "demo",
+      }),
+    );
+  });
+  await page.goto("/resume");
+
+  const editableResume = page.getByRole("article", { name: "Editable resume" });
+  await expect(editableResume.getByRole("heading", { level: 1, name: "James Carter" })).toBeVisible();
+  await expect(page.getByText("Jordan Reyes")).toHaveCount(0);
+  await expect(page.getByText("Stale resume from an earlier sample.")).toHaveCount(0);
+
+  // The seeded findings and decisions come back with the current sample.
+  await expect(page.locator(".review .finding")).toHaveCount(3);
+  await expect(
+    page.getByRole("region", { name: "Highest-leverage decisions" }).locator("ol > li"),
+  ).toHaveCount(3);
+});
+
 test("editable resume expands to contain its document before following controls", async ({ page }) => {
   await page.goto("/resume");
 

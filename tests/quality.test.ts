@@ -4,6 +4,7 @@ import { POST as critiquePOST } from "../app/api/critique/[stage]/route";
 import { fallbackCritique } from "../lib/critique/fallback";
 import { critiqueSchema, validateCritiqueResult } from "../lib/critique/schema";
 import { searchResults } from "../lib/demo-data";
+import { RESUME_SAMPLE_ID, shouldRestoreResume } from "../lib/resume-sample";
 import {
   isOpportunityRecord,
   isPersistedOpportunityState,
@@ -647,5 +648,24 @@ describe("Résumé highest-leverage decisions contract", () => {
         scores: { relevance: 3, ownership: 3, evidence: 3, translation: 3 },
       }),
     ).toBe(true);
+  });
+});
+
+describe("Résumé sample versioning keeps old saved résumés from overriding the current sample", () => {
+  it("in sample mode, restores only a saved résumé tagged with the current sample id", () => {
+    expect(shouldRestoreResume({ sampleId: RESUME_SAMPLE_ID }, false)).toBe(true);
+  });
+
+  it("in sample mode, discards a saved résumé that is missing or has an older sample id", () => {
+    expect(shouldRestoreResume({ sampleId: "james-carter-maintenance-v1" }, false)).toBe(false);
+    expect(shouldRestoreResume({}, false)).toBe(false);
+    expect(shouldRestoreResume(null, false)).toBe(false);
+    expect(shouldRestoreResume(undefined, false)).toBe(false);
+  });
+
+  it("in live-AI mode, never discards the user's own saved résumé over a version mismatch", () => {
+    expect(shouldRestoreResume({ sampleId: "james-carter-maintenance-v1" }, true)).toBe(true);
+    expect(shouldRestoreResume({}, true)).toBe(true);
+    expect(shouldRestoreResume(null, true)).toBe(false);
   });
 });

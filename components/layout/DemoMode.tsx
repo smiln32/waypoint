@@ -24,17 +24,16 @@ export function useDemonstration(): boolean {
 }
 
 /**
- * App-wide demonstration notice. Rendered as the first child inside a page's
- * `.page` container so it is part of the page content — never a top bar that
- * pushes content down (which the workflow-page layout contract forbids).
+ * App-wide demonstration notice — a small, understated line near the page
+ * heading (no background, no border, no full-width alert). Rendered as the first
+ * child inside a page's `.page` so it is part of the page content, never a top
+ * bar that pushes content down (which the workflow-page layout contract forbids).
  */
 export function DemoBanner() {
   if (!useDemonstration()) return null;
   return (
-    <div className="demo-banner" role="note" aria-label="Demonstration notice">
-      <b>Demonstration deployment.</b> This public build of Waypoint uses fictional sample information
-      to show the workflow and critique methodology. It does not run live job searches or send documents
-      to an AI provider.
-    </div>
+    <p className="demo-note" role="note">
+      Sample workspace using fictional information. Live integrations are available when enabled by the operator.
+    </p>
   );
 }

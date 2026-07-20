@@ -109,9 +109,8 @@ export function JobSearchPage() {
         <p className="demo-notice" role="status">{unavailableMessage}</p>
       )}
       {resolved && !searching && source === "sample" && (
-        <p className="demo-notice" role="status">
-          <b>Sample roles.</b> Waypoint ships with example listings so you can explore without an
-          API key. Live federal search requires your own USAJOBS credentials.
+        <p className="demo-note" role="note">
+          Sample roles shown. Live USAJOBS search is available when enabled.
         </p>
       )}
       <div className="search-results">
