@@ -1,11 +1,12 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
 import { Heading } from "@/components/ui/Heading";
-import { searchResults } from "@/lib/demo-data";
 import { useWaypoint } from "@/lib/store";
 import type { JobResult } from "@/lib/types";
 import { JobResultCard } from "./JobResultCard";
 import { defaultJobSearchFilters, SearchFilters, type JobSearchFilters } from "./SearchFilters";
+
+const unavailableMessage = "Live USAJOBS search is temporarily unavailable.";
 
 export function JobSearchPage() {
   const { note, jobTrackingState, toggleTrackedJob } = useWaypoint();
@@ -14,7 +15,7 @@ export function JobSearchPage() {
   const [alert, setAlert] = useState(false);
   const [filters, setFilters] = useState<JobSearchFilters>(defaultJobSearchFilters);
   const [results, setResults] = useState<JobResult[]>([]);
-  const [source, setSource] = useState<"usajobs" | "sample">("sample");
+  const [source, setSource] = useState<"usajobs" | "sample" | "error">("error");
   const [searching, setSearching] = useState(false);
   const [resolved, setResolved] = useState(false);
 
@@ -30,12 +31,15 @@ export function JobSearchPage() {
       const data = (await res.json()) as { source: "usajobs" | "sample"; results: JobResult[] };
       setResults(data.results);
       setSource(data.source);
+      return true;
     } catch {
-      setResults(searchResults);
-      setSource("sample");
+      setResults([]);
+      setSource("error");
+      return false;
+    } finally {
+      setSearching(false);
+      setResolved(true);
     }
-    setSearching(false);
-    setResolved(true);
   }, []);
 
   // Load live results on arrival when the API is configured.
@@ -66,8 +70,8 @@ export function JobSearchPage() {
           className="primary"
           disabled={searching}
           onClick={async () => {
-            await runSearch(query, location, filters);
-            note("Search results updated");
+            const succeeded = await runSearch(query, location, filters);
+            note(succeeded ? "Search results updated" : unavailableMessage);
           }}
         >
           {searching ? "Searching…" : "Search jobs"}
@@ -76,11 +80,15 @@ export function JobSearchPage() {
       <SearchFilters value={filters} onChange={setFilters} />
       <div className="results-heading">
         <div>
-          <h2>{!resolved ? "Finding roles" : source === "usajobs" ? "USAJOBS results" : "Recommended results"}</h2>
+          <h2>
+            {!resolved ? "Finding roles" : source === "error" ? "Search unavailable" : source === "usajobs" ? "USAJOBS results" : "Recommended results"}
+          </h2>
           <span>
             {!resolved
               ? `Searching near ${location}…`
-              : `${results.length} role${results.length === 1 ? "" : "s"} match “${query}” near ${location}`}
+              : source === "error"
+                ? "Try again in a few minutes."
+                : `${results.length} role${results.length === 1 ? "" : "s"} match “${query}” near ${location}`}
           </span>
         </div>
         <label>
@@ -95,10 +103,12 @@ export function JobSearchPage() {
           Alert me to new jobs
         </label>
       </div>
+      {resolved && !searching && source === "error" && (
+        <p className="demo-notice" role="status">{unavailableMessage}</p>
+      )}
       {resolved && !searching && source === "sample" && (
         <p className="demo-notice" role="status">
-          <b>Sample roles.</b> Live federal listings need a free USAJOBS key — set{" "}
-          <code>USAJOBS_API_KEY</code> and <code>USAJOBS_EMAIL</code> in <code>.env.local</code>.
+          <b>Local sample roles.</b> Enabled explicitly for local development.
         </p>
       )}
       <div className="search-results">

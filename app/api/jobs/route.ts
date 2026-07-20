@@ -6,8 +6,8 @@ import type { JobResult } from "@/lib/types";
 /**
  * Job search backed by the USAJOBS API (free key: developer.usajobs.gov).
  * Federal hiring carries veterans' preference, making it the natural first
- * live board for Waypoint. Without credentials (or on any failure) the
- * route returns the labeled sample set — resilience, not a mode.
+ * live board for Waypoint. Deployed environments expose upstream failures;
+ * labeled samples require an explicit local-development switch.
  */
 interface UsaJobsRemuneration {
   MinimumRange?: string;
@@ -67,6 +67,20 @@ function officialPostingUrl(value?: string): string | undefined {
   }
 }
 
+const unavailableMessage = "Live USAJOBS search is temporarily unavailable.";
+
+function sanitize(value: string, secrets: Array<string | undefined>): string {
+  const redacted = secrets.reduce<string>(
+    (message, secret) => secret ? message.replaceAll(secret, "[redacted]") : message,
+    value,
+  );
+  return redacted.replace(/\s+/g, " ").trim().slice(0, 300);
+}
+
+function logUsaJobsError(message: string, key?: string, email?: string) {
+  console.error(`[USAJOBS] ${sanitize(message, [key, email])}`);
+}
+
 export async function GET(request: Request) {
   const { searchParams } = new URL(request.url);
   const keyword = searchParams.get("q")?.trim() ?? "";
@@ -77,8 +91,17 @@ export async function GET(request: Request) {
   const radius = allowedValue(searchParams, "radius");
   const key = process.env.USAJOBS_API_KEY;
   const email = process.env.USAJOBS_EMAIL;
+  const useLocalSamples = process.env.NODE_ENV === "development"
+    && process.env.WAYPOINT_USE_SAMPLE_JOBS === "true";
 
-  if (!key || !email) return NextResponse.json({ source: "sample", results: searchResults });
+  if (useLocalSamples) return NextResponse.json({ source: "sample", results: searchResults });
+  if (!key || !email) {
+    logUsaJobsError("Live search is not configured.");
+    return NextResponse.json(
+      { source: "error", message: "Live USAJOBS search is not configured." },
+      { status: 503 },
+    );
+  }
 
   try {
     const url = new URL("https://data.usajobs.gov/api/search");
@@ -93,7 +116,18 @@ export async function GET(request: Request) {
       headers: { "Authorization-Key": key, "User-Agent": email },
       cache: "no-store",
     });
-    if (!response.ok) throw new Error(`USAJOBS ${response.status}`);
+    if (!response.ok) {
+      const excerpt = sanitize(await response.text(), [key, email]);
+      logUsaJobsError(
+        `Upstream response status=${response.status} body=${excerpt || "[empty]"}`,
+        key,
+        email,
+      );
+      return NextResponse.json(
+        { source: "error", message: unavailableMessage },
+        { status: 502 },
+      );
+    }
     const payload = (await response.json()) as UsaJobsPayload;
     const items = payload.SearchResult?.SearchResultItems ?? [];
     const results: JobResult[] = items
@@ -123,7 +157,12 @@ export async function GET(request: Request) {
       });
     if (!results.length) return NextResponse.json({ source: "usajobs", results: [] });
     return NextResponse.json({ source: "usajobs", results });
-  } catch {
-    return NextResponse.json({ source: "sample", results: searchResults });
+  } catch (error) {
+    const detail = error instanceof Error ? error.message : String(error);
+    logUsaJobsError(`Request failed: ${detail}`, key, email);
+    return NextResponse.json(
+      { source: "error", message: unavailableMessage },
+      { status: 502 },
+    );
   }
 }

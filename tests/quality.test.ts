@@ -287,4 +287,98 @@ describe("USAJOBS fallback identity", () => {
     const response = await (await GET(new Request("http://localhost/api/jobs?q=operations"))).json();
     expect(response.results[0]).not.toHaveProperty("url");
   });
+
+  it("returns an explicit error instead of samples when credentials are missing", async () => {
+    vi.stubEnv("USAJOBS_API_KEY", "");
+    vi.stubEnv("USAJOBS_EMAIL", "");
+    const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+
+    expect(response.status).toBe(503);
+    expect(body).toEqual({ source: "error", message: "Live USAJOBS search is not configured." });
+    expect(body).not.toHaveProperty("results");
+    expect(log).toHaveBeenCalledWith("[USAJOBS] Live search is not configured.");
+  });
+
+  it.each([401, 403, 500])("returns a sanitized error instead of samples for USAJOBS %s", async (status) => {
+    const key = "secret-api-key";
+    const email = "private@example.com";
+    vi.stubEnv("USAJOBS_API_KEY", key);
+    vi.stubEnv("USAJOBS_EMAIL", email);
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(
+      `Rejected ${key} for ${email}`,
+      { status },
+    )));
+    const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+    const logged = log.mock.calls.flat().join(" ");
+    const serialized = JSON.stringify(body);
+
+    expect(response.status).toBe(502);
+    expect(body).toEqual({ source: "error", message: "Live USAJOBS search is temporarily unavailable." });
+    expect(body).not.toHaveProperty("results");
+    expect(logged).toContain(`status=${status}`);
+    expect(logged).toContain("Rejected [redacted] for [redacted]");
+    expect(logged).not.toContain(key);
+    expect(logged).not.toContain(email);
+    expect(serialized).not.toContain(key);
+    expect(serialized).not.toContain(email);
+  });
+
+  it("returns a sanitized error instead of samples for network failures", async () => {
+    const key = "secret-api-key";
+    const email = "private@example.com";
+    vi.stubEnv("USAJOBS_API_KEY", key);
+    vi.stubEnv("USAJOBS_EMAIL", email);
+    vi.stubGlobal("fetch", vi.fn(async () => {
+      throw new Error(`Connection failed for ${key} and ${email}`);
+    }));
+    const log = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=operations"));
+    const body = await response.json();
+    const logged = log.mock.calls.flat().join(" ");
+    const serialized = JSON.stringify(body);
+
+    expect(response.status).toBe(502);
+    expect(body.source).toBe("error");
+    expect(body).not.toHaveProperty("results");
+    expect(logged).toContain("Request failed: Connection failed for [redacted] and [redacted]");
+    expect(logged).not.toContain(key);
+    expect(logged).not.toContain(email);
+    expect(serialized).not.toContain(key);
+    expect(serialized).not.toContain(email);
+  });
+
+  it("keeps successful USAJOBS responses live and unsampled", async () => {
+    vi.stubEnv("USAJOBS_API_KEY", "test-key");
+    vi.stubEnv("USAJOBS_EMAIL", "test@example.com");
+    const payload = {
+      SearchResult: { SearchResultItems: [{ MatchedObjectId: "live-1", MatchedObjectDescriptor: {
+        PositionTitle: "Logistics Management Specialist",
+        OrganizationName: "Department of Testing",
+        PositionLocationDisplay: "Norfolk, VA",
+        PositionURI: "https://www.usajobs.gov/job/987654321",
+      } }] },
+    };
+    vi.stubGlobal("fetch", vi.fn(async () => new Response(JSON.stringify(payload), { status: 200 })));
+
+    const response = await GET(new Request("http://localhost/api/jobs?q=logistics"));
+    const body = await response.json();
+
+    expect(response.status).toBe(200);
+    expect(body.source).toBe("usajobs");
+    expect(body.results).toHaveLength(1);
+    expect(body.results[0]).toMatchObject({
+      id: "live-1",
+      source: "usajobs",
+      title: "Logistics Management Specialist",
+      fit: "",
+      url: "https://www.usajobs.gov/job/987654321",
+    });
+  });
 });

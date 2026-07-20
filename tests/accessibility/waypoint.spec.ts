@@ -485,6 +485,29 @@ test("Job Search links live results to official USAJOBS postings only when avail
   await expect(page.getByRole("button", { name: "Save Logistics Manager at Department of Testing" })).toBeEnabled();
 });
 
+test("Job Search shows an explicit error without fictional results", async ({ page }) => {
+  await page.route("**/api/jobs?**", async (route) => {
+    await route.fulfill({
+      status: 502,
+      contentType: "application/json",
+      body: JSON.stringify({
+        source: "error",
+        message: "Live USAJOBS search is temporarily unavailable.",
+      }),
+    });
+  });
+
+  await page.goto("/search");
+  await expect(page.getByRole("heading", { name: "Search unavailable" })).toBeVisible();
+  await expect(page.getByText("Live USAJOBS search is temporarily unavailable.")).toBeVisible();
+  await expect(page.locator(".search-results article")).toHaveCount(0);
+  await expect(page.getByText(/% fit/)).toHaveCount(0);
+  await expect(page.getByText("Sample roles.", { exact: false })).toHaveCount(0);
+
+  const axe = await new AxeBuilder({ page }).analyze();
+  expect(axe.violations).toEqual([]);
+});
+
 test("required Add Position fields use native validation and receive focus", async ({ page }) => {
   await page.goto("/applications");
   await page.getByRole("button", { name: "Add Position" }).click();
