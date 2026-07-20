@@ -177,6 +177,10 @@ export function ResumeStudioPage() {
       <div className="heading">
         <small>RESUME STUDIO</small>
         <h1>Resume Studio</h1>
+        <p>
+          Identify military terminology, unclear scope, unsupported equivalence, and generic leadership
+          claims that may prevent a civilian hiring reader from understanding your experience.
+        </p>
       </div>
       <ResumeIntake
         fileRef={resumeFileRef}

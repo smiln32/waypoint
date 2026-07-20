@@ -56,7 +56,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
       <Heading
         kicker="COVER LETTER STUDIO"
         title="Make the connection specific."
-        text="Write your letter for one employer and one role. The editor critiques the connection — it never writes for you."
+        text={"Connect verified service experience to the employer\u2019s needs without inventing duties, credentials, or civilian equivalence."}
       />
       <ExampleLetter example={example} />
       <div className="cover-letter-workspace">

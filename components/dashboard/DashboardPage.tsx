@@ -13,8 +13,11 @@ export function DashboardPage() {
     <div className="page dashboard-page">
       <div className="heading">
         <small suppressHydrationWarning>{today}</small>
-        <h1>Welcome back, James.</h1>
-        <p>Simple, actionable guidance to help you navigate your next professional chapter.</p>
+        <h1>Your Military-to-Civilian Transition Workspace</h1>
+        <p>
+          This workspace supports your civilian job-search process while keeping you responsible for
+          every fact, claim, and revision.
+        </p>
       </div>
       <NextSteps />
       <PipelineGlance />

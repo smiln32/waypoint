@@ -47,7 +47,7 @@ export function InterviewPage() {
       <Heading
         kicker="INTERVIEW PRACTICE"
         title="Show employers how you solve problems."
-        text="Practice a realistic question. The editor scores your response and critiques it — it never writes your answer."
+        text="Practice explaining your responsibilities, scale, outcomes, and leadership without expecting the interviewer to understand military acronyms or structure."
       />
       <div className="interview">
         <section>

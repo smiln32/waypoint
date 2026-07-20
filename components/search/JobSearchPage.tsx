@@ -51,7 +51,7 @@ export function JobSearchPage() {
       <Heading
         kicker="JOB SEARCH"
         title="Find work worth pursuing."
-        text="Search live federal openings by keyword, location, date posted, schedule, salary, and distance."
+        text="Search civilian federal opportunities and save roles you want to pursue. Waypoint does not assume that an MOS, rank, or title proves civilian qualifications."
       />
       <section className="search-bar">
         <label>
