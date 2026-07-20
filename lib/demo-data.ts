@@ -12,15 +12,15 @@ export const findings: Finding[] = [
     level: "High",
     title: "“Operations” carries no civilian meaning here",
     quote: "Planned and carried out operations and training, consistently meeting deadlines and standards.",
-    why: "The reader cannot see what was planned, for how many people, under what constraints, or what meeting the standard looked like. As written, the bullet could describe almost any job at any level.",
+    why: "The reader cannot see what was planned, for how many people, under what constraints, or what meeting the standard looked like. As written, this summary line could describe almost any job at any level.",
     task: "Choose one training event or operation you planned. Name what you organized, for how many people, and one observable result — without disclosing sensitive details.",
   },
   {
     level: "Medium",
     title: "The recognition is real but unnamed",
     quote: "Completed an overseas deployment and earned recognition for leadership and dependability.",
-    why: "Your awards section names a Navy and Marine Corps Achievement Medal, but this bullet hides it behind the vague word “recognition” — which reads weaker than the specific award you actually earned.",
-    task: "Name the award here and add one clause, in civilian terms, saying what it was awarded for.",
+    why: "Nowhere on the page does the résumé say what the recognition was — no award name, level, or reason appears. A civilian reader discounts an unnamed “recognition” as self-description; a specific award or a concrete reason would carry the weight this vague noun cannot.",
+    task: "Name the specific recognition — the award, its level, or who gave it — and add one clause, in civilian terms, for what it was awarded. If it cannot be substantiated, cut the clause.",
   },
 ];
 
