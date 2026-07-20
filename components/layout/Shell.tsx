@@ -1,7 +1,6 @@
 "use client";
 import { useWaypoint } from "@/lib/store";
 import { Sidebar } from "./Sidebar";
-import { Topbar } from "./Topbar";
 
 export function Shell({ children }: { children: React.ReactNode }) {
   const { toast } = useWaypoint();
@@ -12,7 +11,6 @@ export function Shell({ children }: { children: React.ReactNode }) {
       </a>
       <Sidebar />
       <main className="work" id="main" tabIndex={-1}>
-        <Topbar />
         {children}
       </main>
       {toast && (
