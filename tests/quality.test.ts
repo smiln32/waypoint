@@ -342,9 +342,17 @@ describe("USAJOBS fallback identity", () => {
   });
 
   it.each([
+    // Internal C0 control character (the original hand-written regex caught these).
     ["USAJOBS_API_KEY", "secret\ninjected", "test@example.com", "secret\ninjected"],
     ["USAJOBS_EMAIL", "test-key", "private@example.com\ninjected", "private@example.com\ninjected"],
-  ])("rejects internal control characters in %s without revealing its value", async (name, key, email, secret) => {
+    // Code points above the Latin-1 header range (U+0100+) that a copied credential
+    // picks up — zero-width space, BOM, smart quote. undici's Headers rejects these
+    // as invalid header values; the previous control-character regex let them through
+    // to fetch, where they threw the "invalid header value" error mid-request.
+    ["USAJOBS_API_KEY", "secret​injected", "test@example.com", "secret​injected"],
+    ["USAJOBS_EMAIL", "test-key", "private﻿@example.com", "private﻿@example.com"],
+    ["USAJOBS_API_KEY", "secret’injected", "test@example.com", "secret’injected"],
+  ])("rejects header values fetch would reject in %s without revealing its value", async (name, key, email, secret) => {
     vi.stubEnv("USAJOBS_API_KEY", key);
     vi.stubEnv("USAJOBS_EMAIL", email);
     const fetchMock = vi.fn();
@@ -359,7 +367,7 @@ describe("USAJOBS fallback identity", () => {
     expect(body).toEqual({ source: "error", message: "Live USAJOBS search is not configured." });
     expect(body).not.toHaveProperty("results");
     expect(fetchMock).not.toHaveBeenCalled();
-    expect(logged).toBe(`[USAJOBS] Invalid configured header value: ${name} contains control characters.`);
+    expect(logged).toBe(`[USAJOBS] Invalid configured header value: ${name} is not a valid HTTP header value.`);
     expect(logged).not.toContain(secret);
     expect(JSON.stringify(body)).not.toContain(secret);
   });

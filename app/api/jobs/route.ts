@@ -88,13 +88,27 @@ function configurationError() {
   );
 }
 
-function hasHeaderControlCharacters(value: string): boolean {
-  return /[\u0000-\u001f\u007f]/.test(value);
+function isValidHeaderValue(headerName: string, value: string): boolean {
+  // Validate against the same Headers implementation the runtime's fetch uses,
+  // so any value fetch would reject is caught here instead of throwing mid-request.
+  // A hand-written control-character regex misses whole classes of contamination
+  // undici rejects: code points outside the Latin-1 header range (BOM,
+  // zero-width space, smart quotes, en/em dashes) copied into a credential.
+  try {
+    new Headers({ [headerName]: value });
+    return true;
+  } catch {
+    return false;
+  }
 }
 
-function rejectInvalidHeader(name: "USAJOBS_API_KEY" | "USAJOBS_EMAIL", value: string): boolean {
-  if (!hasHeaderControlCharacters(value)) return false;
-  console.error(`[USAJOBS] Invalid configured header value: ${name} contains control characters.`);
+function rejectInvalidHeader(
+  name: "USAJOBS_API_KEY" | "USAJOBS_EMAIL",
+  headerName: string,
+  value: string,
+): boolean {
+  if (isValidHeaderValue(headerName, value)) return false;
+  console.error(`[USAJOBS] Invalid configured header value: ${name} is not a valid HTTP header value.`);
   return true;
 }
 
@@ -118,8 +132,8 @@ export async function GET(request: Request) {
     logUsaJobsError("Live search is not configured.");
     return configurationError();
   }
-  if (rejectInvalidHeader("USAJOBS_API_KEY", key)) return configurationError();
-  if (rejectInvalidHeader("USAJOBS_EMAIL", email)) return configurationError();
+  if (rejectInvalidHeader("USAJOBS_API_KEY", "Authorization-Key", key)) return configurationError();
+  if (rejectInvalidHeader("USAJOBS_EMAIL", "User-Agent", email)) return configurationError();
 
   try {
     const url = new URL("https://data.usajobs.gov/api/search");
