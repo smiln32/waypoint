@@ -1,6 +1,8 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GET } from "../app/api/jobs/route";
 import { POST as critiquePOST } from "../app/api/critique/[stage]/route";
+import { fallbackCritique } from "../lib/critique/fallback";
+import { critiqueSchema, validateCritiqueResult } from "../lib/critique/schema";
 import { searchResults } from "../lib/demo-data";
 import {
   isOpportunityRecord,
@@ -557,5 +559,93 @@ describe("AI critique is sample-only by default", () => {
     expect(status).toBe(200);
     expect(body.source).toBe("demo");
     expect(errorSpy).not.toHaveBeenCalled();
+  });
+});
+
+describe("Résumé highest-leverage decisions contract", () => {
+  const resumeText = [
+    "Known for reliability, discipline, and strong leadership.",
+    "Planned and carried out operations and training, consistently meeting deadlines and standards.",
+    "Completed an overseas deployment and earned recognition for leadership and dependability.",
+  ].join("\n");
+  const finding = {
+    level: "High",
+    title: "t",
+    quote: "Known for reliability, discipline, and strong leadership.",
+    why: "w",
+    task: "k",
+  };
+
+  it("rejects a résumé result with more than seven findings", () => {
+    const eight = Array.from({ length: 8 }, () => finding);
+    expect(validateCritiqueResult("resume", resumeText, { findings: eight, note: "n", decisions: [] })).toBe(false);
+  });
+
+  it("rejects a résumé result with more than three decisions", () => {
+    expect(
+      validateCritiqueResult("resume", resumeText, { findings: [finding], note: "n", decisions: ["a", "b", "c", "d"] }),
+    ).toBe(false);
+  });
+
+  it("accepts a résumé result with at most three string decisions", () => {
+    expect(
+      validateCritiqueResult("resume", resumeText, { findings: [finding], note: "n", decisions: ["a", "b", "c"] }),
+    ).toBe(true);
+  });
+
+  it("requires the decisions field on résumé results", () => {
+    expect(validateCritiqueResult("resume", resumeText, { findings: [finding], note: "n" })).toBe(false);
+    expect(
+      validateCritiqueResult("resume", resumeText, { findings: [finding], note: "n", decisions: [1, 2] }),
+    ).toBe(false);
+  });
+
+  it("puts decisions in the résumé schema (max three, required, no extra props) and nowhere else", () => {
+    const resume = critiqueSchema("resume") as {
+      properties: Record<string, { maxItems?: number }>;
+      required: string[];
+      additionalProperties: boolean;
+    };
+    expect(resume.required).toContain("decisions");
+    expect(resume.properties.decisions.maxItems).toBe(3);
+    expect(resume.additionalProperties).toBe(false);
+
+    for (const stage of ["cover-letter", "interview"] as const) {
+      const schema = critiqueSchema(stage) as {
+        properties: Record<string, unknown>;
+        additionalProperties: boolean;
+      };
+      expect(schema.properties.decisions).toBeUndefined();
+      expect(schema.additionalProperties).toBe(false);
+    }
+  });
+
+  it("returns three grounded decisions for the seeded sample résumé", () => {
+    const result = fallbackCritique("resume", resumeText);
+    expect(result.findings).toHaveLength(3);
+    expect(result.decisions).toHaveLength(3);
+    result.decisions?.forEach((decision) => expect(typeof decision).toBe("string"));
+  });
+
+  it("keeps cover-letter and interview critiques working without résumé decisions", () => {
+    const cover = fallbackCritique("cover-letter", "Any draft text.");
+    expect(cover.source).toBe("demo");
+    expect(cover.findings.length).toBeGreaterThan(0);
+    expect(cover.decisions).toBeUndefined();
+
+    const interview = fallbackCritique("interview", "I diagnosed the fault because the readings confirmed it.");
+    expect(interview.source).toBe("demo");
+    expect(interview.scores).toBeDefined();
+    expect(interview.decisions).toBeUndefined();
+
+    const cl = { level: "Medium", title: "t", quote: "Sample sentence.", why: "w", task: "k" };
+    expect(validateCritiqueResult("cover-letter", "Sample sentence.", { findings: [cl], note: "n" })).toBe(true);
+    expect(
+      validateCritiqueResult("interview", "Sample sentence.", {
+        findings: [cl],
+        note: "n",
+        scores: { relevance: 3, ownership: 3, evidence: 3, translation: 3 },
+      }),
+    ).toBe(true);
   });
 });

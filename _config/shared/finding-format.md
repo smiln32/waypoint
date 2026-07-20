@@ -22,6 +22,19 @@ also substring-matches `quote` against the document to highlight it, so quotes m
 - Maximum seven findings per pass, ordered most consequential first.
 - Zero findings is a valid result; `note` should say the review set is clear.
 
+## Résumé decisions (stage 01 only)
+
+The résumé review must end with the highest-leverage revision decisions — **at most
+three**, each a bounded decision the veteran makes, never replacement prose and never a
+fact the résumé does not already hold. They are returned alongside the findings:
+
+```json
+{ "decisions": ["Decide which leadership claim you can back with one verified outcome, and cut the rest."] }
+```
+
+- Derive each decision from the findings; order them most consequential first.
+- Fewer than three is valid when fewer findings remain; more than three is rejected.
+
 ## Interview scores (stage 06 only)
 
 The interview editor additionally returns four dimension scores:

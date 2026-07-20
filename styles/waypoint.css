@@ -592,6 +592,32 @@ button.link:not(:disabled):hover {
   border-radius: 9px;
 }
 
+.review .decisions {
+  background: var(--surface-raised);
+  padding: 17px;
+  margin-top: 4px;
+  border-radius: 9px;
+  border-top: 3px solid var(--deep);
+}
+
+.review .decisions h3 {
+  font-size: 0.9375rem;
+  margin: 0 0 10px;
+}
+
+.review .decisions ol {
+  margin: 0;
+  padding-left: 20px;
+}
+
+.review .decisions li {
+  margin-top: 8px;
+}
+
+.review .decisions li:first-child {
+  margin-top: 0;
+}
+
 .finding > div {
   display: flex;
   gap: 8px;

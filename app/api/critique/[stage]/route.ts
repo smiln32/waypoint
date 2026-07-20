@@ -73,7 +73,7 @@ export async function POST(request: Request, { params }: { params: Promise<{ sta
     if (!textBlock || textBlock.type !== "text") {
       return NextResponse.json(fallbackCritique(stage, text));
     }
-    const parsed = JSON.parse(textBlock.text) as { findings: Finding[]; note: string; scores?: CritiqueResponse["scores"] };
+    const parsed = JSON.parse(textBlock.text) as { findings: Finding[]; note: string; scores?: CritiqueResponse["scores"]; decisions?: string[] };
     if (!validateCritiqueResult(stage, text, parsed)) {
       return NextResponse.json(fallbackCritique(stage, text));
     }

@@ -24,6 +24,17 @@ export const findings: Finding[] = [
   },
 ];
 
+/**
+ * The highest-leverage revision decisions for the seeded sample résumé, one per
+ * finding above and in the same order. Each is a decision for the veteran to
+ * make — never replacement prose, never a fact the résumé does not already hold.
+ */
+export const resumeDecisions: string[] = [
+  "Decide which leadership claim you can back with one verified outcome, and cut the rest.",
+  "Choose one operation or training example whose scope — what, for how many, with what result — you can state accurately.",
+  "Name the specific recognition, or remove the unsupported reference.",
+];
+
 export const searchResults: JobResult[] = [
   {
     id: "sample-aeronorth-technical-operations-manager",

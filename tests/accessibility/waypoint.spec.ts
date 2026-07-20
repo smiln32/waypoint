@@ -79,6 +79,25 @@ test("Resume Studio preserves application and editable-document heading structur
   expect(results.violations).toEqual([]);
 });
 
+test("Resume review shows findings and highest-leverage decisions separately", async ({ page }) => {
+  await page.goto("/resume");
+
+  // The count now reads findings, not decisions.
+  await expect(page.getByText("3 findings", { exact: true })).toBeVisible();
+
+  // Three findings render as their own articles.
+  await expect(page.locator(".review .finding")).toHaveCount(3);
+
+  // The three decisions render in a separate, labeled region — never inside a finding.
+  const decisions = page.getByRole("region", { name: "Highest-leverage decisions" });
+  await expect(decisions.getByRole("heading", { name: "Highest-leverage decisions" })).toBeVisible();
+  await expect(decisions.locator("ol > li")).toHaveCount(3);
+  await expect(page.locator(".finding .decisions")).toHaveCount(0);
+
+  const results = await new AxeBuilder({ page }).analyze();
+  expect(results.violations).toEqual([]);
+});
+
 test("editable resume expands to contain its document before following controls", async ({ page }) => {
   await page.goto("/resume");
 

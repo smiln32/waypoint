@@ -5,14 +5,16 @@ import type { Finding } from "@/lib/types";
 
 export function ResumeReviewPanel({
   findings,
+  decisions,
   source,
 }: {
   findings: Finding[];
+  decisions: string[];
   source: "claude" | "demo" | null;
 }) {
   return (
     <aside className="review">
-      <ReviewHead label={`${findings.length} decisions`} />
+      <ReviewHead label={`${findings.length} findings`} />
       <DemoNotice source={source} />
       {findings.length ? (
         findings.map((f) => (
@@ -37,6 +39,16 @@ export function ResumeReviewPanel({
             draft forward.
           </p>
         </div>
+      )}
+      {decisions.length > 0 && (
+        <section className="decisions" aria-label="Highest-leverage decisions">
+          <h3>Highest-leverage decisions</h3>
+          <ol>
+            {decisions.map((decision) => (
+              <li key={decision}>{decision}</li>
+            ))}
+          </ol>
+        </section>
       )}
     </aside>
   );

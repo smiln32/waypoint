@@ -50,6 +50,8 @@ export interface CritiqueResponse {
   findings: Finding[];
   /** Interview stage only: 0–4 per dimension. */
   scores?: InterviewScores;
+  /** Résumé stage only: the highest-leverage revision decisions, at most three. */
+  decisions?: string[];
   note: string;
 }
 

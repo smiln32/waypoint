@@ -1,7 +1,7 @@
 "use client";
 import { useEffect, useRef, useState } from "react";
 import { requestCritique } from "@/lib/critique/client";
-import { findings } from "@/lib/demo-data";
+import { findings, resumeDecisions } from "@/lib/demo-data";
 import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
@@ -12,6 +12,7 @@ import { DemoBanner } from "@/components/layout/DemoMode";
 interface SavedResume {
   html: string;
   findings: Finding[];
+  decisions: string[];
   note: string;
   source: "claude" | "demo" | null;
 }
@@ -25,6 +26,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
   const [resumeImportText, setResumeImportText] = useState("");
   const resumeFileRef = useRef<HTMLInputElement>(null);
   const [resumeFindings, setResumeFindings] = useState<Finding[]>(findings);
+  const [resumeDecisionList, setResumeDecisionList] = useState<string[]>(resumeDecisions);
   const [resumeEvaluationNote, setResumeEvaluationNote] = useState(
     "Edit the resume directly, then resubmit it for evaluation.",
   );
@@ -41,6 +43,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     persist("waypoint.resume", {
       html,
       findings: resumeFindings,
+      decisions: resumeDecisionList,
       note: resumeEvaluationNote,
       source: critiqueSource,
       ...partial,
@@ -57,6 +60,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
       resumeHistoryIndexRef.current = 0;
       setResumeHistoryState({ index: 0, length: 1 });
       setResumeFindings(saved.findings);
+      setResumeDecisionList(saved.decisions ?? []);
       setResumeEvaluationNote(saved.note);
       setCritiqueSource(saved.source);
     }, 0);
@@ -135,9 +139,10 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     resumeHistoryIndexRef.current = 0;
     setResumeHistoryState({ index: 0, length: 1 });
     setResumeFindings([]);
+    setResumeDecisionList([]);
     setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
     setResumeImportText("");
-    persistResume({ findings: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
+    persistResume({ findings: [], decisions: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
     note(source + " loaded");
   };
 
@@ -166,10 +171,11 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     setResumeEvaluationNote("Evaluating…");
     const result = await requestCritique("resume", text);
     setResumeFindings(result.findings);
+    setResumeDecisionList(result.decisions ?? []);
     setResumeEvaluationNote(result.note);
     setCritiqueSource(result.source);
     setEvaluating(false);
-    persistResume({ findings: result.findings, note: result.note, source: result.source });
+    persistResume({ findings: result.findings, decisions: result.decisions ?? [], note: result.note, source: result.source });
     note(result.note);
   };
 
@@ -219,7 +225,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
             </button>
           </div>
         </section>
-        <ResumeReviewPanel findings={resumeFindings} source={critiqueSource} />
+        <ResumeReviewPanel findings={resumeFindings} decisions={resumeDecisionList} source={critiqueSource} />
       </div>
     </div>
   );

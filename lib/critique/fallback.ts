@@ -1,4 +1,4 @@
-import { findings as resumeDemoFindings } from "@/lib/demo-data";
+import { findings as resumeDemoFindings, resumeDecisions } from "@/lib/demo-data";
 import type { CritiqueResponse, CritiqueStage } from "@/lib/types";
 
 /**
@@ -14,15 +14,25 @@ const resumePatterns = [
 
 export function resumeFallback(text: string): CritiqueResponse {
   const lines = text.split("\n").map((line) => line.trim()).filter(Boolean);
+  // Each surviving finding keeps its paired highest-leverage decision (same
+  // index), so the decisions shown always match the findings still present.
+  const decisions: string[] = [];
   const next = resumeDemoFindings.flatMap((finding, index) => {
-    if (text.includes(finding.quote)) return [finding];
+    if (text.includes(finding.quote)) {
+      decisions.push(resumeDecisions[index]);
+      return [finding];
+    }
     const quote = lines.find((line) => resumePatterns[index].test(line));
-    return quote ? [{ ...finding, quote }] : [];
+    if (quote) {
+      decisions.push(resumeDecisions[index]);
+      return [{ ...finding, quote }];
+    }
+    return [];
   });
   const note = next.length
     ? "Evaluation updated: " + next.length + " finding" + (next.length === 1 ? "" : "s") + " to review."
     : "Evaluation updated: no current findings from this review set.";
-  return { source: "demo", findings: next, note };
+  return { source: "demo", findings: next, decisions, note };
 }
 
 export function coverLetterFallback(): CritiqueResponse {

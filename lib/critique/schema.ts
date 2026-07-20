@@ -25,6 +25,15 @@ export function critiqueSchema(stage: CritiqueStage) {
     note: { type: "string", description: "One-sentence human-readable summary of the evaluation." },
   };
   const required = ["findings", "note"];
+  if (stage === "resume") {
+    properties.decisions = {
+      type: "array",
+      maxItems: 3,
+      items: { type: "string" },
+      description: "The highest-leverage revision decisions the veteran should make — at most three, each a bounded decision, never replacement prose or invented facts.",
+    };
+    required.push("decisions");
+  }
   if (stage === "interview") {
     properties.scores = {
       type: "object",
@@ -44,14 +53,19 @@ export function critiqueSchema(stage: CritiqueStage) {
 
 export function validateCritiqueResult(stage: CritiqueStage, submittedText: string, value: unknown): boolean {
   if (!value || typeof value !== "object") return false;
-  const result = value as { findings?: unknown; note?: unknown; scores?: unknown };
+  const result = value as { findings?: unknown; note?: unknown; scores?: unknown; decisions?: unknown };
   if (!Array.isArray(result.findings) || result.findings.length > 7 || typeof result.note !== "string") return false;
   const valid = result.findings.every((item) => {
     if (!item || typeof item !== "object") return false;
     const finding = item as Record<string, unknown>;
     return ["High", "Medium", "Low"].includes(String(finding.level)) && ["title", "quote", "why", "task"].every((key) => typeof finding[key] === "string") && submittedText.includes(String(finding.quote));
   });
-  if (!valid || stage !== "interview") return valid;
+  if (!valid) return false;
+  if (stage === "resume") {
+    const { decisions } = result;
+    if (!Array.isArray(decisions) || decisions.length > 3 || !decisions.every((decision) => typeof decision === "string")) return false;
+  }
+  if (stage !== "interview") return true;
   const scores = result.scores as Record<string, unknown> | undefined;
   return !!scores && ["relevance", "ownership", "evidence", "translation"].every((key) => Number.isInteger(scores[key]) && Number(scores[key]) >= 0 && Number(scores[key]) <= 4);
 }
