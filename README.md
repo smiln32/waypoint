@@ -1,107 +1,107 @@
 # Waypoint
 
-**An AI career-transition workspace for veterans that refines service records into civilian-ready assets.**
+**An AI career-transition workspace that helps veterans refine their service records into civilian-ready assets.**
 
-Editors, not ghostwriters: every finding cites its evidence, explains the civilian-reader problem, and leaves every fact and revision with the veteran.
+More than 200,000 U.S. service members transition to civilian life each year.[^1] Their experience is real; the problem is that military language often does not translate. Acronyms, broad leadership claims, and unclear scope can keep civilian employers from seeing what someone actually did.[^2]
 
-More than 200,000 U.S. service members transition to civilian life each year.[^1] Their experience is real; the problem is that military language often does not translate. Acronyms, broad leadership claims, and unclear scope can keep civilian employers from seeing what someone actually did.[^2] Waypoint is for those veterans — most often recently separated enlisted service members — turning a verified record into materials a civilian reader understands.
+Many AI tools respond by rewriting the résumé. Waypoint takes the opposite approach. It identifies the exact wording that may confuse a civilian reader, explains the impact, and gives the veteran a bounded revision task without supplying replacement prose. The veteran remains the author and the authority on every fact.
+
+## Scope
+
+| | |
+|---|---|
+| **Primary focus** | Helping veterans translate verified military experience into civilian-ready résumés without losing ownership of the facts or the writing |
+| **Standalone editor** | A portable military-to-civilian résumé editor in [`stages/01_resume/references/`](stages/01_resume/references/) |
+| **Connected workflow** | Résumé review, job search, job tracking, cover-letter critique, interview practice, and a dashboard that keeps the process organized |
+| **Built for live use** | AI-powered critique and company briefs, live federal job search, and résumé upload or paste when enabled by the operator |
+
+> **Demo note:** The public version uses fictional sample data to show the full workflow.
 
 ## Critique, never ghostwrite
 
-Generic AI "fixes" a résumé by rewriting it into fluent text the veteran cannot defend in an interview. Waypoint refuses to. Every editor follows one contract:
+Every Waypoint editor follows the same contract:
 
-- **Findings quote their evidence** — the smallest exact passage with a problem, highlighted in the document.
-- **Reasoning is shown** — how a civilian hiring reader will read the passage, and why it costs the veteran.
-- **Tasks, not rewrites** — a bounded revision decision; the veteran makes the edit in their own words.
-- **No invented facts** — no scale, outcomes, or credentials the record does not support.
+- **Quote the evidence.** Each finding points to the smallest exact passage with a problem.
+- **Explain the civilian impact.** The editor shows how the wording may be understood and why it matters.
+- **Give a task, not a rewrite.** The veteran decides how to revise it.
+- **Do not invent facts.** No added scale, outcomes, credentials, or unsupported company knowledge.
+- **Keep the review bounded.** Résumé critiques return no more than seven prioritized findings, followed by up to three highest-leverage decisions.
 
-A résumé review returns at most seven prioritized findings, then up to three highest-leverage decisions.
-
-![Resume Studio — the editor quotes each problem passage and explains why it fails for a civilian reader](docs/screenshots/resume-studio.png)
+![Resume Studio showing evidence-grounded findings beside an editable résumé](docs/screenshots/resume-studio.png)
 
 ## The connected workflow
 
-Waypoint keeps the process connected from the first résumé revision through the interview:
+Waypoint guides veterans through five connected steps:
 
 | Step | Workspace | What happens |
-|------|-----------|--------------|
-| 1 | **Resume Studio** | The editor returns evidence-quoted findings and the highest-leverage decisions; edit in place and resubmit until clear |
-| 2 | **Job Search** | Search federal roles by keyword, location, date, schedule, salary, and radius |
-| 3 | **Job Tracking** | Saved roles and applications in one tracker — stage, materials, contacts, a next action per row, and a per-position company brief |
-| 4 | **Cover Letter** | Draft against a critique-only editor, with a strong finished example one click away |
-| 5 | **Interview Prep** | Practice responses scored 0–4 on relevance, ownership, evidence, and translation |
+|---|---|---|
+| 1 | **Resume Studio** | Review evidence-quoted findings, edit the résumé in place, and resubmit |
+| 2 | **Job Search** | Explore sample federal-style roles or search live federal listings when enabled |
+| 3 | **Job Tracking** | Keep saved roles, applications, contacts, materials, due dates, and next actions together |
+| 4 | **Cover Letter** | Draft against a critique-only editor without turning the letter into generic AI prose |
+| 5 | **Interview Prep** | Practice responses scored on relevance, ownership, evidence, and translation |
 
-The dashboard ties it together: prioritized next steps, pipeline counts, materials status, and a due-date calendar.
+The dashboard brings the workflow, application pipeline, materials, and deadlines into one view.
 
-![Dashboard — next steps, pipeline, materials, and the due-date calendar](docs/screenshots/dashboard.png)
+![Job Search showing role discovery and filtering](docs/screenshots/job-search.png)
 
-![Job Search — sample federal-style roles with the board's real filters](docs/screenshots/job-search.png)
+![Dashboard showing next steps, application status, materials, and due dates](docs/screenshots/dashboard.png)
 
-## Sample mode and live operation
+## Built for live use
 
-The default deployment runs on **fictional sample data** — no credentials, nothing sent anywhere — but it is not a static mockup. The application is fully wired for live operation: Claude-powered résumé, cover-letter, and interview critique; Claude-powered company briefs; live USAJOBS search; and résumé upload/paste when live AI is on.
+Waypoint is wired for:
 
-What sample mode actually does:
+- AI-powered résumé, cover-letter, and interview critique
+- AI-powered company briefs
+- live federal job search
+- résumé upload and paste
 
-- The résumé evaluator is a **bounded demonstration**. It recognizes the seeded problem passages in the fictional James Carter résumé and clears each finding as that passage is revised. It does **not** evaluate an arbitrary replacement résumé — general critique of any résumé requires live AI.
-- Job Search returns clearly-labeled **sample roles**, not current postings.
-- On-demand **company briefs are disabled** rather than generated from fabricated research.
-- Résumé upload and paste are turned off; the demonstration works from the seeded sample.
+Live integrations are opt-in and require operator-supplied credentials. Configuration details are documented in [`.env.example`](.env.example).
 
-Live features are opt-in — each needs its own flag **and** its own credentials, so a key alone never activates anything:
+> **Demo note:** The public version uses fictional sample content. Resume Studio demonstrates the review process with seeded passages, Job Search uses sample roles, and company briefs are not generated from invented research.
 
-```
-# Live AI critique + company briefs
-WAYPOINT_ENABLE_LIVE_AI=true
-ANTHROPIC_API_KEY=
+## Interpretable by design
 
-# Live USAJOBS search
-WAYPOINT_ENABLE_LIVE_JOBS=true
-USAJOBS_API_KEY=
-USAJOBS_EMAIL=
-```
+Waypoint follows the Interpretable Context Methodology. The editor’s identity, rules, examples, and review framework live in plain Markdown instead of one hidden prompt.
 
-Sample/public mode requires no credentials. Do not put real keys in this file — set them in `.env.local`; the gate logic is in [`lib/live-config.ts`](lib/live-config.ts).
+- `identity.md` defines the editor.
+- `rules.md` defines its boundaries.
+- `review-framework.md` defines the review sequence.
+- `examples.md` shows what acceptable output looks like.
 
-## Interpretable by design (ICM)
+The app loads those files in a defined order when it builds the editor instructions. Changing a rule changes the editor’s behavior while keeping the instruction visible and version-controlled.
 
-Each editor's reasoning is plain, human-editable Markdown, assembled into the AI prompt at request time. The résumé editor:
+The standalone résumé editor is available in [`stages/01_resume/references/`](stages/01_resume/references/).
 
-```
-stages/01_resume/
-├── CONTEXT.md
-├── references/
-│   ├── identity.md
-│   ├── rules.md
-│   ├── examples.md
-│   ├── README.md
-│   └── reference/
-│       └── review-framework.md
-└── output/
-```
+## Run locally
 
-- `identity.md` defines who the editor is; `rules.md` defines its limits.
-- `reference/review-framework.md` defines the review order; `examples.md` shows acceptable output.
-- The files load in a defined order, and the shared output shape lives in [`_config/shared/finding-format.md`](_config/shared/finding-format.md).
-- Change a Markdown rule and live AI behavior changes with it — the instruction, its reason, and its git history stay visible, never hidden in orchestration code.
-
-## Run it locally
-
-```
+```bash
 npm install
-npm run dev        # http://localhost:3000
+npm run dev
 ```
 
-Runs in sample mode with no configuration. To enable live features, copy `.env.example` to `.env.local` and set the flags and credentials above.
+Open `http://localhost:3000`.
 
-## Privacy
+The sample experience requires no configuration. To enable live integrations, copy `.env.example` to `.env.local` and add the required credentials. Never commit real keys.
 
-Drafts and tracker data stay in the browser (localStorage); no account is needed. In sample mode nothing is sent to an AI provider. When live AI is enabled and you submit text for review, that text is sent to the configured provider and the result returns to the browser. Remove Social Security and service numbers, home addresses, medical information, and any classified or controlled information before submitting anything for live review.
+Verification:
+
+```bash
+npm test
+npm run test:a11y
+npm run lint
+npm run build
+```
+
+## Privacy and boundaries
+
+Drafts and tracking data are stored in the browser. In the public sample, nothing is sent to an external AI provider. When live AI is enabled, only text submitted for review is sent to the configured provider.
+
+Do not submit Social Security or service numbers, home addresses, medical information, classified material, controlled information, export-restricted information, or anything unnecessary for the review.
+
+Waypoint does not guarantee employment, applicant-tracking-system ranking, civilian credential equivalence, or clearance transferability.
 
 ## Sources
 
-[^1]: U.S. Department of Labor — Transition Assistance Program\
-https://www.dol.gov/agencies/vets/programs/tap
-
-[^2]: U.S. Government Accountability Office — Military and Veteran Support: Performance Goals Could Strengthen Programs That Help Servicemembers Obtain Civilian Employment\
-https://www.gao.gov/products/gao-22-105261
+[^1]: [U.S. Department of Labor — Transition Assistance Program](https://www.dol.gov/agencies/vets/programs/tap)
+[^2]: [U.S. Government Accountability Office — Military and Veteran Support: Performance Goals Could Strengthen Programs That Help Servicemembers Obtain Civilian Employment](https://www.gao.gov/products/gao-22-105261)
