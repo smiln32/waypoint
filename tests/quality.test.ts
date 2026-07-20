@@ -349,9 +349,11 @@ describe("USAJOBS fallback identity", () => {
     // picks up — zero-width space, BOM, smart quote. undici's Headers rejects these
     // as invalid header values; the previous control-character regex let them through
     // to fetch, where they threw the "invalid header value" error mid-request.
-    ["USAJOBS_API_KEY", "secret​injected", "test@example.com", "secret​injected"],
-    ["USAJOBS_EMAIL", "test-key", "private﻿@example.com", "private﻿@example.com"],
-    ["USAJOBS_API_KEY", "secret’injected", "test@example.com", "secret’injected"],
+    // Written as explicit escapes so the invisible glyphs can't be silently
+    // stripped by an editor or normalization filter and turn the case into a no-op.
+    ["USAJOBS_API_KEY", "secret\u200Binjected", "test@example.com", "secret\u200Binjected"],
+    ["USAJOBS_EMAIL", "test-key", "private\uFEFF@example.com", "private\uFEFF@example.com"],
+    ["USAJOBS_API_KEY", "secret\u2019injected", "test@example.com", "secret\u2019injected"],
   ])("rejects header values fetch would reject in %s without revealing its value", async (name, key, email, secret) => {
     vi.stubEnv("USAJOBS_API_KEY", key);
     vi.stubEnv("USAJOBS_EMAIL", email);
