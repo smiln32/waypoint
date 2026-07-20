@@ -5,6 +5,7 @@ import {
   resumeTextFromStorage,
   type CompanyBrief,
 } from "@/lib/briefs";
+import { DemoBanner } from "@/components/layout/DemoMode";
 import { Heading } from "@/components/ui/Heading";
 import {
   formatFriendlyDate,
@@ -71,6 +72,7 @@ export function ApplicationsPage() {
 
   return (
     <div className="page">
+      <DemoBanner />
       <Heading
         kicker="JOB TRACKING"
         title="Nothing gets lost."

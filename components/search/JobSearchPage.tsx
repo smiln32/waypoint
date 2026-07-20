@@ -1,5 +1,6 @@
 "use client";
 import { useCallback, useEffect, useState } from "react";
+import { DemoBanner } from "@/components/layout/DemoMode";
 import { Heading } from "@/components/ui/Heading";
 import { useWaypoint } from "@/lib/store";
 import type { JobResult } from "@/lib/types";
@@ -52,10 +53,11 @@ export function JobSearchPage() {
 
   return (
     <div className="page job-search-page">
+      <DemoBanner />
       <Heading
         kicker="JOB SEARCH"
         title="Find work worth pursuing."
-        text="Search live federal openings by keyword, location, date posted, schedule, salary, and distance."
+        text="Browse sample federal-style roles by keyword, location, date posted, schedule, salary, and distance. This demonstration does not run a live search."
       />
       <section className="search-bar">
         <label>

@@ -9,6 +9,7 @@ import type { CritiqueResponse } from "@/lib/types";
 import { ExampleLetter } from "./ExampleLetter";
 import { LetterReviewPanel } from "./LetterReviewPanel";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
+import { DemoBanner } from "@/components/layout/DemoMode";
 
 interface SavedLetter {
   draft: string;
@@ -17,7 +18,7 @@ interface SavedLetter {
   review: CritiqueResponse | null;
 }
 
-export function CoverLetterPage({ example }: { example: CoverLetterExample | null }) {
+export function CoverLetterPage({ example, liveAiEnabled }: { example: CoverLetterExample | null; liveAiEnabled: boolean }) {
   const { note } = useWaypoint();
   const [draft, setDraft] = useState("");
   const [role, setRole] = useState("");
@@ -53,6 +54,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
 
   return (
     <div className="page cover-letter-page">
+      <DemoBanner />
       <Heading
         kicker="COVER LETTER STUDIO"
         title="Make the connection specific."
@@ -98,7 +100,7 @@ export function CoverLetterPage({ example }: { example: CoverLetterExample | nul
               rows={20}
             />
           </label>
-          <AiPrivacyNotice />
+          <AiPrivacyNotice liveAiEnabled={liveAiEnabled} />
           <div className="letter-actions">
             <span>{draft.trim() ? draft.trim().split(/\s+/).length : 0} words</span>
             <button className="primary" disabled={reviewing || !draft.trim()} onClick={sendToEditor}>

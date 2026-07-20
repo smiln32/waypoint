@@ -1,5 +1,6 @@
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { GET } from "../app/api/jobs/route";
+import { POST as critiquePOST } from "../app/api/critique/[stage]/route";
 import { searchResults } from "../lib/demo-data";
 import {
   isOpportunityRecord,
@@ -508,5 +509,53 @@ describe("USAJOBS live search (opt-in)", () => {
       fit: "",
       url: "https://www.usajobs.gov/job/987654321",
     });
+  });
+});
+
+describe("AI critique is sample-only by default", () => {
+  afterEach(() => {
+    vi.unstubAllEnvs();
+    vi.restoreAllMocks();
+  });
+
+  async function critique(stage: string, text: string) {
+    const request = new Request(`http://localhost/api/critique/${stage}`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ text }),
+    });
+    const response = await critiquePOST(request, { params: Promise.resolve({ stage }) });
+    return { status: response.status, body: await response.json() };
+  }
+
+  it("returns a labeled sample critique and makes no live attempt when a key is set but live AI is off", async () => {
+    vi.stubEnv("ANTHROPIC_API_KEY", "sk-should-never-be-used");
+    // WAYPOINT_ENABLE_LIVE_AI intentionally unset — a key alone must not go live.
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const { status, body } = await critique(
+      "resume",
+      "Known for reliability, discipline, and strong leadership.",
+    );
+
+    expect(status).toBe(200);
+    expect(body.source).toBe("demo");
+    // The live branch throws on a bad key and logs "[critique] falling back"; a
+    // clean run proves the gate returned before any external request.
+    expect(errorSpy).not.toHaveBeenCalled();
+  });
+
+  it("does not go live when the flag is set but no key is present", async () => {
+    vi.stubEnv("WAYPOINT_ENABLE_LIVE_AI", "true");
+    const errorSpy = vi.spyOn(console, "error").mockImplementation(() => undefined);
+
+    const { status, body } = await critique(
+      "resume",
+      "Known for reliability, discipline, and strong leadership.",
+    );
+
+    expect(status).toBe(200);
+    expect(body.source).toBe("demo");
+    expect(errorSpy).not.toHaveBeenCalled();
   });
 });

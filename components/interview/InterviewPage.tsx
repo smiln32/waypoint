@@ -6,6 +6,7 @@ import { loadPersisted, persist } from "@/lib/persist";
 import type { CritiqueResponse } from "@/lib/types";
 import { InterviewReviewPanel } from "./InterviewReviewPanel";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
+import { DemoBanner } from "@/components/layout/DemoMode";
 
 interface SavedInterview {
   answer: string;
@@ -18,7 +19,7 @@ const question = "Tell me about a time you solved a difficult technical problem 
 const LEGACY_DEMO_ANSWER =
   "We had an aircraft return with an intermittent fault. My team worked through it and got the jet back up before the next flight window.";
 
-export function InterviewPage() {
+export function InterviewPage({ liveAiEnabled }: { liveAiEnabled: boolean }) {
   const [answer, setAnswer] = useState("");
   const [review, setReview] = useState<CritiqueResponse | null>(null);
   const [reviewing, setReviewing] = useState(false);
@@ -44,6 +45,7 @@ export function InterviewPage() {
 
   return (
     <div className="page">
+      <DemoBanner />
       <Heading
         kicker="INTERVIEW PRACTICE"
         title="Show employers how you solve problems."
@@ -66,7 +68,7 @@ export function InterviewPage() {
               }}
             />
           </label>
-          <AiPrivacyNotice />
+          <AiPrivacyNotice liveAiEnabled={liveAiEnabled} />
           <div className="actions">
             <button className="primary" disabled={reviewing || !answer.trim()} onClick={sendToEditor}>
               {reviewing ? "Reviewing…" : "Send to response editor"}

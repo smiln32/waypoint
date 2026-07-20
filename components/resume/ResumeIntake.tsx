@@ -6,18 +6,37 @@ import type { RefObject } from "react";
  * A third card (build from scratch) is planned; the grid is ready for it.
  */
 export function ResumeIntake({
+  liveAiEnabled,
   fileRef,
   importText,
   onImportTextChange,
   onUpload,
   onUsePasted,
 }: {
+  liveAiEnabled: boolean;
   fileRef: RefObject<HTMLInputElement | null>;
   importText: string;
   onImportTextChange: (text: string) => void;
   onUpload: (file?: File) => void;
   onUsePasted: () => void;
 }) {
+  // In the public sample demonstration there is no AI model, so an uploaded or
+  // pasted résumé could not be critiqued honestly (the offline evaluator only
+  // recognizes the seeded sample). Hide the intake controls and explain why.
+  if (!liveAiEnabled) {
+    return (
+      <section className="resume-intake" aria-label="Add your resume">
+        <div className="intake-heading">
+          <h2>1. Add Your Resume</h2>
+          <p>
+            This demonstration starts from a fictional sample résumé, shown in the editable draft below.
+            Uploading or pasting your own résumé is turned off here — an honest review needs the live AI
+            editor, which this public demo does not run. Edit the sample freely to see how the critique responds.
+          </p>
+        </div>
+      </section>
+    );
+  }
   return (
     <section className="resume-intake" aria-label="Add your resume">
       <div className="intake-heading">

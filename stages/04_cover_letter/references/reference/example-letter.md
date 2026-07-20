@@ -18,7 +18,7 @@ I would welcome the chance to talk. Thank you for your time.
 
 Sincerely,
 James Carter
-(910) 555-0148 · jcarter88@email.com
+(555) 014-2876 · james.carter@example.com
 ```
 
 ## Why this letter works

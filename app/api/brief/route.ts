@@ -3,6 +3,7 @@ import path from "path";
 import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { briefSlug, type BriefSections, type CompanyBrief } from "@/lib/briefs";
+import { liveAiEnabled } from "@/lib/live-config";
 
 /**
  * Generate a pre-interview company brief. The brief writer's rules are ICM
@@ -35,8 +36,13 @@ function buildSystemPrompt(): string {
 }
 
 export async function POST(request: Request) {
-  if (!process.env.ANTHROPIC_API_KEY) {
-    return NextResponse.json({ error: "Briefs require the AI editor (ANTHROPIC_API_KEY)." }, { status: 503 });
+  // Sample-only by default: no external Anthropic request unless live AI is
+  // explicitly enabled AND a key is present. A key alone never activates it.
+  if (!liveAiEnabled() || !process.env.ANTHROPIC_API_KEY) {
+    return NextResponse.json(
+      { error: "Live company briefs are turned off in this demonstration deployment." },
+      { status: 503 },
+    );
   }
 
   let body: { company?: string; role?: string; detail?: string; resumeText?: string };

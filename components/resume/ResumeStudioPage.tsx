@@ -7,6 +7,7 @@ import { loadPersisted, persist } from "@/lib/persist";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
+import { DemoBanner } from "@/components/layout/DemoMode";
 
 interface SavedResume {
   html: string;
@@ -19,7 +20,7 @@ import { ResumeIntake } from "./ResumeIntake";
 import { ResumePaper } from "./ResumePaper";
 import { ResumeReviewPanel } from "./ResumeReviewPanel";
 
-export function ResumeStudioPage() {
+export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) {
   const { note } = useWaypoint();
   const [resumeImportText, setResumeImportText] = useState("");
   const resumeFileRef = useRef<HTMLInputElement>(null);
@@ -174,11 +175,13 @@ export function ResumeStudioPage() {
 
   return (
     <div className="page">
+      <DemoBanner />
       <div className="heading">
         <small>RESUME STUDIO</small>
         <h1>Resume Studio</h1>
       </div>
       <ResumeIntake
+        liveAiEnabled={liveAiEnabled}
         fileRef={resumeFileRef}
         importText={resumeImportText}
         onImportTextChange={setResumeImportText}
@@ -189,6 +192,12 @@ export function ResumeStudioPage() {
         <h2>2. Review Your Resume</h2>
         <p>Submit your resume for evaluation and make edits as needed.</p>
         <p>Click anywhere in the resume to edit it.</p>
+        <p>
+          <a className="sample-pdf-link" href="/Waypoint_Sample_Resume_Final.pdf" target="_blank" rel="noopener noreferrer">
+            View sample PDF
+          </a>{" "}
+          — the fictional résumé this demonstration is built around.
+        </p>
       </div>
       <div className="editor">
         <section className="resume-draft">
@@ -202,7 +211,7 @@ export function ResumeStudioPage() {
               persistResume({ note: "Changes not evaluated yet." });
             }}
           />
-          <AiPrivacyNotice />
+          <AiPrivacyNotice liveAiEnabled={liveAiEnabled} />
           <div className="resume-submit">
             <span role="status">{resumeEvaluationNote}</span>
             <button className="primary" disabled={evaluating} onClick={evaluateResume}>

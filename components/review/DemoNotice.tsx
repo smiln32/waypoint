@@ -8,8 +8,8 @@ export function DemoNotice({ source }: { source: "claude" | "demo" | null }) {
   if (source !== "demo") return null;
   return (
     <p className="demo-notice" role="status">
-      <b>Demo findings.</b> The AI editor is not connected — add <code>ANTHROPIC_API_KEY</code> to{" "}
-      <code>.env.local</code> and restart to enable real critiques.
+      <b>Sample critique.</b> These are demonstration results produced without an AI model, shown to
+      illustrate the editor&apos;s standards on the sample document.
     </p>
   );
 }
