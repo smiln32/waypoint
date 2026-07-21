@@ -181,6 +181,26 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     }
   };
 
+  const downloadResume = () => {
+    const text = resumeRef.current?.innerText ?? "";
+    if (!text.trim()) {
+      note("Nothing to download yet.");
+      return;
+    }
+    const firstLine = text.split("\n").find((line) => line.trim())?.trim() ?? "";
+    const name = firstLine.replace(/[^\w\- ]/g, "").slice(0, 60).trim() || "Resume";
+    const blob = new Blob([text], { type: "text/plain;charset=utf-8" });
+    const url = URL.createObjectURL(blob);
+    const anchor = document.createElement("a");
+    anchor.href = url;
+    anchor.download = name + " - Resume.txt";
+    document.body.appendChild(anchor);
+    anchor.click();
+    anchor.remove();
+    URL.revokeObjectURL(url);
+    note("Resume downloaded as a text file.");
+  };
+
   const evaluateResume = async () => {
     if (evaluating) return;
     const text = resumeRef.current?.innerText ?? "";
@@ -244,6 +264,21 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
         </section>
       </div>
       <ResumeReviewPanel findings={resumeFindings} decisions={resumeDecisionList} source={critiqueSource} />
+      <div className="intake-heading">
+        <h2>3. Save Your Resume</h2>
+        <p>
+          Take the revised draft with you. Download the text to paste into any document, or print to
+          save a formatted PDF — only the résumé prints, not the workspace around it.
+        </p>
+      </div>
+      <div className="resume-export">
+        <button type="button" className="secondary" onClick={downloadResume}>
+          Download as text
+        </button>
+        <button type="button" className="secondary" onClick={() => window.print()}>
+          Print or save as PDF
+        </button>
+      </div>
     </div>
   );
 }

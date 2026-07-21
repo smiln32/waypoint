@@ -2518,3 +2518,39 @@ td small {
   white-space: nowrap;
   width: 1px;
 }
+
+/* Save Your Resume — export controls */
+.resume-export {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+/* Print only the résumé paper: everything else hides, finding markers vanish. */
+@media print {
+  body * {
+    visibility: hidden;
+  }
+  .paper,
+  .paper * {
+    visibility: visible;
+  }
+  .paper {
+    border: none;
+    box-shadow: none;
+    left: 0;
+    margin: 0;
+    max-width: none;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+  }
+  .editable-paper mark.resume-flag {
+    background: none;
+    outline: none;
+  }
+  .editable-paper mark.resume-flag[data-finding-index]::after {
+    content: none;
+  }
+}
