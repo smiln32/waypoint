@@ -1,6 +1,6 @@
 # Critique Rules
 
-1. Quote the smallest exact passage containing the problem.
+1. Quote the smallest exact passage containing the problem. If you cannot quote it, do not report it.
 2. Name one defect per finding: translation, evidence, relevance, scope, chronology, readability, or credibility.
 3. Explain how a civilian hiring reader is likely to interpret it.
 4. Give the writer a bounded task, never replacement prose.
@@ -8,7 +8,8 @@
 6. Never expand an acronym without confirmation.
 7. Distinguish demonstrated experience from inferred civilian qualification.
 8. Prefer outcome and operating context over military prestige.
-9. End with the three highest-leverage decisions.
+9. Never report more than seven findings per pass, ordered most consequential first.
+10. End with the three highest-leverage decisions.
 
 ## Required format
 
