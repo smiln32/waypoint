@@ -5,6 +5,7 @@ import { findings, resumeDecisions } from "@/lib/demo-data";
 import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
 import { RESUME_SAMPLE_ID, shouldRestoreResume } from "@/lib/resume-sample";
+import { sanitizeResumeHtml } from "@/lib/sanitize-html";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
@@ -68,8 +69,9 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
         if (saved) persistResume();
         return;
       }
-      resumeRef.current.innerHTML = saved!.html;
-      resumeHistoryRef.current = [saved!.html];
+      const restoredHtml = sanitizeResumeHtml(saved!.html);
+      resumeRef.current.innerHTML = restoredHtml;
+      resumeHistoryRef.current = [restoredHtml];
       resumeHistoryIndexRef.current = 0;
       setResumeHistoryState({ index: 0, length: 1 });
       setResumeFindings(saved!.findings);
@@ -143,7 +145,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     const target = resumeHistoryIndexRef.current + direction;
     if (target < 0 || target >= resumeHistoryRef.current.length || !resumeRef.current) return;
     resumeHistoryIndexRef.current = target;
-    resumeRef.current.innerHTML = resumeHistoryRef.current[target];
+    resumeRef.current.innerHTML = sanitizeResumeHtml(resumeHistoryRef.current[target]);
     setResumeHistoryState({ index: target, length: resumeHistoryRef.current.length });
     setResumeEvaluationNote("Changes not evaluated yet.");
   };

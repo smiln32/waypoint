@@ -1,6 +1,7 @@
 import AxeBuilder from "@axe-core/playwright";
 import { expect, test, type Locator } from "playwright/test";
 import { searchResults } from "../../lib/demo-data";
+import { RESUME_SAMPLE_ID } from "../../lib/resume-sample";
 
 const expectMinimumTargetSize = async (locator: Locator) => {
   await expect(locator).toBeVisible();
@@ -124,6 +125,38 @@ test("an old saved résumé does not override the current James Carter sample", 
   await expect(
     page.getByRole("region", { name: "Highest-leverage decisions" }).locator("ol > li"),
   ).toHaveCount(3);
+});
+
+test("a persisted résumé with an injected handler is sanitized on restore", async ({ page }) => {
+  page.on("dialog", (dialog) => dialog.dismiss()); // fail loudly if an injected script ran
+  // A same-sample save (valid sampleId) that a user could produce by pasting
+  // markup into the editor: legitimate text plus an <img onerror> payload.
+  await page.addInitScript((sampleId) => {
+    localStorage.setItem(
+      "waypoint.resume",
+      JSON.stringify({
+        html:
+          '<h1>James Carter</h1><p>Sanitized restore keeps this text.</p>' +
+          '<img src="x" onerror="window.__xssFired = true">',
+        findings: [],
+        decisions: [],
+        note: "restored",
+        source: "demo",
+        sampleId,
+      }),
+    );
+  }, RESUME_SAMPLE_ID);
+  await page.goto("/resume");
+
+  const editableResume = page.getByRole("article", { name: "Editable resume" });
+  // The user's own edited text is restored (this is a valid same-sample save)…
+  await expect(editableResume.getByText("Sanitized restore keeps this text.")).toBeVisible();
+  // …but the event-handler attribute was stripped before insertion.
+  await expect
+    .poll(() => page.evaluate(() => (window as unknown as { __xssFired?: boolean }).__xssFired ?? false))
+    .toBe(false);
+  const handlerSurvived = await editableResume.evaluate((el) => el.innerHTML.toLowerCase().includes("onerror"));
+  expect(handlerSurvived).toBe(false);
 });
 
 test("editable resume expands to contain its document before following controls", async ({ page }) => {
