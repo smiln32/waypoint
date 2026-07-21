@@ -27,7 +27,7 @@ export function ResumeIntake({
         <p>
           {liveAiEnabled
             ? "Start with the resume you have. It becomes the editable draft below, ready for review."
-            : "Upload or paste a resume to edit it in the workspace. In this public demo, the document stays in your browser and the review uses a limited sample evaluation. Full ICM-guided critique is available when live AI is enabled."}
+            : "Upload or paste a resume to edit it in the workspace. File parsing happens in your browser. In this public demo, review uses a limited sample evaluation and the text is not sent to an external AI provider. Full ICM-guided critique is available when live AI is enabled."}
         </p>
       </div>
       <div className="intake-grid">
