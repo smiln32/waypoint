@@ -57,7 +57,7 @@ export function JobSearchPage() {
       <Heading
         kicker="JOB SEARCH"
         title="Find work worth pursuing."
-        text="Browse roles by keyword, location, date posted, schedule, salary, and distance. This demonstration does not run a live search."
+        text="Browse roles by keyword, location, date posted, schedule, salary, and distance. Live with API key."
       />
       <section className="search-bar">
         <label>
