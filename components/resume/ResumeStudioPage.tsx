@@ -86,7 +86,7 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     if (!root) return;
     root.querySelectorAll("mark.resume-flag").forEach((mark) => mark.replaceWith(document.createTextNode(mark.textContent ?? "")));
     root.normalize();
-    resumeFindings.forEach((finding) => {
+    resumeFindings.forEach((finding, index) => {
       const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
       let node = walker.nextNode();
       while (node) {
@@ -98,6 +98,9 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
           range.setEnd(node, start + finding.quote.length);
           const mark = document.createElement("mark");
           mark.className = "resume-flag";
+          // Rendered via CSS ::after (attr) so the marker never lands in the
+          // editable text that gets persisted and submitted for evaluation.
+          mark.dataset.findingIndex = String(index + 1);
           try {
             range.surroundContents(mark);
           } catch {
@@ -239,8 +242,8 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
             </button>
           </div>
         </section>
-        <ResumeReviewPanel findings={resumeFindings} decisions={resumeDecisionList} source={critiqueSource} />
       </div>
+      <ResumeReviewPanel findings={resumeFindings} decisions={resumeDecisionList} source={critiqueSource} />
     </div>
   );
 }

@@ -57,7 +57,7 @@ export function JobSearchPage() {
       <Heading
         kicker="JOB SEARCH"
         title="Find work worth pursuing."
-        text="Browse sample federal-style roles by keyword, location, date posted, schedule, salary, and distance. This demonstration does not run a live search."
+        text="Browse roles by keyword, location, date posted, schedule, salary, and distance. This demonstration does not run a live search."
       />
       <section className="search-bar">
         <label>
@@ -82,10 +82,17 @@ export function JobSearchPage() {
       <SearchFilters value={filters} onChange={setFilters} />
       <div className="results-heading">
         <div>
-          <h2>
-            {!resolved ? "Finding roles" : source === "error" ? "Search unavailable" : source === "usajobs" ? "USAJOBS results" : "Sample results"}
-          </h2>
-          <span>
+          <div className="results-title">
+            <h2>
+              {!resolved ? "Finding roles" : source === "error" ? "Search unavailable" : source === "usajobs" ? "USAJOBS results" : "Sample results"}
+            </h2>
+            {resolved && !searching && source === "sample" && (
+              <span className="results-title-note">
+                (Sample roles shown. Live USAJOBS search is available when enabled.)
+              </span>
+            )}
+          </div>
+          <span className="results-count">
             {!resolved
               ? `Searching near ${location}…`
               : source === "error"
@@ -107,11 +114,6 @@ export function JobSearchPage() {
       </div>
       {resolved && !searching && source === "error" && (
         <p className="demo-notice" role="status">{unavailableMessage}</p>
-      )}
-      {resolved && !searching && source === "sample" && (
-        <p className="demo-note" role="note">
-          Sample roles shown. Live USAJOBS search is available when enabled.
-        </p>
       )}
       <div className="search-results">
         {!resolved &&

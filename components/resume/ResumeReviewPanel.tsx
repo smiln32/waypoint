@@ -17,11 +17,20 @@ export function ResumeReviewPanel({
       <ReviewHead label={`${findings.length} findings`} />
       <DemoNotice source={source} />
       {findings.length ? (
-        findings.map((f) => (
+        <div className="findings-grid">
+          {findings.map((f, index) => (
           <article className="finding" key={f.title}>
-            <div>
-              <small className={f.level.toLowerCase()}>Impact: {f.level}</small>
-              <h3>{f.title}</h3>
+            <div className="finding-head">
+              <span className="step-index" aria-hidden>
+                {index + 1}
+              </span>
+              <div>
+                <small className={f.level.toLowerCase()}>Impact: {f.level}</small>
+                <h3>
+                  <span className="sr-only">Finding {index + 1}: </span>
+                  {f.title}
+                </h3>
+              </div>
             </div>
             <blockquote>“{f.quote}”</blockquote>
             <p>{f.why}</p>
@@ -30,7 +39,8 @@ export function ResumeReviewPanel({
               {f.task}
             </section>
           </article>
-        ))
+          ))}
+        </div>
       ) : (
         <div className="evaluation-clear">
           <b>No findings from this review set.</b>
