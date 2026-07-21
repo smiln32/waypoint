@@ -19,7 +19,7 @@ export const metadata: Metadata = {
     template: "%s · Waypoint",
   },
   description:
-    "Translate military experience into civilian opportunity without losing the person behind the record.",
+    "A critique-only resume editor for veterans entering civilian careers — and the career-transition workspace built around it.",
   icons: { icon: "/favicon.svg", shortcut: "/favicon.svg" },
 };
 
