@@ -85,7 +85,7 @@ export function ApplicationsPage() {
           <small>
             {activeStageCount === 0
               ? "No active stages"
-              : `${activeStageCount} active hiring stage${activeStageCount === 1 ? "" : "s"}`}
+              : `${activeStageCount} at active hiring stage`}
           </small>
         </section>
         <section>
