@@ -31,13 +31,23 @@ export function ResumeReviewPanel({
             </section>
           </article>
         ))
+      ) : source === "demo" ? (
+        <div className="evaluation-clear">
+          <b>No findings from this limited review set.</b>
+          <p>
+            This deterministic sample evaluation checks only a small set of known patterns. It does not
+            confirm that the résumé is complete, clear, or ready to submit.
+          </p>
+        </div>
+      ) : source === "claude" ? (
+        <div className="evaluation-clear">
+          <b>No findings from this review.</b>
+          <p>You can continue editing or move this draft forward.</p>
+        </div>
       ) : (
         <div className="evaluation-clear">
-          <b>No findings from this review set.</b>
-          <p>
-            The three previously identified issues are no longer present. You can continue editing or move this
-            draft forward.
-          </p>
+          <b>No review results yet.</b>
+          <p>Submit this draft for evaluation when you are ready.</p>
         </div>
       )}
       {decisions.length > 0 && (
