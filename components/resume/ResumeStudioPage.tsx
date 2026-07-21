@@ -4,7 +4,12 @@ import { requestCritique } from "@/lib/critique/client";
 import { findings, resumeDecisions } from "@/lib/demo-data";
 import { extractFileText } from "@/lib/extract-text";
 import { loadPersisted, persist } from "@/lib/persist";
-import { RESUME_SAMPLE_ID, shouldRestoreResume } from "@/lib/resume-sample";
+import {
+  RESUME_SAMPLE_ID,
+  savedResumeOrigin,
+  shouldRestoreResume,
+  type ResumeOrigin,
+} from "@/lib/resume-sample";
 import { useWaypoint } from "@/lib/store";
 import type { Finding } from "@/lib/types";
 import { AiPrivacyNotice } from "@/components/review/AiPrivacyNotice";
@@ -16,7 +21,9 @@ interface SavedResume {
   decisions: string[];
   note: string;
   source: "claude" | "demo" | null;
-  /** Identifies which seeded sample this state derives from; absent for user uploads in live mode. */
+  /** Explicitly distinguishes the seeded sample from a user-imported document. */
+  origin?: ResumeOrigin;
+  /** Present only for seeded sample state so stale sample versions can be replaced. */
   sampleId?: string;
 }
 import { ResumeHistoryControls } from "./ResumeHistoryControls";
@@ -35,25 +42,27 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
   );
   const [evaluating, setEvaluating] = useState(false);
   const [critiqueSource, setCritiqueSource] = useState<"claude" | "demo" | null>(null);
+  const [resumeOrigin, setResumeOrigin] = useState<ResumeOrigin>("sample");
   const resumeRef = useRef<HTMLElement>(null);
   const resumeHistoryRef = useRef<string[]>([]);
   const resumeHistoryIndexRef = useRef(-1);
   const [resumeHistoryState, setResumeHistoryState] = useState({ index: -1, length: 0 });
 
-  const persistResume = (partial?: Partial<SavedResume>) => {
+  const persistResume = (partial: Partial<SavedResume> = {}) => {
     const html = resumeRef.current?.innerHTML;
     if (html === undefined) return;
-    persist("waypoint.resume", {
+    const origin = partial.origin ?? resumeOrigin;
+    const saved: SavedResume = {
       html,
       findings: resumeFindings,
       decisions: resumeDecisionList,
       note: resumeEvaluationNote,
       source: critiqueSource,
-      // Tag sample-mode state with the current sample id; leave a live-mode
-      // upload untagged so it is never mistaken for the seeded sample.
-      sampleId: liveAiEnabled ? undefined : RESUME_SAMPLE_ID,
+      origin,
       ...partial,
-    });
+    };
+    saved.sampleId = saved.origin === "sample" ? RESUME_SAMPLE_ID : undefined;
+    persist("waypoint.resume", saved);
   };
 
   // Restore a persisted session (deferred a tick so the contentEditable ref is mounted).
@@ -62,12 +71,13 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
       if (!resumeRef.current) return;
       const saved = loadPersisted<SavedResume>("waypoint.resume");
       if (!shouldRestoreResume(saved, liveAiEnabled)) {
-        // Stale or foreign saved résumé (older/absent sample id in sample mode):
-        // keep the freshly seeded James Carter résumé and its findings/decisions,
-        // and migrate any existing stored value to the current sample.
+        // Stale saved sample: keep the freshly seeded James Carter résumé and
+        // migrate any existing stored value to the current sample contract.
         if (saved) persistResume();
         return;
       }
+      const restoredOrigin = savedResumeOrigin(saved!, liveAiEnabled);
+      setResumeOrigin(restoredOrigin);
       resumeRef.current.innerHTML = saved!.html;
       resumeHistoryRef.current = [saved!.html];
       resumeHistoryIndexRef.current = 0;
@@ -154,9 +164,21 @@ export function ResumeStudioPage({ liveAiEnabled }: { liveAiEnabled: boolean }) 
     setResumeHistoryState({ index: 0, length: 1 });
     setResumeFindings([]);
     setResumeDecisionList([]);
-    setResumeEvaluationNote(source + " loaded. Resubmit it for evaluation.");
+    setCritiqueSource(null);
+    setResumeOrigin("user");
+    const nextStep = liveAiEnabled
+      ? "Resubmit it for evaluation."
+      : "Submit it for a limited sample review.";
+    const loadedNote = `${source} loaded. ${nextStep}`;
+    setResumeEvaluationNote(loadedNote);
     setResumeImportText("");
-    persistResume({ findings: [], decisions: [], note: source + " loaded. Resubmit it for evaluation.", source: null });
+    persistResume({
+      findings: [],
+      decisions: [],
+      note: loadedNote,
+      source: null,
+      origin: "user",
+    });
     note(source + " loaded");
   };
 
