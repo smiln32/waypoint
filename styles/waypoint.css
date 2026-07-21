@@ -787,9 +787,10 @@ blockquote {
 /* Resume studio                                                    */
 /* ================================================================ */
 
+/* Findings sit below the resume, so the draft gets the full content width. */
 .editor {
   display: grid;
-  grid-template-columns: minmax(560px, 1.45fr) minmax(340px, 0.65fr);
+  grid-template-columns: 1fr;
   gap: 24px;
   align-items: start;
 }
@@ -867,6 +868,67 @@ blockquote {
   border-radius: 4px;
   color: inherit;
   padding: 2px 3px;
+}
+
+/* Marker tying a highlight to its numbered write-up below. Generated content,
+   so it stays out of the editable text and out of what is submitted. */
+.editable-paper mark.resume-flag[data-finding-index]::after {
+  align-items: center;
+  background: var(--info-soft);
+  border-radius: 50%;
+  color: var(--deep);
+  content: attr(data-finding-index);
+  display: inline-flex;
+  font-size: 0.875rem;
+  font-weight: 650;
+  height: 24px;
+  justify-content: center;
+  margin-left: 6px;
+  vertical-align: -6px;
+  width: 24px;
+}
+
+/* Findings below the resume: numbered write-ups, side by side rather than
+   stacked in a narrow rail. */
+.resume-draft + .review,
+.editor + .review {
+  margin-top: 24px;
+}
+
+.editor + .review .findings-grid {
+  display: grid;
+  gap: 12px;
+  /* min() keeps the track from forcing horizontal overflow below 300px. */
+  grid-template-columns: repeat(auto-fit, minmax(min(300px, 100%), 1fr));
+  align-items: start;
+}
+
+.editor + .review .finding {
+  margin-bottom: 0;
+}
+
+.finding-head {
+  align-items: flex-start;
+  display: flex;
+  gap: 11px;
+}
+
+.finding-head > div {
+  min-width: 0;
+}
+
+/* Medium impact reads as a plain label here, matching High. */
+.findings-grid .finding .medium {
+  background: transparent;
+  color: var(--ink);
+  padding: 2px 0;
+}
+
+/* Rule separating the explanation from the "Your task" box below it. */
+.findings-grid .finding p {
+  border-bottom: 1px solid var(--line);
+  margin: 0 0 13px;
+  padding-bottom: 13px;
 }
 
 /* Compact evaluation panel beside the resume, unified on ink text. */
@@ -1166,9 +1228,33 @@ blockquote {
   margin: 0 0 4px;
 }
 
+/* Heading and its parenthetical note share one line, wrapping if cramped. */
+.results-title {
+  align-items: baseline;
+  column-gap: 8px;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.results-title h2 {
+  margin: 0;
+}
+
+.results-title .results-title-note {
+  color: var(--muted);
+  font-size: 0.8125rem;
+  font-weight: 400;
+}
+
 .results-heading span {
   color: var(--muted);
   font-size: 0.75rem;
+}
+
+/* Count sits a line below the title, not tucked against it. */
+.results-heading .results-count {
+  display: inline-block;
+  margin-top: 10px;
 }
 
 .results-heading > label {
@@ -1569,12 +1655,8 @@ td small {
 /* ================================================================ */
 
 @media (max-width: 1100px) {
-  .editor {
-    grid-template-columns: minmax(500px, 1.25fr) minmax(320px, 0.75fr);
-  }
-
   /* Formerly at 1050px */
-  
+
 
   .cover-letter-workspace {
     grid-template-columns: 1fr;
