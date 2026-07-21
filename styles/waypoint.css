@@ -531,7 +531,7 @@ button.link:not(:disabled):hover {
   border: 1px solid var(--deep);
   border-radius: 7px;
   color: var(--deep);
-  min-height: 38px;
+  min-height: 44px;
   padding: 0 14px;
 }
 
@@ -1095,7 +1095,7 @@ blockquote {
   align-self: center;
   margin-top: 0;
   margin-left: auto;
-  min-height: 38px;
+  min-height: 44px;
 }
 
 .intake-card {
@@ -1212,7 +1212,7 @@ blockquote {
 .search-filters .check-filter {
   align-items: center;
   flex-direction: row;
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 8px;
 }
 
@@ -1676,11 +1676,14 @@ td small {
   }
 
   .side {
+    /* Static (not sticky) on mobile: the nav reflows to 2–7 rows as the
+       viewport narrows, so a pinned top bar would both cover keyboard focus
+       (WCAG 2.2 SC 2.4.11) and eat most of a small screen. Let it scroll away. */
+    position: static;
     height: auto;
     display: block;
     padding: 7px 12px;
     overflow: auto;
-    z-index: 3;
   }
 
   .logo,
@@ -2345,7 +2348,7 @@ td small {
   color: var(--ink);
   font-size: 0.875rem;
   font-weight: 400;
-  min-height: 42px;
+  min-height: 44px;
   padding: 0 11px;
 }
 
