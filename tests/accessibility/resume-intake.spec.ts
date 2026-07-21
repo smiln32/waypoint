@@ -36,5 +36,5 @@ test("demo review identifies itself as limited", async ({ page }) => {
 
   await expect(page.getByText("Limited sample review.", { exact: true })).toBeVisible();
   await expect(page.getByText("No findings from this limited review set.", { exact: true })).toBeVisible();
-  await expect(page.getByRole("complementary", { name: "AI privacy notice" })).toContainText("not sent to any AI provider");
+  await expect(page.getByRole("complementary", { name: "AI privacy notice" })).toContainText("not sent to an external AI provider");
 });
