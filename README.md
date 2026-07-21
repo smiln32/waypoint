@@ -1,5 +1,7 @@
 # Waypoint
 
+**A critique-only resume editor for veterans entering civilian careers — and the career-transition workspace built around it.**
+
 **An AI career-transition workspace that helps veterans refine their service records into civilian-ready assets.**
 
 More than 200,000 U.S. service members transition to civilian life each year.[^1] Their experience is real; the problem is that military language often does not translate. Acronyms, broad leadership claims, and unclear scope can keep civilian employers from seeing what someone actually did.[^2]
