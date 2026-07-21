@@ -4,6 +4,7 @@ import Anthropic from "@anthropic-ai/sdk";
 import { NextResponse } from "next/server";
 import { briefSlug, type BriefSections, type CompanyBrief } from "@/lib/briefs";
 import { liveAiEnabled } from "@/lib/live-config";
+import { clientKey, rateLimit } from "@/lib/rate-limit";
 
 /**
  * Generate a pre-interview company brief. The brief writer's rules are ICM
@@ -55,6 +56,24 @@ export async function POST(request: Request) {
   const role = body.role?.trim();
   if (!company || !role) {
     return NextResponse.json({ error: "company and role are required" }, { status: 400 });
+  }
+  // Bound token cost/latency and blunt abuse of the live AI path.
+  if (
+    company.length > 300 ||
+    role.length > 300 ||
+    (body.detail?.length ?? 0) > 20_000 ||
+    (body.resumeText?.length ?? 0) > 50_000
+  ) {
+    return NextResponse.json({ error: "A request field is too long." }, { status: 413 });
+  }
+
+  // Throttle the cost-incurring live path per IP (best-effort; see lib/rate-limit).
+  const limit = rateLimit(`brief:${clientKey(request)}`, 5, 60_000);
+  if (!limit.ok) {
+    return NextResponse.json(
+      { error: "Too many requests. Please slow down and try again shortly." },
+      { status: 429, headers: { "Retry-After": String(limit.retryAfterSeconds) } },
+    );
   }
 
   const userMessage = [
