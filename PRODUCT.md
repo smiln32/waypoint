@@ -18,7 +18,7 @@ Provide a five-step career-transition workspace: Resume, Job Search, Job Trackin
 
 ## Positioning
 
-Translate the service record without erasing the person who earned it.
+Critique the resume. Never take the pen.
 
 ## Brand Personality
 
