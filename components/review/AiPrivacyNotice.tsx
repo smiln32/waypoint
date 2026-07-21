@@ -2,8 +2,8 @@ export function AiPrivacyNotice({ liveAiEnabled = false }: { liveAiEnabled?: boo
   if (!liveAiEnabled) {
     return (
       <aside className="ai-privacy-notice" aria-label="AI privacy notice">
-        <b>Your document stays in your browser</b>
-        <p>A limited deterministic sample review runs locally in this demonstration. The text is <b>not</b> sent to any AI provider.</p>
+        <b>No external AI provider</b>
+        <p>When you submit, Waypoint uses deterministic sample logic for this limited review. The text is <b>not</b> sent to an external AI provider.</p>
         <p>Full ICM-guided AI review is available only when enabled by the operator.</p>
       </aside>
     );
