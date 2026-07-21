@@ -1,21 +1,42 @@
 # Waypoint
 
-**An AI career-transition workspace that helps veterans refine their service records into civilian-ready assets.**
+**A critique-only resume editor for veterans entering civilian careers — and the career-transition workspace built around it.**
 
-More than 200,000 U.S. service members transition to civilian life each year.[^1] Their experience is real; the problem is that military language often does not translate. Acronyms, broad leadership claims, and unclear scope can keep civilian employers from seeing what someone actually did.[^2]
+More than 200,000 U.S. service members transition to civilian life each
+year.[^1] The record is real. The problem is that military language often
+does not translate: acronyms, broad leadership claims, and unclear scope
+can keep civilian employers from seeing what someone actually did.[^2]
 
-Many AI tools respond by rewriting the résumé. Waypoint takes the opposite approach. It identifies the exact wording that may confuse a civilian reader, explains the impact, and gives the veteran a bounded revision task without supplying replacement prose. The veteran remains the author and the authority on every fact.
+Many AI tools respond by rewriting the résumé. Waypoint takes the opposite
+approach. It identifies the exact wording that may confuse a civilian
+reader, explains the impact, and hands the veteran a bounded revision task
+without supplying replacement prose. The veteran remains the author and
+the authority on every fact.
 
-## Scope
+## The editor
 
-| | |
-|---|---|
-| **Primary focus** | Helping veterans translate verified military experience into civilian-ready résumés without losing ownership of the facts or the writing |
-| **Standalone editor** | A portable military-to-civilian résumé editor in [`stages/01_resume/references/`](stages/01_resume/references/) |
-| **Connected workflow** | Résumé review, job search, job tracking, cover-letter critique, interview practice, and a dashboard that keeps the process organized |
-| **Built for live use** | AI-powered critique and company briefs, live federal job search, and résumé upload or paste when enabled by the operator |
+The heart of Waypoint is a resume editor for recently separated enlisted
+U.S. service members entering civilian operations, logistics, maintenance,
+and technical careers. It lives in one small folder of plain markdown —
+[`stages/01_resume/references/`](stages/01_resume/references/) — and each
+file does one job:
 
-> **Demo note:** The public version uses fictional sample data to show the full workflow.
+```
+stages/01_resume/references/
+├── README.md                        How to use it
+├── identity.md                      Who the editor is, whose work it reviews
+├── rules.md                         How it critiques — ten rules and a required finding format
+├── examples.md                      What strong critique looks like, and what it never looks like
+└── reference/
+    └── review-framework.md          The review order and the grounding sources it trusts
+```
+
+It needs no app to run. Add the folder's files to a Claude project, paste
+a resume (plus the target job posting if you have one), and ask for a
+review. What comes back is at most seven prioritized findings — each with
+severity and defect, the exact quoted passage, why it fails for a civilian
+reader, the evidence needed, and a decision that belongs to the writer —
+followed by the three highest-leverage decisions to make first.
 
 ## Critique, never ghostwrite
 
@@ -25,13 +46,38 @@ Every Waypoint editor follows the same contract:
 - **Explain the civilian impact.** The editor shows how the wording may be understood and why it matters.
 - **Give a task, not a rewrite.** The veteran decides how to revise it.
 - **Do not invent facts.** No added scale, outcomes, credentials, or unsupported company knowledge.
-- **Keep the review bounded.** Résumé critiques return no more than seven prioritized findings, followed by up to three highest-leverage decisions.
+- **Keep the review bounded.** No more than seven findings, then up to three highest-leverage decisions.
+
+In practice:
+
+> **High — Translation gap**
+>
+> Passage: "Maintained a 96% MC rate across 12 aircraft."
+>
+> Why it fails: "MC" is unexplained, and a civilian hiring reader cannot
+> determine what the percentage measures, over what period, or what
+> responsibility the candidate personally held for the result.
+>
+> Evidence needed: The verified meaning of "MC," the measurement period,
+> the candidate's role, and which factors they directly influenced.
+>
+> Writer's decision: Explain the verified measure in civilian language and
+> decide which part of your own contribution matters for the target role.
+> Draft the revision yourself.
+
+The editor never supplies the fixed sentence. A line the veteran did not
+write is a line they cannot defend in an interview.
+
+## The same files run a working app
+
+Those markdown files are also the live brain of Waypoint, a five-step
+career-transition workspace. The app assembles `identity.md` → `rules.md`
+→ `reference/review-framework.md` → `examples.md` into the AI editor's
+instructions at request time, highlights each finding's quoted passage in
+the document, and logs every run to `stages/01_resume/output/`. Edit the
+markdown and the editor behaves differently — no code changes.
 
 ![Resume Studio showing evidence-grounded findings beside an editable résumé](docs/screenshots/resume-studio.png)
-
-## The connected workflow
-
-Waypoint guides veterans through five connected steps:
 
 | Step | Workspace | What happens |
 |---|---|---|
@@ -41,37 +87,34 @@ Waypoint guides veterans through five connected steps:
 | 4 | **Cover Letter** | Draft against a critique-only editor without turning the letter into generic AI prose |
 | 5 | **Interview Prep** | Practice responses scored on relevance, ownership, evidence, and translation |
 
-The dashboard brings the workflow, application pipeline, materials, and deadlines into one view.
+The dashboard brings the workflow, pipeline, materials, and deadlines into
+one view. The cover-letter and interview editors are built from the same
+small-folder pattern
+([`stages/04_cover_letter/references/`](stages/04_cover_letter/references/),
+[`stages/06_interview/references/`](stages/06_interview/references/)), so
+the approach holds as the work grows.
 
 ![Job Search showing role discovery and filtering](docs/screenshots/job-search.png)
 
 ![Dashboard showing next steps, application status, materials, and due dates](docs/screenshots/dashboard.png)
 
-## Built for live use
+> **Demo note:** The public version uses fictional sample data to show the
+> full workflow. Resume Studio demonstrates the review process with seeded
+> passages, Job Search uses sample roles, and company briefs are not
+> generated from invented research.
 
-Waypoint is wired for:
+## How the repository is organized
 
-- AI-powered résumé, cover-letter, and interview critique
-- AI-powered company briefs
-- live federal job search
-- résumé upload and paste
+Two layers share this repository, and they touch only through markdown:
 
-Live integrations are opt-in and require operator-supplied credentials. Configuration details are documented in [`.env.example`](.env.example).
+| Layer | Where | What it is |
+|---|---|---|
+| **Knowledge** | [`stages/`](stages/), [`_config/shared/`](_config/shared/) | Plain markdown and JSON. Each numbered stage owns one job: its contract (`CONTEXT.md`), stable references (`references/`), and per-run artifacts (`output/`) |
+| **Execution** | [`app/`](app/), [`components/`](components/), [`lib/`](lib/) | Next.js and browser local storage. Reads `stages/*/references/` to build editor instructions; writes critique runs to `stages/*/output/` |
 
-> **Demo note:** The public version uses fictional sample content. Resume Studio demonstrates the review process with seeded passages, Job Search uses sample roles, and company briefs are not generated from invented research.
-
-## Interpretable by design
-
-Waypoint follows the Interpretable Context Methodology. The editor’s identity, rules, examples, and review framework live in plain Markdown instead of one hidden prompt.
-
-- `identity.md` defines the editor.
-- `rules.md` defines its boundaries.
-- `review-framework.md` defines the review sequence.
-- `examples.md` shows what acceptable output looks like.
-
-The app loads those files in a defined order when it builds the editor instructions. Changing a rule changes the editor’s behavior while keeping the instruction visible and version-controlled.
-
-The standalone résumé editor is available in [`stages/01_resume/references/`](stages/01_resume/references/).
+Every editor decision is visible and version-controlled instead of hidden
+in a prompt. See [`CONTEXT.md`](CONTEXT.md) for the stage map and
+[`docs/`](docs/) for the conformance log.
 
 ## Run locally
 
@@ -82,24 +125,32 @@ npm run dev
 
 Open `http://localhost:3000`.
 
-The sample experience requires no configuration. To enable live integrations, copy `.env.example` to `.env.local` and add the required credentials. Never commit real keys.
+The sample experience requires no configuration. To enable live
+integrations (AI critique, company briefs, live federal job search, résumé
+upload), copy `.env.example` to `.env.local` and add the required
+credentials. Never commit real keys.
 
-Verification:
+Verification, also run in CI:
 
 ```bash
-npm test
-npm run test:a11y
+npm test          # unit tests
+npm run test:a11y # accessibility checks
 npm run lint
 npm run build
 ```
 
 ## Privacy and boundaries
 
-Drafts and tracking data are stored in the browser. In the public sample, nothing is sent to an external AI provider. When live AI is enabled, only text submitted for review is sent to the configured provider.
+Drafts and tracking data are stored in the browser. In the public sample,
+nothing is sent to an external AI provider. When live AI is enabled, only
+text submitted for review is sent to the configured provider.
 
-Do not submit Social Security or service numbers, home addresses, medical information, classified material, controlled information, export-restricted information, or anything unnecessary for the review.
+Do not submit Social Security or service numbers, home addresses, medical
+information, classified material, controlled information,
+export-restricted information, or anything unnecessary for the review.
 
-Waypoint does not guarantee employment, applicant-tracking-system ranking, civilian credential equivalence, or clearance transferability.
+Waypoint does not guarantee employment, applicant-tracking-system ranking,
+civilian credential equivalence, or clearance transferability.
 
 ## Sources
 
