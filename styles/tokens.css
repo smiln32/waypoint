@@ -46,6 +46,10 @@
   /* Shared task-surface accent */
   --task-mustard: oklch(0.9238 0.1167 94.2); /* #FFE588 */
 
+  /* Elevation — the shared card shadow (violet ink = --deep, kept as explicit
+     oklch so the value is identical to what it replaced across the app). */
+  --shadow-card: 0 1px 2px oklch(0.2817 0.1045 286.7 / 0.04), 0 6px 18px oklch(0.2817 0.1045 286.7 / 0.06);
+
   /* Spacing scale — 8 / 12 / 24 / 48 / 64 / 96 px.
      Names kept as --overview-space-* because existing rules reference them. */
   --overview-space-xs: 8px;
