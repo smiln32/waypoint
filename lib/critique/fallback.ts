@@ -30,8 +30,8 @@ export function resumeFallback(text: string): CritiqueResponse {
     return [];
   });
   const note = next.length
-    ? "Evaluation updated: " + next.length + " finding" + (next.length === 1 ? "" : "s") + " to review."
-    : "Evaluation updated: no current findings from this review set.";
+    ? "Limited sample review complete: " + next.length + " finding" + (next.length === 1 ? "" : "s") + " to review."
+    : "Limited sample review complete: no findings from this limited review set.";
   return { source: "demo", findings: next, decisions, note };
 }
 
