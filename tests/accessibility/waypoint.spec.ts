@@ -352,7 +352,7 @@ test("audited controls meet Waypoint's 44px target at responsive viewports", asy
 
     await page.goto("/resume");
     const history = page.getByLabel("Resume edit history");
-    const undo = history.getByRole("button", { name: "Undo" });
+    const undo = history.getByRole("button", { name: "Back" });
     const forward = history.getByRole("button", { name: "Forward" });
     await expectMinimumTargetSize(undo);
     await expectMinimumTargetSize(forward);

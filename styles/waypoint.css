@@ -999,9 +999,16 @@ blockquote {
 
 .resume-history {
   display: flex;
+  flex-wrap: wrap;
   gap: 6px;
-  justify-content: flex-start;
+  justify-content: space-between;
   margin-bottom: 10px;
+}
+
+.resume-history-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
 }
 
 .resume-history button {
@@ -2443,7 +2450,7 @@ td small {
 }
 
 
-/* 44px targets per PRODUCT.md (Undo/Forward stay compact by explicit design choice). */
+/* 44px targets per PRODUCT.md (Back/Forward stay compact by explicit design choice). */
 .save-job,
 .application-table .next-action {
   min-height: 44px;
@@ -2517,13 +2524,6 @@ td small {
   position: absolute;
   white-space: nowrap;
   width: 1px;
-}
-
-/* Save Your Resume — export controls */
-.resume-export {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 12px;
 }
 
 /* Print only the résumé paper: everything else hides, finding markers vanish. */
