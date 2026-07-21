@@ -10,7 +10,7 @@ fact and every revision.
 | File | One job |
 |------|---------|
 | `identity.md` | Who the editor is and whose work it reviews |
-| `rules.md` | How it critiques — nine rules and a required finding format |
+| `rules.md` | How it critiques — ten rules and a required finding format |
 | `examples.md` | What strong critique looks like (and two failure modes it must never produce) |
 | `reference/review-framework.md` | The review order and the grounding sources it trusts |
 | `README.md` | This file |
