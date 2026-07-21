@@ -56,6 +56,15 @@ export async function POST(request: Request) {
   if (!company || !role) {
     return NextResponse.json({ error: "company and role are required" }, { status: 400 });
   }
+  // Bound token cost/latency and blunt abuse of the live AI path.
+  if (
+    company.length > 300 ||
+    role.length > 300 ||
+    (body.detail?.length ?? 0) > 20_000 ||
+    (body.resumeText?.length ?? 0) > 50_000
+  ) {
+    return NextResponse.json({ error: "A request field is too long." }, { status: 413 });
+  }
 
   const userMessage = [
     `Organization: ${company}`,
