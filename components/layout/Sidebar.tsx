@@ -1,4 +1,5 @@
 "use client";
+import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { VIEW_PATHS } from "@/lib/nav";
@@ -19,7 +20,14 @@ export function Sidebar() {
   return (
     <aside className="side" aria-label="Waypoint sidebar">
       <Link className="logo" href="/">
-        <span>W</span>Waypoint
+        <Image
+          src="/waypoint-logo.png"
+          alt="Waypoint"
+          width={2400}
+          height={1792}
+          style={{ height: 44, width: "auto" }}
+          priority
+        />
       </Link>
       <nav aria-label="Primary navigation">
         {NAV_ITEMS.map(([view, label]) => {
