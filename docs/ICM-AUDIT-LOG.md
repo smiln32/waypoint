@@ -26,6 +26,17 @@
 - Version 2 storage migrates legacy arrays once, preserves valid empty state, and never re-appends demo rows.
 - Runtime partition checks confirm Stage 03 and Stage 05 records are mutually exclusive.
 
+## ICM-11 — Layer 0 completion + PRODUCT.md relocation
+
+- Date: 2026-07-21
+- Gap closed: Missing Layer 0 (`IDENTITY.md`); loose Layer-3 file at root (`PRODUCT.md`).
+- Changes:
+  - Added `IDENTITY.md` (workspace map).
+  - Moved `PRODUCT.md` -> `references/product.md`.
+- Unchanged by design: Next.js execution layer at root (`app/`, `lib/`, `package.json`).
+- Verification: Layers 2-4 declared-loading Inputs tables confirmed against `lib/icm.server.ts`.
+- Result: Full ICM five-layer hierarchy present; knowledge and execution layers coexist at root.
+
 ## Open Findings
 
 None in the ICM foundation repair scope after verification. Later evidence, matching, sourcing, and broader product work remain outside this audit.
