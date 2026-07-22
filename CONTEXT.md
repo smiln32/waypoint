@@ -4,7 +4,8 @@ Waypoint's user-facing scope is exactly five steps: Resume, Job Search, Job Trac
 
 # Task Routing — Stage Map
 
-Layer 1. Start at `CLAUDE.md` for identity; open a stage's `CONTEXT.md` for its contract before working in it.
+Layer 1. Start at `IDENTITY.md` for the workspace map (`CLAUDE.md` holds global identity + agent rules);
+open a stage's `CONTEXT.md` for its contract before working in it.
 
 ## Stage map
 
@@ -31,7 +32,7 @@ status, and a due-date calendar, all derived from stage data.
 | `_config/shared/product-voice.md` | Ground rules every AI editor persona loads: critique-only, no invented facts, civilian-reader test |
 | `_config/shared/finding-format.md` | The finding JSON contract `{level, title, quote, why, task}` + interview score scale |
 | `_config/shared/opportunity-record.md` | Stable opportunity identity, structured fields, ISO dates, and Stage 03/05 ownership rules |
-| `PRODUCT.md` | Brand, audience, design principles, accessibility bar |
+| `references/product.md` | Brand, audience, design principles, accessibility bar (product description, Layer 3) |
 
 ## How the app uses the stages
 

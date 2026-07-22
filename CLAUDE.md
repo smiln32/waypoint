@@ -5,7 +5,8 @@ experience into civilian technical and operational careers. Editors critique; th
 recommendation shows its reasoning, and the veteran owns every fact and revision.
 
 This workspace follows the **Interpretable Context Methodology** (ICM — Van Clief & McDermott,
-arXiv:2603.16021). Read `CONTEXT.md` next for the stage map and routing.
+arXiv:2603.16021). See `IDENTITY.md` for the Layer 0 workspace map, then `CONTEXT.md` for the stage map
+and routing.
 
 ## Structure
 
@@ -19,12 +20,14 @@ Two layers coexist at this root:
   `stages/*/output/`. ICM files define editor behavior, stage responsibilities, and interpretable handoffs; stages do not need to be separate user-facing pages. Uploaded files are parsed and stored locally. Only text selected by an explicit AI-review action is sent to the configured hosted provider. Stages never contain executable code.
 
 ```
-CLAUDE.md            Layer 0 — this file (global identity)
+IDENTITY.md          Layer 0 — workspace map ("Where am I?")
+CLAUDE.md            Layer 0 — global identity + agent/harness entry (this file)
 CONTEXT.md           Layer 1 — task routing: stage map + shared resources
+references/          Layer 3 — root-level descriptive material (e.g. product.md)
 stages/0N_<name>/    Layer 2 — CONTEXT.md stage contract (Inputs / Process / Outputs)
   references/        Layer 3 — stable reference material (editor personas, rules, rubrics)
   output/            Layer 4 — per-run artifacts (critique runs; safe to edit or delete)
-_config/shared/      shared resources used by more than one stage
+_config/shared/      Layer 3 — operating rules shared by more than one stage (voice, finding format)
 ```
 
 ## Hard rules
@@ -44,7 +47,7 @@ _config/shared/      shared resources used by more than one stage
 - Editors are critique-only: findings quote exact passages and assign bounded tasks; they never supply
   replacement prose. See `_config/shared/product-voice.md`.
 - Brand: calm, exacting, respectful. No camouflage, flags-as-decoration, stencil type, or motivational
-  slogans (see `PRODUCT.md`). Target WCAG 2.2 AA.
+  slogans (see `references/product.md`). Target WCAG 2.2 AA.
 
 ## Running the app
 

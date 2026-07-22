@@ -4,6 +4,7 @@
 
 ### Structural Conformance
 
+- Layer 0 is explicit: `IDENTITY.md` carries the workspace map; `CLAUDE.md` holds global identity + agent rules.
 - Root identity and routing preserve the five-step product scope.
 - Six numbered stages each retain a contract, references, and inspectable output structure.
 - Shared product voice and finding format remain visible under `_config/shared/`.
@@ -41,6 +42,7 @@ None in the ICM foundation repair scope after verification. Later evidence, matc
 - ICM-08: Derived tracker summaries from current data and removed the technical Ownership column.
 - ICM-09: Replaced UI-shaped tracker rows with canonical, versioned opportunity records and verified legacy migration, empty-state preservation, duplicate posting identity, and stage handoff integrity.
 - ICM-10: Removed stale committed critique and company-brief artifacts containing user-derived content and aligned all output READMEs with the ignored runtime path.
+- ICM-11: Added the Layer 0 `IDENTITY.md` workspace map and relocated `PRODUCT.md` to `references/product.md` (Layer 3 descriptive material, distinct from `_config/shared/` operating rules); updated both referrers, no code paths affected.
 
 ## Audit History
 
@@ -50,3 +52,4 @@ None in the ICM foundation repair scope after verification. Later evidence, matc
 - 2026-07-18: Foundation pass introduced formatting, runtime-path, stale-artifact, transition, and tracker-summary regressions.
 - 2026-07-18: Repair pass resolved ICM-03 through ICM-08 and re-verified structural and operational conformance.
 - 2026-07-18: Record Integrity pass resolved ICM-09 and ICM-10 after deterministic migration tests, duplicate-identity checks, live stage partition checks, UI inspection, lint, production build, diff validation, and runtime-ignore verification.
+- 2026-07-21: Layer 0 pass resolved ICM-11 — added `IDENTITY.md` and relocated `PRODUCT.md` to `references/product.md`; Layers 2–4 pre-existing (ICM-01..10), stage Inputs tables verified against `lib/icm.server.ts`; execution layer unchanged; no deletions.
